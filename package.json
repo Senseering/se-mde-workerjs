@@ -1,0 +1,44 @@
+{
+  "name": "@senseering/worker_js",
+  "version": "1.0.0",
+  "description": "Client library to connect to the [edge node](https://github.com/Senseering/edge_node_js).",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha ./test/** --exclude ./test/component.test.key.pem",
+    "lint": "./node_modules/.bin/eslint ./lib/**"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Senseering/component_js.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Senseering/component_js/issues"
+  },
+  "homepage": "https://github.com/Senseering/component_js#readme",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "eslint": "^5.15.1",
+    "mocha": "^6.2.0",
+    "mock-fs": "^4.8.0",
+    "mock-require": "^3.0.3",
+    "mockery": "^2.1.0",
+    "nock": "^10.0.6"
+  },
+  "dependencies": {
+    "ajv": "^6.10.0",
+    "axios": "^0.18.1",
+    "better-queue": "^3.8.10",
+    "colors": "^1.4.0",
+    "config": "^3.2.2",
+    "debug": "^4.1.1",
+    "mqtt": "^2.18.8",
+    "nconf": "^0.10.0",
+    "node-persist": "^3.0.4",
+    "node-rsa": "^1.0.5",
+    "queue": "^6.0.1",
+    "require-from-string": "^2.0.2"
+  }
+}

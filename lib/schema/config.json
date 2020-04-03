@@ -1,0 +1,351 @@
+{
+    "definitions": {},
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://example.com/root.json",
+    "type": "object",
+    "title": "The Root Schema",
+    "required": [
+        "id",
+        "name",
+        "location",
+        "payment",
+        "schema",
+        "apikey",
+        "privKey",
+        "mode",
+        "apiDomain",
+        "port",
+        "info"
+    ],
+    "properties": {
+        "id": {
+            "$id": "#/properties/id",
+            "type": "string",
+            "title": "The Id Schema",
+            "default": "not_provided",
+            "examples": [
+                "e224a090-15d5-11ea-bb06-cf5dceb3c950"
+            ],
+            "pattern": "^(.*)$"
+        },
+        "name": {
+            "$id": "#/properties/name",
+            "type": "string",
+            "title": "The Name Schema",
+            "default": "not_provided",
+            "examples": [
+                "sample_worker"
+            ],
+            "pattern": "^(.*)$"
+        },
+        "location": {
+            "$id": "#/properties/location",
+            "type": "object",
+            "title": "The Location Schema",
+            "required": [
+                "latitude",
+                "longitude"
+            ],
+            "default": {},
+            "properties": {
+                "latitude": {
+                    "$id": "#/properties/location/properties/latitude",
+                    "type": "number",
+                    "title": "The Latitude Schema",
+                    "default": 0.0,
+                    "examples": [
+                        52.5297268
+                    ]
+                },
+                "longitude": {
+                    "$id": "#/properties/location/properties/longitude",
+                    "type": "number",
+                    "title": "The Longitude Schema",
+                    "default": 0.0,
+                    "examples": [
+                        13.400391
+                    ]
+                }
+            }
+        },
+        "payment": {
+            "$id": "#/properties/payment",
+            "type": "object",
+            "title": "The Payment Schema",
+            "required": [
+                "upfront",
+                "afterProcessing",
+                "invoice"
+            ],
+            "default": {},
+            "properties": {
+                "upfront": {
+                    "$id": "#/properties/payment/properties/upfront",
+                    "type": "integer",
+                    "title": "The Upfront Schema",
+                    "default": 0,
+                    "examples": [
+                        0
+                    ]
+                },
+                "afterProcessing": {
+                    "$id": "#/properties/payment/properties/afterProcessing",
+                    "type": "integer",
+                    "title": "The Afterprocessing Schema",
+                    "default": 0,
+                    "examples": [
+                        0
+                    ]
+                },
+                "invoice": {
+                    "$id": "#/properties/payment/properties/invoice",
+                    "type": "integer",
+                    "title": "The Invoice Schema",
+                    "default": 0,
+                    "examples": [
+                        0
+                    ]
+                }
+            }
+        },
+        "schema": {
+            "$id": "#/properties/schema",
+            "type": "object",
+            "title": "The Schema Schema",
+            "default": {
+                "input": "./env/schema/input.json",
+                "output": "./env/schema/output.json"
+            },
+            "examples": [
+                {
+                    "link": "https://github.com/ArzelaAscoIi/MachineMock.git",
+                    "commit": "ce89d0e5503f50689fe537423127976686c6d0be"
+                },
+                {
+                    "input": "./env/schema/input.json",
+                    "output": "./env/schema/output.json"
+                }
+            ],
+            "oneOf": [
+                {
+                    "required": [
+                        "link",
+                        "commit"
+                    ],
+                    "properties": {
+                        "link": {
+                            "$id": "#/properties/schema/properties/link",
+                            "type": "string",
+                            "title": "The Link Schema",
+                            "pattern": "^(.*)$"
+                        },
+                        "commit": {
+                            "$id": "#/properties/schema/properties/commit",
+                            "type": "string",
+                            "title": "The Commit Schema",
+                            "pattern": "^(.*)$"
+                        }
+                    }
+                },
+                {
+                    "required": [
+                        "input",
+                        "output"
+                    ],
+                    "properties": {
+                        "input": {
+                            "$id": "#/properties/schema/properties/input",
+                            "type": "string",
+                            "title": "The Input Schema",
+                            "pattern": "^(.*)$"
+                        },
+                        "output": {
+                            "$id": "#/properties/schema/properties/output",
+                            "type": "string",
+                            "title": "The Output Schema",
+                            "pattern": "^(.*)$"
+                        }
+                    }
+                }
+            ]
+        },
+        "apikey": {
+            "$id": "#/properties/apikey",
+            "type": "string",
+            "title": "The Apikey Schema",
+            "default": "not_provided",
+            "examples": [
+                "31dccb53d70747caa817e98302796d5d"
+            ],
+            "pattern": "^(.*)$"
+        },
+        "privKey": {
+            "$id": "#/properties/privKey",
+            "type": "string",
+            "title": "The Privkey Schema",
+            "default": "./env/key_world.js",
+            "examples": [
+                "./env/key_world.js"
+            ],
+            "pattern": "^(.*)$"
+        },
+        "mode": {
+            "$id": "#/properties/mode",
+            "type": "integer",
+            "title": "The Mode Schema",
+            "default": 1,
+            "examples": [
+                1
+            ]
+        },
+        "apiDomain": {
+            "$id": "#/properties/apiDomain",
+            "type": "string",
+            "title": "The Apidomain Schema",
+            "default": "127.0.0.1",
+            "examples": [
+                "127.0.0.1"
+            ],
+            "pattern": "^(.*)$"
+        },
+        "port": {
+            "$id": "#/properties/port",
+            "type": "integer",
+            "title": "The Port Schema",
+            "default": 443,
+            "examples": [
+                443
+            ]
+        },
+        "info": {
+            "$id": "#/properties/info",
+            "type": "object",
+            "title": "The Info Schema",
+            "required": [
+                "description",
+                "tags"
+            ],
+            "default": {},
+            "examples": [
+                {
+                    "description": "./env/description/worker.md",
+                    "tags": [
+                        "image processing"
+                    ]
+                },
+                {
+                    "description": "./env/description/worker.md",
+                    "tags": [
+                        "image processing"
+                    ],
+                    "input": {
+                        "description": "./env/description/input.md",
+                        "tags": [
+                            "h"
+                        ]
+                    },
+                    "output": {
+                        "description": "./env/description/output.md",
+                        "tags": [
+                            ""
+                        ]
+                    }
+                }
+            ],
+            "properties": {
+                "description": {
+                    "$id": "#/properties/info/properties/description",
+                    "type": "string",
+                    "title": "The Description Schema",
+                    "default": "./env/description/worker.md",
+                    "pattern": "^(.*)$"
+                },
+                "tags": {
+                    "$id": "#/properties/info/properties/tags",
+                    "type": "array",
+                    "title": "The Tags Schema",
+                    "default": [],
+                    "items": {
+                        "$id": "#/properties/info/properties/tags/items",
+                        "type": "string",
+                        "title": "The Items Schema",
+                        "default": "",
+                        "examples": [
+                            "weather",
+                            "forecast",
+                            "cologne"
+                        ],
+                        "pattern": "^(.*)$"
+                    }
+                },
+                "input": {
+                    "$id": "#/properties/info/properties/input",
+                    "title": "The Input Schema",
+                    "type": "object",
+                    "required": [
+                        "description",
+                        "tags"
+                    ],
+                    "properties": {
+                        "description": {
+                            "$id": "#/properties/info/properties/input/properties/description",
+                            "type": "string",
+                            "title": "The Description Schema",
+                            "default": "./env/description/input.md"
+                        },
+                        "tags": {
+                            "$id": "#/properties/info/properties/input/properties/tags",
+                            "type": "array",
+                            "title": "The Tags Schema",
+                            "default": [],
+                            "items": {
+                                "$id": "#/properties/info/properties/input/properties/tags/items",
+                                "type": "string",
+                                "title": "The Items Schema",
+                                "default": "",
+                                "examples": [
+                                    "cologne"
+                                ],
+                                "pattern": "^(.*)$"
+                            }
+                        }
+                    }
+                },
+                "output": {
+                    "$id": "#/properties/info/properties/output",
+                    "title": "The Output Schema",
+                    "type": "object",
+                    "required": [
+                        "description",
+                        "tags"
+                    ],
+                    "properties": {
+                        "description": {
+                            "$id": "#/properties/info/properties/output/properties/description",
+                            "type": "string",
+                            "title": "The Description Schema",
+                            "default": "./env/description/output.md"
+                        },
+                        "tags": {
+                            "$id": "#/properties/info/properties/output/properties/tags",
+                            "type": "array",
+                            "title": "The Tags Schema",
+                            "default": [],
+                            "items": {
+                                "$id": "#/properties/info/properties/output/properties/tags/items",
+                                "type": "string",
+                                "title": "The Items Schema",
+                                "default": "",
+                                "examples": [
+                                    "forecast",
+                                    "cologne"
+                                ],
+                                "pattern": "^(.*)$"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
