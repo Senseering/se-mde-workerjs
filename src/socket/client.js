@@ -1,6 +1,6 @@
 const debug = require('debug')('ws:client')
 const WebSocket = require('ws');
-const update = require("../socket/events/update")
+const update = require("./events/update")
 const config = require("nconf")
 const fs = require("fs")
 let status
@@ -32,7 +32,7 @@ client.init = async (apiDomain, port, id, apikey) => {
     debug("Connection to node established")
   })
 
-  status = require("../socket/status")
+  status = require("./status")
   return client.socket
 }
 
