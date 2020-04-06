@@ -52,7 +52,6 @@ function Worker(params) {
             throw new Error('Config schema does not match')
         }
 
-        //TODO: Maybe if not provided, get apikey or something like that
         if (conf_object.id === 'not_provided' || conf_object.name === 'not_provided' || conf_object.apikey === 'not_provided') {
             let development_config = (JSON.parse(fs.readFileSync('./config/development.json', 'utf8')))
 
@@ -73,6 +72,96 @@ function Worker(params) {
             this.community = true
         }
     }
+}
+
+
+/**
+ * Connect should register the worker at the manager
+ * or load all required data like id, keys and templates
+ */
+Worker.prototype.connect = async function () {
+    //initialize websocket client
+    let socket = await client.init(config.get('apiDomain'), config.get('port'), config.get('id'), config.get('apikey'))
+    while (socket.readyState !== 1) {
+
+        debug('Waiting for connection to manager')
+        await new Promise(resolve => setTimeout(resolve, 2000))
+    }
+
+    fsutil.ensureDirectoryExistence(config.get('privKey'))
+    if (fs.existsSync(config.get('privKey'))) {
+        debug("Key found...")
+        let keyModuleString = fs.readFileSync(config.get('privKey'), 'utf8')
+        let keyString = requireFromString(keyModuleString).key
+        this.key = new NodeRSA(keyString)
+        debug("Key imported.");
+    } else {
+        debug("Key generation in progress...")
+        this.key = new NodeRSA({ b: 1024 })
+        fs.writeFileSync(config.get('privKey'), 'module.exports = ' + JSON.stringify({ key: this.key.exportKey('private') }))
+        debug("Key generated.")
+    }
+
+
+    debug('Registering machine')
+
+    let schema = {}
+    let info = {}
+    if (config.get('schema') !== undefined) {
+        if (config.get('schema').link !== undefined) {
+            //worker of a specific community 
+            schema.link = config.get('schema').link
+            if (config.get('schema').commit !== undefined) {
+                schema.commit = config.get('schema').commit
+            }
+            if (fs.existsSync("./env/schema")) {
+                debug("WARNING: Worker joins the community and the custom schema in: ./env/schema was not used".red)
+            }
+            //there are no custon descriptions for input and output schemas of community-workers
+            info.description = fs.readFileSync(config.get('info').description, "utf8")
+            info.tags = config.get('info').tags
+        } else {
+            //worker without community
+            schema.input = JSON.parse(fs.readFileSync(config.get('schema').input, "utf8"))
+            schema.output = JSON.parse(fs.readFileSync(config.get('schema').output, "utf8"))
+            info = {
+                description: fs.readFileSync(config.get('info').description, "utf8"),
+                tags: config.get('info').tags,
+                input: config.get("info").hasOwnProperty("input") ? {
+                    description: config.get('info').input.hasOwnProperty("description") ? fs.readFileSync(config.get('info').input.description, "utf8") : "",
+                    tags: config.get('info').input.hasOwnProperty("tags") ? config.get('info').input.tags : []
+                } : {
+                        description: "",
+                        tags: []
+                    },
+                output: config.get("info").hasOwnProperty("output") ? {
+                    description: config.get('info').output.hasOwnProperty("description") ? fs.readFileSync(config.get('info').output.description, "utf8") : "",
+                    tags: config.get('info').output.hasOwnProperty("tags") ? config.get('info').output.tags : []
+                } : {
+                        description: "",
+                        tags: []
+                    }
+
+            }
+        }
+    }
+
+    await register.submit(this.completeManagerLink + "/core/", {
+        schema: schema,
+        info: info,
+        pubkey: this.key.exportKey('public'),
+        name: config.get('name') || '',
+        payment: config.get('payment') || '',
+        apikey: config.get('apikey') || '',
+        location: config.get('location') || '',
+        id: config.get('id') || ''
+    })
+    debug('Registered in system')
+    const Trigger = require('./trigger/trigger')
+    this.trigger = new Trigger(run, this.key, socket)
+    this.trigger.setID(config.get('id'))
+    await client.isRegistered()
+    debug('Initialisation done')
 }
 
 
