@@ -82,11 +82,7 @@ function Worker(params) {
 Worker.prototype.connect = async function () {
     //initialize websocket client
     let socket = await client.init(config.get('apiDomain'), config.get('port'), config.get('id'), config.get('apikey'))
-    while (socket.readyState !== 1) {
-
-        debug('Waiting for connection to manager')
-        await new Promise(resolve => setTimeout(resolve, 2000))
-    }
+    await client.isConnected()
 
     fsutil.ensureDirectoryExistence(config.get('privKey'))
     if (fs.existsSync(config.get('privKey'))) {
@@ -101,7 +97,6 @@ Worker.prototype.connect = async function () {
         fs.writeFileSync(config.get('privKey'), 'module.exports = ' + JSON.stringify({ key: this.key.exportKey('private') }))
         debug("Key generated.")
     }
-
 
     debug('Registering worker')
 
@@ -156,114 +151,28 @@ Worker.prototype.connect = async function () {
         location: config.get('location') || '',
         id: config.get('id') || ''
     })
+
+    await client.isRegistered()
     debug('Registered in system')
+
     const Trigger = require('./trigger/trigger')
     this.trigger = new Trigger(run, this.key, socket)
     this.trigger.setID(config.get('id'))
-    await client.isRegistered()
     debug('Initialisation done')
 }
 
-
-/**
- * Init should register the worker at the manager
- * or load all required data like id, keys and templates
- */
-Worker.prototype.init = async function (run) {
-    //initialize socket.io client
-    let socket = await client.init(config.get('apiDomain'), config.get('port'), config.get('id'), config.get('apikey')) //needs to be changed after approved PR#37 auto-register to this.config.apiDomain etc
-    while (socket.readyState !== 1) {
-
-        debug('Waiting for connection to manager')
-        await new Promise(resolve => setTimeout(resolve, 2000))
-    }
-
-    fsutil.ensureDirectoryExistence(config.get('privKey'))
-    if (fs.existsSync(config.get('privKey'))) {
-        debug("Key found...")
-        let keyModuleString = fs.readFileSync(config.get('privKey'), 'utf8')
-        let keyString = requireFromString(keyModuleString).key
-        this.key = new NodeRSA(keyString)
-        debug("Key imported.");
-    } else {
-        debug("Key generation in progress...")
-        this.key = new NodeRSA({ b: 1024 })
-        fs.writeFileSync(config.get('privKey'), 'module.exports = ' + JSON.stringify({ key: this.key.exportKey('private') }))
-        debug("Key generated.")
-    }
-
-
-    debug('Registering machine')
-
-    let schema = {}
-    let info = {}
-    if (config.get('schema') !== undefined) {
-        if (config.get('schema').link !== undefined) {
-            //worker of a specific community 
-            schema.link = config.get('schema').link
-            if (config.get('schema').commit !== undefined) {
-                schema.commit = config.get('schema').commit
-            }
-            if (fs.existsSync("./env/schema")) {
-                debug("WARNING: Worker joins the community and the custom schema in: ./env/schema was not used".red)
-            }
-            //there are no custon descriptions for input and output schemas of community-workers
-            info.description = fs.readFileSync(config.get('info').description, "utf8")
-            info.tags = config.get('info').tags
-        } else {
-            //worker without community
-            schema.input = JSON.parse(fs.readFileSync(config.get('schema').input, "utf8"))
-            schema.output = JSON.parse(fs.readFileSync(config.get('schema').output, "utf8"))
-            info = {
-                description: fs.readFileSync(config.get('info').description, "utf8"),
-                tags: config.get('info').tags,
-                input: config.get("info").hasOwnProperty("input") ? {
-                    description: config.get('info').input.hasOwnProperty("description") ? fs.readFileSync(config.get('info').input.description, "utf8") : "",
-                    tags: config.get('info').input.hasOwnProperty("tags") ? config.get('info').input.tags : []
-                } : {
-                        description: "",
-                        tags: []
-                    },
-                output: config.get("info").hasOwnProperty("output") ? {
-                    description: config.get('info').output.hasOwnProperty("description") ? fs.readFileSync(config.get('info').output.description, "utf8") : "",
-                    tags: config.get('info').output.hasOwnProperty("tags") ? config.get('info').output.tags : []
-                } : {
-                        description: "",
-                        tags: []
-                    }
-
-            }
-        }
-    }
-
-    await register.submit(this.completeManagerLink + "/core/", {
-        schema: schema,
-        info: info,
-        pubkey: this.key.exportKey('public'),
-        name: config.get('name') || '',
-        payment: config.get('payment') || '',
-        apikey: config.get('apikey') || '',
-        location: config.get('location') || '',
-        id: config.get('id') || ''
-    })
-    debug('Registered in system')
-    const Trigger = require('./trigger/trigger')
-    this.trigger = new Trigger(run, this.key, socket)
-    this.trigger.setID(config.get('id'))
-    await client.isRegistered()
-    debug('Initialisation done')
-}
 
 
 /**
  * This will run the function defined by the second parameter in worker.use locally.
  * Only available if the worker is set to LOCAL or HYBRID otherwise it throws an error
  *
- * @param {Object} datainput The given input for the worker
- * @param {Object} params The specified settings with which the function should run
+ * @param {Object} data The data to be sent
+ * @param {Object} params The specified settings with which the function should run (TODO: find out if needed)
+ * @param {Number} price The price of the data set (TODO: Find out if only fixed or whole price)
  */
-Worker.prototype.run = async function (datainput, params, price = undefined) {
-    debug('Running the worker...')
+Worker.prototype.send = async function (data, params, price = undefined) {
+    debug('Sending data...')
     if (typeof config.get('id') === 'undefined') {
         throw new Error('Worker is not initialized')
     } else {

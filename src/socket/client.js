@@ -68,6 +68,24 @@ client.handleMessage = async function (fresponse, Trigger) {
   }
 }
 
+client.isConnected = async function () {
+  return new Promise(function (resolve, reject) {
+    let counter = 1
+    let interval = setInterval(function () {
+      if (client.readyState !== 1) {
+        resolve(true)
+        clearInterval(interval)
+      } else if (counter > 1000) {
+        reject(false)
+        clearInterval(interval)
+      } else {
+        debug("Waiting for connection to manager")
+      }
+      counter++
+    }, 2000)
+  })
+}
+
 client.isRegistered = async function () {
   return new Promise(function (resolve, reject) {
     let counter = 1
