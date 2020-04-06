@@ -8,7 +8,7 @@ const debug = require("debug")("socket:update")
  * @param {Object} update 
  */
 let update = async function (update) {
-    //prepare worker for update from via edgenode api
+    //prepare worker for update from via manager api
     debug(('Updating worker details: ' + JSON.stringify(Object.keys(update))).orange)
     for (var key of Object.keys(update)) {
         //never update login credentials

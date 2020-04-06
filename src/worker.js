@@ -103,7 +103,7 @@ Worker.prototype.connect = async function () {
     }
 
 
-    debug('Registering machine')
+    debug('Registering worker')
 
     let schema = {}
     let info = {}

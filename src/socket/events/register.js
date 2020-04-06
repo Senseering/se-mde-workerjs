@@ -7,8 +7,8 @@ let register = {}
 
 
 /**
- * Registers at the edge node
- * @param {Object} url The edge node url
+ * Registers at the manager
+ * @param {Object} url The manager url
  * @param {Object} registration the needed data package to register
  */
 register.submit = async function (url, registration) {

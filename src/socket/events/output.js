@@ -8,8 +8,8 @@ let output = {}
 
 
 /**
- * Sends the output data to the edge node
- * @param {Object} url The edge node url
+ * Sends the output data to the manager
+ * @param {Object} url The manager url
  * @param {Object} data The actual data package that should be send
  */
 output.send = async function (data, resolve) {

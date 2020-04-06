@@ -29,7 +29,7 @@ client.init = async (apiDomain, port, id, apikey) => {
   )
 
   client.socket.on('open', function () {
-    debug("Connection to node established")
+    debug("Connection to manager established")
   })
 
   status = require("./status")
