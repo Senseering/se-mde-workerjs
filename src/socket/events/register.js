@@ -8,19 +8,11 @@ let register = {}
 
 /**
  * Registers at the manager
- * @param {Object} url The manager url
- * @param {Object} registration the needed data package to register
+ * @param {Object} registration the registration info to register at manager
  */
-register.submit = async function (url, registration) {
-    // Run the request to register a machine
-    debug('url: ' + url)
+register.submit = async function (registration) {
     try {
-        return new Promise((resolve) => {
-            client.socket.send(format.output('register', registration), (callback) => {
-                resolve(callback)
-            })
-        })
-
+        client.socket.send(format.output('register', registration))
     } catch (error) {
         debug(('Error: ' + error).red)
     }
