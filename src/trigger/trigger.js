@@ -31,17 +31,6 @@ function Trigger(run, key) {
     debug("Trigger: " + this.name + " now available.")
 }
 
-/**
- * Sets the id and makes the worker ready
- * @param {String} id
- */
-Trigger.prototype.setID = function (id) {
-    this.id = id
-}
-
-Trigger.prototype.setKey = function (key) {
-    this.key = key
-}
 
 /**
  * Receives the push notification *only available with remote enabled*
