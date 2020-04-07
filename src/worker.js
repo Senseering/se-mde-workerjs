@@ -1,4 +1,3 @@
-//const register = require('./socket/events/register')
 const NodeRSA = require('node-rsa')
 const fs = require('fs')
 const requireFromString = require('require-from-string');
@@ -83,10 +82,8 @@ function Worker(params) {
  * or load all required data like id, keys and templates
  */
 Worker.prototype.connect = async function () {
-    //initialize websocket client
-    let socket = await client.init(config.get('apiDomain'), config.get('port'), config.get('id'), config.get('apikey'))
-    await client.isConnected()
 
+    //generate key
     fsutil.ensureDirectoryExistence(config.get('privKey'))
     if (fs.existsSync(config.get('privKey'))) {
         debug("Key found...")
@@ -144,7 +141,8 @@ Worker.prototype.connect = async function () {
         }
     }
 
-    await register.submit(this.completeManagerLink + "/core/", {
+    //initialize websocket client and register worker on manager
+    let registration = {
         schema: schema,
         info: info,
         pubkey: this.key.exportKey('public'),
@@ -153,21 +151,22 @@ Worker.prototype.connect = async function () {
         apikey: config.get('apikey') || '',
         location: config.get('location') || '',
         id: config.get('id') || ''
-    })
+    }
+
+    let socket = await client.init(config.get('apiDomain'), config.get('port'), config.get('id'), config.get('apikey'), registration)
 
     await client.isRegistered()
-    debug('Registered in system')
+    debug('Worker registered in system')
 
     const Trigger = require('./trigger/trigger')
-    this.trigger = new Trigger(run, this.key, socket)
+    this.trigger = new Trigger(run, this.key)
     this.trigger.setID(config.get('id'))
     debug('Initialisation done')
 }
 
 
-
 /**
- * This will run the function defined by the second parameter in worker.use locally.
+ * This will send data to the manager
  * Only available if the worker is set to LOCAL or HYBRID otherwise it throws an error
  *
  * @param {Object} data The data to be sent
@@ -179,10 +178,10 @@ Worker.prototype.send = async function (data, params, price = undefined) {
     if (typeof config.get('id') === 'undefined') {
         throw new Error('Worker is not initialized')
     } else {
-        let input = {}
-        input.data = datainput
-        input.params = params
-        let data = await this.trigger.exec(input, {
+        let result = {}
+
+        result.data = data
+        result.meta = {
             id: config.get('id'),
             timestamp: new Date().getTime(),
             price: price === undefined ? 0 : price,
@@ -196,8 +195,28 @@ Worker.prototype.send = async function (data, params, price = undefined) {
                 workerIDs: [],
                 dataIDs: [[]]
             }
+        }
+
+        //append additional prices if worker is not fixCostWorker (TODO: Check if applicable for Source worker)
+        /*if (calculations.price !== undefined && !this.isFixCostOnly) {
+            meta.price = calculations.price
+        } else {
+            delete meta.price
+        }
+        */
+
+        verify.appendSignature(result, this.key)
+        result._id = uuidV1()
+        let receivePromise = new Promise(async (resolve, reject) => {
+            try {
+                await output.send({ data: result, statusID: undefined }, resolve)
+            } catch (err) {
+                reject(err)
+            }
+
         })
-        return data
+        await receivePromise
+        return { data: result.data, id: result._id }
     }
 }
 

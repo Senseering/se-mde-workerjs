@@ -94,4 +94,5 @@ client.isRegistered = async function () {
 client.succsessfullySend = async function (data_id, resolve) {
   sendQueue[data_id] = resolve
 }
+
 module.exports = client
