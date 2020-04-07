@@ -19,7 +19,7 @@ client.triggerCallback = function (workerCallback) {
   triggerCallback = workerCallback
 }
 
-client.init = async (apiDomain, port, id, apikey) => {
+client.init = async (apiDomain, port, id, apikey, registration) => {
   client.socket = new WebSocket(
     (config.get('protocol') === 'https' ? 'wss' : 'ws') + '://'
     + id + ':'
@@ -30,6 +30,11 @@ client.init = async (apiDomain, port, id, apikey) => {
 
   client.socket.on('open', function () {
     debug("Connection to manager established")
+    client.socket.send(format.output('register', registration))
+  })
+
+  socket.on('message', (msg) => {
+    handleMessage(format.input(msg))
   })
 
   status = require("./status")
