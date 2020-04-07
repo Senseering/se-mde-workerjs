@@ -14,7 +14,7 @@ const handleMessage = require("../socket/client").handleMessage
  * This function initalizes the mqtt stream and connects all workers
  * @param {String} run The function that will be run on trigger
  */
-function Trigger(run, key, socket) {
+function Trigger(run, key) {
     this.key = key
     this.run = run
     this.fixCost = config.get('payment').fixCost
@@ -23,10 +23,6 @@ function Trigger(run, key, socket) {
     this.completeEdgeLink = config.get('apiDomain') + ':' + config.get('port')
     this.location = config.get('location')
     this.name = config.get('name')
-    socket.on('message', (msg) => {
-        let fmsg = format.input(msg)
-        handleMessage(fmsg, this)
-    })
     debug("Trigger: " + this.name + " now available.")
 }
 
@@ -126,4 +122,5 @@ Trigger.prototype.exec = async function (input, meta, statusID) {
     await receivePromise
     return { data: data, id: result._id }
 }
+
 module.exports = Trigger
