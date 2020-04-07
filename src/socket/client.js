@@ -1,13 +1,16 @@
-const debug = require('debug')('ws:client')
 const WebSocket = require('ws');
-const update = require("./events/update")
 const config = require("nconf")
-const fs = require("fs")
-let status
-//const status = require("../socket/status")
-let isRegistered = false
+//const fs = require("fs")
+const debug = require('debug')('ws:client')
 require('colors')
+
+const update = require("./events/update")
 let format = require("../utils/formatMessages")
+//const status = require("../socket/status")
+
+let status
+let isRegistered = false
+
 
 
 let client = {}
