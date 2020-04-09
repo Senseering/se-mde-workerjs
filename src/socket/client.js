@@ -66,13 +66,6 @@ client.handleMessage = async function (fresponse) {
     delete fresponse.topic
     await update(fresponse.message)
   }
-
-  if (fresponse.topic === "trigger") {
-    message = fresponse.message
-    debug('trigger initiated' + JSON.stringify(message))
-    status.report(message.statusID, "Processing", "started", 'Service received job')
-    Trigger.prepare(message)
-  }
 }
 
 client.isRegistered = async function () {
