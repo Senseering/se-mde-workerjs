@@ -35,15 +35,15 @@ client.init = async (apiDomain, port, id, apikey) => {
     debug("Connection to manager established")
   })
 
-  socket.on('message', (msg) => {
-    handleMessage(format.input(msg))
+  client.socket.on('message', (msg) => {
+    client.handleMessage(format.input(msg))
   })
 
   status = require("./status")
   return client.socket
 }
 
-client.handleMessage = async function (fresponse, Trigger) {
+client.handleMessage = async function (fresponse) {
   if (fresponse.topic === "response") {
     try {
       fresponse = fresponse.message
@@ -52,13 +52,13 @@ client.handleMessage = async function (fresponse, Trigger) {
         debug("Workersettings differ from settings in Manager. Overwriting: " + fresponse.msg)
       } else {
         if (fresponse.code === 200 && fresponse.event === "register") { isRegistered = true }
-        if (fresponse.code === 200 && fresponse.event === "send" && fresponse.id !== undefined) {
+        if (fresponse.code === 200 && fresponse.event === "publish" && fresponse.id !== undefined) {
           sendQueue[fresponse.id]("noticed: " + fresponse.id)
         }
         debug('(Code ' + fresponse.code + ') ' + (fresponse.code == 200 ? 'Successful' : 'Error') + ' response from "' + fresponse.event + '": ' + fresponse.msg)
       }
     } catch (err) {
-      debug(("error in respone" + err).red)
+      debug(("error in response" + err).red)
     }
   }
 
