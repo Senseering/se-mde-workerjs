@@ -17,16 +17,18 @@ let client = require('../socket/client')
 
 
 /**
- * This function initalizes the mqtt stream and connects all workers
- * @param {String} run The function that will be run on trigger
+ * This function initalizes the trigger for the worker
+ * @param {String} key The key of the worker to sign data
+ * @param {String} service The function that will be run on trigger
  */
-function Trigger(run, key) {
+function Trigger(key, service) {
+    this.id = config.get('id')
     this.key = key
-    this.run = run
+    this.service = service
     this.fixCost = config.get('payment').fixCost
     this.isFixCostOnly = config.get('payment').isFixCostOnly
-    this.edge = config.get('apiDomain')
-    this.completeEdgeLink = config.get('apiDomain') + ':' + config.get('port')
+    this.manager = config.get('apiDomain')
+    this.completeManagerLink = config.get('apiDomain') + ':' + config.get('port')
     this.location = config.get('location')
     this.name = config.get('name')
     client.onmessage = function (msg) {
