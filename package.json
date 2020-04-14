@@ -1,5 +1,5 @@
 {
-  "name": "@senseering/worker_js",
+  "name": "@senseering/new_worker_js",
   "version": "1.0.0",
   "description": "Client library to connect to the [edge node](https://github.com/Senseering/edge_node_js).",
   "main": "index.js",
@@ -39,6 +39,7 @@
     "node-persist": "^3.0.4",
     "node-rsa": "^1.0.5",
     "queue": "^6.0.1",
+    "reconnecting-websocket": "^4.4.0",
     "require-from-string": "^2.0.2"
   }
 }
