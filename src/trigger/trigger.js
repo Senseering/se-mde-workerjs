@@ -46,23 +46,31 @@ function Trigger(key, service) {
 
 
 /**
- * Receives the push notification *only available with remote enabled*
- * @param {String} msg String of the actual message received via mqtt
+ * Preparing data for execution of service function
+ * @param {String} msg String of the actual message received via websocket
  */
-Trigger.prototype.prepare = async function (msg) {
+Trigger.prototype.execute = async function (msg) {
     try {
-        debug('Receiving remote trigger and preparing for execution')
-        // Check if data matches the schema to avoid huge failure
-        let invoke = msg
+        debug('Preparing for execution')
+        // Check if data matches the schema (TODO: Needed?)
+        /*let invoke = msg
         let statusID = invoke.statusID
         delete invoke.statusID
-        let valid = validate.validateData(invoke, triggerSchema)
-        if (valid[0]) {
-            let dataIDs = invoke.data.map(a => a._id)
-            let workerIDs = invoke.workerIDs
-            if (this.id == invoke.serviceID) {
 
-                await this.exec(invoke, {
+        let valid = validate.validateData(invoke, triggerSchema)
+        */
+
+        let statusID = msg.statusID
+        delete msg.statusID
+
+        if (this.id == msg.serviceID) {
+            debug('Running service function with foreign data...')
+
+            let dataIDs = msg.data.map(a => a._id)
+            let workerIDs = msg.workerIDs
+
+            let calculations = await this.service(msg.data)
+            let meta = {
                     id: this.id,
                     timestamp: new Date().getTime(),
                     price: 0,
