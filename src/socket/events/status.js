@@ -1,7 +1,8 @@
-
 const debug = require('debug')('socket:status')
-let socket = require('./client').socket
-let format = require("../utils/formatMessages")
+require('colors')
+
+let socket = require('../client').socket
+let format = require("../../utils/formatMessages")
 
 let status = {}
 

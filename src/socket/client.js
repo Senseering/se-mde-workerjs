@@ -57,7 +57,7 @@ client.init = async (apiDomain, port, id, apikey) => {
     debug('Connection to manager lost. Trying to reconnect...')
   }
 
-  status = require("./status")
+  status = require("./events/status")
   return client.socket
 }
 
