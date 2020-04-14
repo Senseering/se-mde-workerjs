@@ -1,4 +1,5 @@
-const WebSocket = require('ws');
+const WebSocket = require('reconnecting-websocket')
+const ws = require('ws')
 const config = require("nconf")
 //const fs = require("fs")
 const debug = require('debug')('ws:client')
@@ -28,7 +29,9 @@ client.init = async (apiDomain, port, id, apikey) => {
     + id + ':'
     + apikey + '@'
     + apiDomain + ":"
-    + port + "/connector/"
+    + port + "/connector/",
+    [],
+    { WebSocket: ws, connectionTimeout: 2000 }
   )
 
   client.socket.on('open', function () {
