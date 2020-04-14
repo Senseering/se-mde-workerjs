@@ -15,6 +15,7 @@ let isRegistered = false
 
 
 let client = {}
+client.waitingQueue = []
 let sendQueue = []
 
 
@@ -34,28 +35,43 @@ client.init = async (apiDomain, port, id, apikey) => {
     { WebSocket: ws, connectionTimeout: 2000 }
   )
 
-  client.socket.on('open', function () {
-    debug("Connection to manager established")
-  })
+  client.socket.emit = function (message) {
+    if (client.socket.readyState == 1) {
+      client.socket.send(message)
+    } else {
+      client.waitingQueue.push(message)
+    }
+  }
 
-  client.socket.on('message', (msg) => {
+  client.socket.onopen = function () {
+    debug("Connection to manager established")
+    setTimeout(client.processQueue, 1000)
+  }
+
+  client.socket.onmessage = function (msg) {
     client.handleMessage(format.input(msg))
-  })
+  }
+
+  client.socket.onclose = function () {
+    isRegistered = false
+    debug('Connection to manager lost. Trying to reconnect...')
+  }
 
   status = require("./status")
   return client.socket
 }
 
 client.handleMessage = async function (fresponse) {
+  fresponse = JSON.parse(fresponse.message.data, 'utf8')
+  //debug(fresponse)
   if (fresponse.topic === "response") {
     try {
-      fresponse = fresponse.message
       if (fresponse.code === 204) {
-        delete fresponse.id
+        delete fresponse.topic
         debug("Workersettings differ from settings in Manager. Overwriting: " + fresponse.msg)
       } else {
         if (fresponse.code === 200 && fresponse.event === "register") { isRegistered = true }
-        if (fresponse.code === 200 && fresponse.event === "publish" && fresponse.id !== undefined) {
+        if (fresponse.code === 200 && fresponse.event === "send" && fresponse.id !== undefined) {
           sendQueue[fresponse.id]("noticed: " + fresponse.id)
         }
         debug('(Code ' + fresponse.code + ') ' + (fresponse.code == 200 ? 'Successful' : 'Error') + ' response from "' + fresponse.event + '": ' + fresponse.msg)
@@ -63,11 +79,28 @@ client.handleMessage = async function (fresponse) {
     } catch (err) {
       debug(("error in response" + err).red)
     }
-  }
-
-  if (fresponse.topic === "update") {
+  } else if (fresponse.topic === "update") {
     delete fresponse.topic
-    await update(fresponse.message)
+    delete fresponse.id
+    await update(fresponse)
+  } else {
+    debug('Unknown message topic received: ' + fresponse.topic)
+  }
+}
+
+client.processQueue = function () {
+  if (client.waitingQueue.length > 0) {
+    while (client.socket.readyState == 1 && client.waitingQueue.length > 0) {
+      debug((client.waitingQueue.length > 1 ? 'There are ' + client.waitingQueue.length + ' unsent messages. Processing...' : 'There is 1 unsent message. Processing...'))
+      let message = client.waitingQueue[0]
+      client.socket.send(message)
+      client.waitingQueue.shift()
+    }
+    if (client.waitingQueue.length == 0) {
+      debug('All unsent messages sent')
+    }
+  } else {
+    debug('No leftover messages to be send')
   }
 }
 
@@ -109,5 +142,11 @@ client.isConnected = async function () {
 client.succsessfullySend = async function (data_id, resolve) {
   sendQueue[data_id] = resolve
 }
+
+/*setInterval(function () {
+  if (client.hasOwnProperty('waitingQueue')) {
+    debug(client.waitingQueue)
+  }
+}, 5000)*/
 
 module.exports = client
