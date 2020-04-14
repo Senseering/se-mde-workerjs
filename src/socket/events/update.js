@@ -1,15 +1,15 @@
-require("colors")
 const config = require("nconf")
 const fs = require("fs")
 const debug = require("debug")("socket:update")
+require("colors")
 
 /** 
  * Update config file so that 
  * @param {Object} update 
  */
 let update = async function (update) {
-    //prepare worker for update from via manager api
-    debug(('Updating worker details: ' + JSON.stringify(Object.keys(update))).orange)
+    //prepare worker for update from manager
+    debug(('Updating worker details: ' + JSON.stringify(Object.keys(update))).yellow)
     for (var key of Object.keys(update)) {
         //never update login credentials
         if (key === "payment") {
@@ -128,8 +128,5 @@ let pathExists = function (obj, args) {
     }
     return true
 }
-
-
-
 
 module.exports = update
