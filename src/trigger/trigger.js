@@ -71,71 +71,44 @@ Trigger.prototype.execute = async function (msg) {
 
             let calculations = await this.service(msg.data)
             let meta = {
-                    id: this.id,
-                    timestamp: new Date().getTime(),
-                    price: 0,
-                    location:
-                    {
-                        latitude: this.location.latitude,
-                        longitude: this.location.longitude,
-                    },
-                    basedOn:
-                    {
-                        workerIDs,
-                        dataIDs
-                    }
-                }, statusID)
-                status.report(statusID, "Processing", "done", 'calculations done')
-                return true
-            } else {
-                debug('Message not for this worker')
+                id: this.id,
+                timestamp: new Date().getTime(),
+                price: 0,
+                location:
+                {
+                    latitude: this.location.latitude,
+                    longitude: this.location.longitude,
+                },
+                basedOn:
+                {
+                    workerIDs,
+                    dataIDs
+                }
             }
 
+            if (calculations.data === undefined) {
+                throw new Error("service function has to return an Object with data field and optionally a price field")
+            }
+
+            let receivePromise = new Promise(async (resolve, reject) => {
+                try {
+                    await publish(calculations.data, meta, statusID, this.key, resolve)
+                } catch (err) {
+                    reject(err)
+                }
+
+            })
+            await receivePromise
+
+            status.report(statusID, "Processing", "done", 'calculations done')
+            return { data: data, id: result._id }
         } else {
-            debug('Message is no valid trigger: ' + valid[0])
-            return false
+            debug('Message not for this worker')
         }
     } catch (err) {
         debug('Error during pull or execution: ' + err)
         return false
     }
-}
-
-/**
- * Executes the function on the given input
- * @param {Object} input data package which should be processed by the function
- */
-Trigger.prototype.exec = async function (input, meta, statusID) {
-    debug('Executing workers function')
-    let calculations = await this.run(input, meta)
-    if (calculations.data === undefined) {
-        throw new Error("run function has to return an Object with data field and optionally a price field")
-    }
-    let data = calculations.data
-
-    //append additional prices if worker is not fixCostWorker 
-    if (calculations.price !== undefined && !this.isFixCostOnly) {
-        meta.price = calculations.price
-    } else {
-        delete meta.price
-    }
-
-    let result = {
-        data,
-        meta
-    }
-    verify.appendSignature(result, this.key)
-    result._id = uuidV1()
-    let receivePromise = new Promise(async (resolve, reject) => {
-        try {
-            await output.send({ data: result, statusID: statusID }, resolve)
-        } catch (err) {
-            reject(err)
-        }
-
-    })
-    await receivePromise
-    return { data: data, id: result._id }
 }
 
 module.exports = Trigger
