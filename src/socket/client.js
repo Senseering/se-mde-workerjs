@@ -54,7 +54,7 @@ client.init = async (apiDomain, port, id, apikey) => {
 
   client.socket.onclose = function () {
     isRegistered = false
-    debug('Connection to manager lost. Trying to reconnect...')
+    debug('Unable to connect to manager. Trying to connect...')
   }
 
   status = require("./events/status")
