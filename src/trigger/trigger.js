@@ -5,7 +5,7 @@ require('colors')
 
 const Ajv = require('ajv')
 let ajv = new Ajv({ useDefaults: true })
-let triggerSchema = ajv.compile(require('../schema/trigger'))
+//let triggerSchema = ajv.compile(require('../schema/trigger'))
 
 const validate = require('../utils/validate')
 const publish = require('../socket/events/publish')
