@@ -1,4 +1,4 @@
-let Worker = require('worker_js')
+let Worker = require('@senseering/worker_js')
 
 let config = './config/development.json'
 
@@ -8,5 +8,5 @@ let worker = new Worker(config);
     await worker.connect()
 
     let data = { test: 'Hello world!' }
-    await worker.send(data)
+    await worker.publish({ data: data, price: 1 })
 })();
