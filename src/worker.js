@@ -100,7 +100,7 @@ Worker.prototype.connect = async function () {
         debug("Key generated.")
     }
 
-    debug('Registering worker')
+    debug('Fetching registration details')
 
     let schema = {}
     let info = {}
@@ -155,38 +155,36 @@ Worker.prototype.connect = async function () {
         id: config.get('id') || ''
     }
 
-    let socket = await client.init(config.get('apiDomain'), config.get('port'), config.get('id'), config.get('apikey'), registration)
+    await client.init(config.get('apiDomain'), config.get('port'), config.get('id'), config.get('apikey'))
+    //await client.isConnected()
 
+    debug('Registering worker')
+    await register(registration)
     await client.isRegistered()
-    debug('Worker registered in system')
 
-    const Trigger = require('./trigger/trigger')
-    this.trigger = new Trigger(run, this.key)
-    this.trigger.setID(config.get('id'))
+    debug('Worker registered in system')
     debug('Initialisation done')
 }
 
 
 /**
- * This will send data to the manager
- * Only available if the worker is set to LOCAL or HYBRID otherwise it throws an error
+ * This will publish data on the manager
  *
- * @param {Object} data The data to be sent
- * @param {Object} params The specified settings with which the function should run (TODO: find out if needed)
- * @param {Number} price The price of the data set (TODO: Find out if only fixed or whole price)
+ * @param {Object} data The data to be published
  */
-Worker.prototype.send = async function (data, params, price = undefined) {
-    debug('Sending data...')
+Worker.prototype.publish = async function (data) {
+    debug('Preparing data for publish on manager...')
     if (typeof config.get('id') === 'undefined') {
         throw new Error('Worker is not initialized')
+    } else if (!data.hasOwnProperty('data')) {
+        throw new Error('publish has to get an Object with "data" field and optionally a "price" field as argument.')
     } else {
-        let result = {}
 
-        result.data = data
-        result.meta = {
+        let result
+        let meta = {
             id: config.get('id'),
             timestamp: new Date().getTime(),
-            price: price === undefined ? 0 : price,
+            price: data.price === undefined ? 0 : data.price,
             location:
             {
                 latitude: config.get('location.latitude'),
@@ -199,27 +197,31 @@ Worker.prototype.send = async function (data, params, price = undefined) {
             }
         }
 
-        //append additional prices if worker is not fixCostWorker (TODO: Check if applicable for Source worker)
-        /*if (calculations.price !== undefined && !this.isFixCostOnly) {
-            meta.price = calculations.price
-        } else {
-            delete meta.price
-        }
-        */
-
-        verify.appendSignature(result, this.key)
-        result._id = uuidV1()
         let receivePromise = new Promise(async (resolve, reject) => {
             try {
-                await output.send({ data: result, statusID: undefined }, resolve)
+                result = await publish(data.data, meta, undefined, this.key, resolve)
             } catch (err) {
                 reject(err)
             }
-
         })
+
         await receivePromise
-        return { data: result.data, id: result._id }
+        return result
     }
+}
+
+
+/**
+ * This sets the service function that can be triggered and executed on demand
+ *
+ * @param {Object} service The function that can be triggered and executed on demand
+ */
+Worker.prototype.provide = async function (service) {
+    debug('Setting service function...')
+
+    //set trigger
+    const Trigger = require('./trigger/trigger')
+    this.trigger = new Trigger(this.key, service)
 }
 
 module.exports = Worker
