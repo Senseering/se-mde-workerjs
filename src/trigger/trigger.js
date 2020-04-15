@@ -92,7 +92,6 @@ Trigger.prototype.execute = async function (msg) {
             await receivePromise
 
             status.report(statusID, "Processing", "done", 'calculations done')
-            return { data: data, id: result._id }
         } else {
             debug('Message not for this worker')
         }
