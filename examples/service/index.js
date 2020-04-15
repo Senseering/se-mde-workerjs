@@ -1,4 +1,4 @@
-let Worker = require('@senseering/new_worker_js')
+let Worker = require('../../src/worker')
 
 let config = './config/development.json'
 
