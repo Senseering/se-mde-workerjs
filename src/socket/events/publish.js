@@ -40,13 +40,7 @@ let publish = async function (data, meta, statusID, key, resolve) {
 
                 //publish data
                 client.succsessfullySend(package.data._id, resolve)
-
-                /*if (client.socket.readyState == 1) {
-                    client.socket.send(format.output('send', package))
-                } else {
-                    client.waitingQueue.push(format.output('send', package))
-                }*/
-                client.socket.emit(format.output('send', package))
+                client.socket.emit(format.output('publish', package))
                 return { data: package.data, id: package._id }
 
             } else {
