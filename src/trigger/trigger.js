@@ -35,49 +35,61 @@ Trigger.prototype.execute = async function (msg) {
     try {
         debug('Preparing for execution')
 
-        let statusID = msg.statusID
-        delete msg.statusID
+        //check incoming data against schema if required
+        let valid
+        if (config.get('schema').check) {
+            let inputSchema = JSON.parse(fs.readFileSync(config.get('schema').input, "utf8"))
+            valid = (validate.validateData(msg.data, inputSchema))[0]
+        }
 
-        if (this.id == msg.serviceID) {
-            debug('Running service function with foreign data...')
+        if (valid) {
 
-            let dataIDs = msg.data.map(a => a._id)
-            let workerIDs = msg.workerIDs
+            let statusID = msg.statusID
+            delete msg.statusID
 
-            let calculations = await this.service(msg.data)
-            let meta = {
-                id: this.id,
-                timestamp: new Date().getTime(),
-                price: calculations.price === undefined ? 0 : calculations.price,
-                location:
-                {
-                    latitude: this.location.latitude,
-                    longitude: this.location.longitude,
-                },
-                basedOn:
-                {
-                    workerIDs,
-                    dataIDs
-                }
-            }
+            if (this.id == msg.serviceID) {
+                debug('Running service function with foreign data...')
 
-            if (calculations.data === undefined) {
-                throw new Error("service function has to return an Object with data field and optionally a price field")
-            }
+                let dataIDs = msg.data.map(a => a._id)
+                let workerIDs = msg.workerIDs
 
-            let receivePromise = new Promise(async (resolve, reject) => {
-                try {
-                    await publish(calculations.data, meta, statusID, this.key, resolve)
-                } catch (err) {
-                    reject(err)
+                let calculations = await this.service(msg.data)
+                let meta = {
+                    id: this.id,
+                    timestamp: new Date().getTime(),
+                    price: calculations.price === undefined ? 0 : calculations.price,
+                    location:
+                    {
+                        latitude: this.location.latitude,
+                        longitude: this.location.longitude,
+                    },
+                    basedOn:
+                    {
+                        workerIDs,
+                        dataIDs
+                    }
                 }
 
-            })
-            await receivePromise
+                if (calculations.data === undefined) {
+                    throw new Error("service function has to return an Object with data field and optionally a price field")
+                }
 
-            status.report(statusID, "Processing", "done", 'calculations done')
+                let receivePromise = new Promise(async (resolve, reject) => {
+                    try {
+                        await publish(calculations.data, meta, statusID, this.key, resolve)
+                    } catch (err) {
+                        reject(err)
+                    }
+
+                })
+                await receivePromise
+
+                status.report(statusID, "Processing", "done", 'calculations done')
+            } else {
+                debug('Message not for this worker')
+            }
         } else {
-            debug('Message not for this worker')
+            debug('Incoming data does not match the schema')
         }
     } catch (err) {
         debug('Error during pull or execution: ' + err)
