@@ -31,16 +31,7 @@ function Trigger(key, service) {
     this.completeManagerLink = config.get('apiDomain') + ':' + config.get('port')
     this.location = config.get('location')
     this.name = config.get('name')
-    client.onmessage = function (msg) {
-        let fresponse = format.input(msg).message
-
-        if (fresponse.topic === "trigger") {
-            message = fresponse.message
-            debug('trigger initiated' + JSON.stringify(message))
-            status.report(message.statusID, "Processing", "started", 'Service received job')
-            this.execute(message)
-        }
-    }
+    client.trigger = this
     debug("Trigger: " + this.name + " now available.")
 }
 

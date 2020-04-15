@@ -7,7 +7,7 @@ require('colors')
 
 const update = require("./events/update")
 let format = require("../utils/formatMessages")
-//const status = require("../socket/status")
+//const status = require("../events/status")
 
 let status
 let isRegistered = false
@@ -83,6 +83,11 @@ client.handleMessage = async function (fresponse) {
     delete fresponse.topic
     delete fresponse.id
     await update(fresponse)
+  } else if (fresponse.topic === "trigger" && client.hasOwnProperty('trigger')) {
+    message = fresponse.message
+    debug('trigger initiated :' + JSON.stringify(message))
+    status.report(message.statusID, "Processing", "started", 'Service received job')
+    client.trigger.execute(message)
   } else {
     debug('Unknown message topic received: ' + fresponse.topic)
   }
