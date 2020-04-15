@@ -155,7 +155,6 @@ Worker.prototype.connect = async function () {
     }
 
     await client.init(config.get('apiDomain'), config.get('port'), config.get('id'), config.get('apikey'))
-    //await client.isConnected()
 
     debug('Registering worker')
     await register(registration)

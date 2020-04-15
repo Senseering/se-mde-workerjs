@@ -124,31 +124,8 @@ client.isRegistered = async function () {
   })
 }
 
-client.isConnected = async function () {
-  debug('Waiting for connection to manager...')
-  return new Promise(function (resolve, reject) {
-    let counter = 1
-    let interval = setInterval(function () {
-      if (client.socket.readyState == 1) {
-        resolve(true)
-        clearInterval(interval)
-      } else if (counter > 1000) {
-        reject(false)
-        clearInterval(interval)
-      }
-      counter++
-    }, 300)
-  })
-}
-
 client.succsessfullySend = async function (data_id, resolve) {
   sendQueue[data_id] = resolve
 }
-
-/*setInterval(function () {
-  if (client.hasOwnProperty('waitingQueue')) {
-    debug(client.waitingQueue)
-  }
-}, 5000)*/
 
 module.exports = client

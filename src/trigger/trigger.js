@@ -34,13 +34,6 @@ function Trigger(key, service) {
 Trigger.prototype.execute = async function (msg) {
     try {
         debug('Preparing for execution')
-        // Check if data matches the schema (TODO: Needed?)
-        /*let invoke = msg
-        let statusID = invoke.statusID
-        delete invoke.statusID
-
-        let valid = validate.validateData(invoke, triggerSchema)
-        */
 
         let statusID = msg.statusID
         delete msg.statusID
