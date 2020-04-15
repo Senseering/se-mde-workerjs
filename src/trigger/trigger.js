@@ -61,7 +61,7 @@ Trigger.prototype.execute = async function (msg) {
                     location:
                     {
                         latitude: this.location.latitude,
-                        longitude: this.location.longitude,
+                        longitude: this.location.longitude
                     },
                     basedOn:
                     {
