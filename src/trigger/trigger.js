@@ -73,7 +73,7 @@ Trigger.prototype.execute = async function (msg) {
             let meta = {
                 id: this.id,
                 timestamp: new Date().getTime(),
-                price: 0,
+                price: calculations.price === undefined ? 0 : calculations.price,
                 location:
                 {
                     latitude: this.location.latitude,
