@@ -7,13 +7,12 @@ require('colors')
 
 const Ajv = require('ajv')
 let ajv = new Ajv({ useDefaults: true })
-let configSchema = ajv.compile(require('./schema/config'))
+let configSchema = ajv.compile(require('./schema/config/config'))
 
 const fsutil = require('./utils/fsutil')
 const client = require('./socket/client')
 const publish = require('./socket/events/publish')
 const register = require('./socket/events/register')
-//const verify = require('./utils/verify')
 
 /**
  * Is used to register at a manager with the necessary options given. It checks if the worker is

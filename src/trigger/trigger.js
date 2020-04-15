@@ -1,19 +1,10 @@
-const uuidV1 = require('uuid/v1')
 const config = require('nconf')
 const debug = require('debug')('trigger')
 require('colors')
 
-const Ajv = require('ajv')
-let ajv = new Ajv({ useDefaults: true })
-//let triggerSchema = ajv.compile(require('../schema/trigger'))
-
-const validate = require('../utils/validate')
 const publish = require('../socket/events/publish')
-const verify = require('../utils/verify')
 const status = require('../socket/events/status')
 let client = require('../socket/client')
-//const format = require("../utils/formatMessages")
-//const handleMessage = require("../socket/client").handleMessage
 
 
 /**

@@ -1,13 +1,11 @@
 const WebSocket = require('reconnecting-websocket')
 const ws = require('ws')
 const config = require("nconf")
-//const fs = require("fs")
 const debug = require('debug')('ws:client')
 require('colors')
 
 const update = require("./events/update")
 let format = require("../utils/formatMessages")
-//const status = require("../events/status")
 
 let status
 let isRegistered = false
