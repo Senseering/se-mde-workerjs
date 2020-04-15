@@ -186,7 +186,7 @@ Worker.prototype.publish = async function (data) {
             location:
             {
                 latitude: config.get('location.latitude'),
-                longitude: config.get('location.longitude'),
+                longitude: config.get('location.longitude')
             },
             basedOn:
             {
