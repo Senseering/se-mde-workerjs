@@ -63,7 +63,6 @@ client.init = async (apiDomain, port, id, apikey) => {
 
 client.handleMessage = async function (fresponse) {
   fresponse = JSON.parse(fresponse.message.data, 'utf8')
-  //debug(fresponse)
   if (fresponse.topic === "response") {
     try {
       if (fresponse.code === 204) {
@@ -71,7 +70,7 @@ client.handleMessage = async function (fresponse) {
         debug("Workersettings differ from settings in Manager. Overwriting: " + fresponse.msg)
       } else {
         if (fresponse.code === 200 && fresponse.event === "register") { isRegistered = true }
-        if (fresponse.code === 200 && fresponse.event === "send" && fresponse.id !== undefined) {
+        if (fresponse.code === 200 && fresponse.event === "publish" && fresponse.id !== undefined) {
           sendQueue[fresponse.id]("noticed: " + fresponse.id)
         }
         debug('(Code ' + fresponse.code + ') ' + (fresponse.code == 200 ? 'Successful' : 'Error') + ' response from "' + fresponse.event + '": ' + fresponse.msg)
