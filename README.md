@@ -35,27 +35,27 @@ This should give a short introduction to workers and the possible use cases. Bel
 
 ### Config object high level description
 
-| Property | Type | Subproperty | Description |
+| Property | Subproperty | Type | Description |
 |--------|--------|----------|------|
-| id | String |  | Identifier for connection to manager |
-| name | String  |  | The fully qualified name by which the worker should be called | 
-| location | Object |  | 2D GPS coordinate of the worker |
+| id |  | String | Identifier for connection to manager |
+| name |  | String  | The fully qualified name by which the worker should be called | 
+| location |  | Object | 2D GPS coordinate of the worker |
 |  | latitude | Number | Latitude of worker location |
 |  | longitude | Number | Longitude of worker location |
-| payment | Object |  | Fixed price and boolean option for additional pricing |
+| payment |  | Object | Fixed price and boolean option for additional pricing |
 |  | fixCost | Integer | Fixed costs of the data packages |
 |  | isFixCostOnly | Boolean | Can additional costs apply? |
-| schema | Object | Either single or community schema and boolean option for schema check on worker |
+| schema |  | Object | Either single or community schema and boolean option for schema check on worker |
 |  | input | String | URI reference to the input schema in .json format |
 |  | output | String | URI reference to the output schema in .json format |
 |  | check | Boolean | Is the data checked against the schema by the worker itself? |
-| signature | Boolean |  | Is the data signed by the worker |
-| apikey | String |  | API-Key to access the manager |
-| privKey | String |  | URI reference to the private key used to signing |
-| apiDomain | String |  | Domain of manager |
-| port | String |  | port on which to connect to manager |
-| protocol | String |  | http or https |
-| info | Object |  | object containing all relevant information |
+| signature |  | Boolean | Is the data signed by the worker |
+| apikey |  | String  | API-Key to access the manager |
+| privKey |  | String  | URI reference to the private key used to signing |
+| apiDomain |  | String | Domain of manager |
+| port |  | String | port on which to connect to manager |
+| protocol |  | String | http or https |
+| info |  | Object | object containing all relevant information |
 |  | description | String | URI reference to the info in .md format |
 |  | tags | Array | tags under which this worker wnats to be found |
 |  | input | String | URI reference to the input info in .md format |
