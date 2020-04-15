@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/Senseering/worker_js.svg?token=J8PZydPmZBQA3jayA6F4&branch=master)](https://travis-ci.com/Senseering/worker_js)
 
-Client library to connect to the [edge node](https://github.com/Senseering/edge_node_js).
+Client library to connect to the [edge node](https://github.com/Senseering/manager).
 
 ## Development lifecycle
 
@@ -45,8 +45,7 @@ c1.init().then(() => {
 ```
 
 ## Worker Description
-A worker is the basic building block for our approach to a decentralised data plattform. It utilizes the edge node for storing, managing and selling our data on the senseering plattform. The workers objectiv is to process or generate data based on sensor inputs or other available feeds. It can be run in a *local* mode or a *remote* mode. *Local* mode is especially interesting if you want to create a data stream (e.g. send every few seconds the new sensor inputs) or you need the results of your data in another application in real time and dont want to wait on the edge node making the data available for you. *Remote* mode on the other hand is interesting if you want to data only if some user requests it (e.g. a weather station that should only publish on demand) or if you want to process data from other data sources (e.g. image recognition service or similar).
-
+A worker is the basic building block for our approach to a decentralised data plattform. It utilizes the manager for storing, managing and selling our data on the senseering myDataEconomy-plattform. The workers objective is to process or generate data based on sensor inputs or other available feeds. It can be run as a source that only publishes data to your liking (e.g. send every few seconds the new sensor inputs) or as a service, which provides a service function that can be triggered on demand (e.g. a weather station that should only publish on demand or an image recognition service). Also a mixture of those two types is possible.
 This should give a short introduction to workers and the possible use cases. Below you can find more information to the config object and the api of `worker_js`.
 
 ### Config object high level description
@@ -64,10 +63,12 @@ This should give a short introduction to workers and the possible use cases. Bel
 
 ### Worker API
 
-#### worker.init : 
-Registeres the worker on the edge node, generates Keys and initalizes the different properties of the worker.
-#### worker.run :
-Runs the internal function. You can pass the input and params as parameters to this function.
+#### worker.connect : 
+Sets up the connection to the manager, registers the worker and generates keys
+#### worker.publish :
+Publishes desired data on the manager
+#### worker.provide:
+Provides the service function that can be triggered on demand
 
 ### Templates in workers
 
