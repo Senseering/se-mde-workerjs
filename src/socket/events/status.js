@@ -1,7 +1,7 @@
 const debug = require('debug')('socket:status')
 require('colors')
 
-let socket = require('../client').socket
+let client = require('../client')
 let format = require("../../utils/formatMessages")
 
 let status = {}
@@ -16,10 +16,11 @@ status.report = function (id, step, status, msg = "", code = null) {
       msg: msg,
       code: code
     }
-    socket.emit(format.output("log", toPublishMsg))
+    client.socket.emit(format.output("log", toPublishMsg))
   } catch (err) {
     debug(("error occured on reporting worker status:" + err).red)
     throw err
   }
 }
+
 module.exports = status

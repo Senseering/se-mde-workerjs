@@ -1,7 +1,7 @@
 const debug = require('debug')('socket:register')
 require('colors')
 
-let socket = require('../client').socket
+let client = require('../client')
 const format = require("../../utils/formatMessages")
 
 
@@ -11,7 +11,7 @@ const format = require("../../utils/formatMessages")
  */
 let register = async function (registration) {
     try {
-        socket.emit(format.output('register', registration))
+        client.socket.emit(format.output('register', registration))
     } catch (error) {
         debug(('Error: ' + error).red)
     }
