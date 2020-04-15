@@ -15,33 +15,18 @@ And run all tests:
 
 ## Example usage
 ```js
-let Worker = require('worker_js')
+let Worker = require('../../src/worker')
 
-config = {
-    name: 'hello_world',
-    location: {
-        lat: 50.7797268,
-        long: 6.100391
-    },
-    input: './env/input_template.js',
-    output: './env/output_template.js',
-    apiKey: '123466',
-    privKey: './env/key_world.js',
-    mode: 0, 
-    run: ({data, params}) => { 
-        return 'Hello World'
-    }
-}
-        
-c1 = new Worker(config,'127.0.0.1:3000')
+let config = './config/development.json'
 
-c1.init().then(() => {
-    c1.run({challo: 123}, {ballo: 321}).then((res) => {
-        //consol.log(res)
-    }).catch((e) => {
-        debug('Unexpected Error: ' + e.stack)
-    })
-})
+let worker = new Worker(config);
+
+(async function () {
+    await worker.connect()
+
+    let data = { test: 'Hello world!' }
+    await worker.publish({ data: data, price: 0 })
+})();
 ```
 
 ## Worker Description
@@ -50,16 +35,31 @@ This should give a short introduction to workers and the possible use cases. Bel
 
 ### Config object high level description
 
-| Property | Type | Description |
-|--------|----------|------|
-| name | String | The fully qualified name by which the worker should be called | 
-| location | Object | 2D GPS coordinate of the worker |
-| input | String | URI reference to the input  |
-| output | String | URI reference to the output |
-| apiKey | String | API-Key to access the edge node |
-| privKey | String | URI reference to the private key used to signing |
-| mode | Number | Number to describe the options that trigger the function |
-| run | Function | Function that is run when triggered |
+| Property | Type | Subproperty | Description |
+|--------|--------|----------|------|
+| id | String |  | Identifier for connection to manager |
+| name | String  |  | The fully qualified name by which the worker should be called | 
+| location | Object |  | 2D GPS coordinate of the worker |
+|  | latitude | Number | Latitude of worker location |
+|  | longitude | Number | Longitude of worker location |
+| payment | Object |  | Fixed price and boolean option for additional pricing |
+|  | fixCost | Integer | Fixed costs of the data packages |
+|  | isFixCostOnly | Boolean | Can additional costs apply? |
+| schema | Object | Either single or community schema and boolean option for schema check on worker |
+|  | input | String | URI reference to the input schema in .json format |
+|  | output | String | URI reference to the output schema in .json format |
+|  | check | Boolean | Is the data checked against the schema by the worker itself? |
+| signature | Boolean |  | Is the data signed by the worker |
+| apikey | String |  | API-Key to access the manager |
+| privKey | String |  | URI reference to the private key used to signing |
+| apiDomain | String |  | Domain of manager |
+| port | String |  | port on which to connect to manager |
+| protocol | String |  | http or https |
+| info | Object |  | object containing all relevant information |
+|  | description | String | URI reference to the info in .md format |
+|  | tags | Array | tags under which this worker wnats to be found |
+|  | input | String | URI reference to the input info in .md format |
+|  | output | String | URI reference to the output info in .md format |
 
 ### Worker API
 
