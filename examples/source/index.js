@@ -9,4 +9,5 @@ let worker = new Worker(config);
 
     let data = { test: 'Hello world!' }
     await worker.publish({ data: data, price: 0 })
+    await worker.disconnect()
 })();

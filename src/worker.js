@@ -79,7 +79,7 @@ function Worker(params) {
 
 
 /**
- * Connect should register the worker at the manager
+ * Connect should establish the websocket connection to the manager and register the worker
  * or load all required data like id, keys and templates
  */
 Worker.prototype.connect = async function () {
@@ -220,6 +220,15 @@ Worker.prototype.provide = async function (service) {
     //set trigger
     const Trigger = require('./trigger/trigger')
     this.trigger = new Trigger(this.key, service)
+}
+
+
+/**
+ * This disconnects the client from the manager
+ */
+Worker.prototype.disconnect = async function () {
+    debug('Disconnecting client...')
+    await client.disconnect()
 }
 
 module.exports = Worker
