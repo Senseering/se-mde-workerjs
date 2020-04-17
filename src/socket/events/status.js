@@ -16,7 +16,7 @@ status.report = function (id, step, status, msg = "", code = null) {
       msg: msg,
       code: code
     }
-    client.socket.emit(format.output("log", toPublishMsg))
+    client.socket.emit('log', toPublishMsg)
   } catch (err) {
     debug(("error occured on reporting worker status:" + err).red)
     throw err

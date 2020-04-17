@@ -1,6 +1,7 @@
 const WebSocket = require('reconnecting-websocket')
 const ws = require('ws')
 const config = require("nconf")
+const uuidV1 = require('uuid/v1')
 const debug = require('debug')('ws:client')
 require('colors')
 
@@ -11,13 +12,12 @@ let status
 let isRegistered = false
 
 
-
 let client = {}
+client.unsentQueue = []
+client.pendingQueue = []
 client.waitingQueue = []
 let sendQueue = []
 
-
-let triggerCallback = undefined
 client.triggerCallback = function (workerCallback) {
   triggerCallback = workerCallback
 }
@@ -33,11 +33,23 @@ client.init = async (apiDomain, port, id, apikey) => {
     { WebSocket: ws, connectionTimeout: 2000 }
   )
 
-  client.socket.emit = function (message) {
-    if (client.socket.readyState == 1) {
-      client.socket.send(message)
+  client.socket.emit = function (topic, message) {
+    let msg
+    if (topic === 'queued') {
+    }
+    if (topic !== 'queued' && typeof (message) == "object") {
+      message.eventID = uuidV1()
+      msg = format.output(topic, message)
     } else {
-      client.waitingQueue.push(message)
+      msg = message.message
+      delete msg.topic
+    }
+
+    if (client.socket.readyState == 1) {
+      client.socket.send(msg)
+      client.pendingQueue.push({ eventID: message.eventID, topic: topic, message: msg })
+    } else {
+      client.unsentQueue.push({ eventID: message.eventID, topic: topic, message: msg })
     }
   }
 
@@ -52,6 +64,8 @@ client.init = async (apiDomain, port, id, apikey) => {
 
   client.socket.onclose = function () {
     isRegistered = false
+    client.unsentQueue = client.unsentQueue.concat(client.pendingQueue)
+    client.pendingQueue = []
     debug('Unable to connect to manager. Trying to connect...')
   }
 
@@ -67,8 +81,12 @@ client.handleMessage = async function (fresponse) {
         delete fresponse.topic
         debug("Workersettings differ from settings in Manager. Overwriting: " + fresponse.msg)
       } else {
-        if (fresponse.code === 200 && fresponse.event === "register") { isRegistered = true }
+        if (fresponse.code === 200 && fresponse.event === "register") {
+          isRegistered = true
+          client.pendingQueue = client.pendingQueue.filter(a => a.eventID != fresponse.eventID)
+        }
         if (fresponse.code === 200 && fresponse.event === "publish" && fresponse.id !== undefined) {
+          client.pendingQueue = client.pendingQueue.filter(a => a.eventID != fresponse.eventID)
           sendQueue[fresponse.id]("noticed: " + fresponse.id)
         }
         debug('(Code ' + fresponse.code + ') ' + (fresponse.code == 200 ? 'Successful' : 'Error') + ' response from "' + fresponse.event + '": ' + fresponse.msg)
@@ -91,14 +109,14 @@ client.handleMessage = async function (fresponse) {
 }
 
 client.processQueue = function () {
-  if (client.waitingQueue.length > 0) {
-    while (client.socket.readyState == 1 && client.waitingQueue.length > 0) {
-      debug((client.waitingQueue.length > 1 ? 'There are ' + client.waitingQueue.length + ' unsent messages. Processing...' : 'There is 1 unsent message. Processing...'))
-      let message = client.waitingQueue[0]
-      client.socket.send(message)
-      client.waitingQueue.shift()
+  if (client.unsentQueue.length > 0) {
+    while (client.socket.readyState == 1 && client.unsentQueue.length > 0) {
+      debug((client.unsentQueue.length > 1 ? 'There are ' + client.unsentQueue.length + ' unsent messages. Processing...' : 'There is 1 unsent message. Processing...'))
+      let message = client.unsentQueue[0]
+      client.socket.emit('queued', message)
+      client.unsentQueue.shift()
     }
-    if (client.waitingQueue.length == 0) {
+    if (client.unsentQueue.length == 0) {
       debug('All unsent messages sent')
     }
   } else {
@@ -126,6 +144,15 @@ client.isRegistered = async function () {
 
 client.succsessfullySend = async function (data_id, resolve) {
   sendQueue[data_id] = resolve
+}
+
+client.disconnect = async function () {
+  if (client.socket.readyState != 1) {
+    debug('Disconnected already. Nothing to be done')
+  } else {
+    await client.socket.close()
+    debug('Closed connection to manager')
+  }
 }
 
 module.exports = client
