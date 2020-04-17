@@ -1,0 +1,17 @@
+{
+  "name": "worker_example_source",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "NODE_CONFIG_DIR='./config/' NODE_ENV='development' DEBUG=*,-follow-redirects node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "base64-img": "^1.0.4",
+    "debug": "^4.1.1",
+    "socket.io-client": "^2.3.0"
+  }
+}
