@@ -35,61 +35,49 @@ Trigger.prototype.execute = async function (msg) {
     try {
         debug('Preparing for execution')
 
-        //check incoming data against schema if required
-        let valid
-        if (config.get('schema').check) {
-            let inputSchema = JSON.parse(fs.readFileSync(config.get('schema').input, "utf8"))
-            valid = (validate.validateData(msg.data, inputSchema))[0]
-        }
+        let statusID = msg.statusID
+        delete msg.statusID
 
-        if (valid) {
+        if (this.id == msg.serviceID) {
+            debug('Running service function with foreign data...')
 
-            let statusID = msg.statusID
-            delete msg.statusID
+            let dataIDs = msg.data.map(a => a._id)
+            let workerIDs = msg.workerIDs
 
-            if (this.id == msg.serviceID) {
-                debug('Running service function with foreign data...')
-
-                let dataIDs = msg.data.map(a => a._id)
-                let workerIDs = msg.workerIDs
-
-                let calculations = await this.service(msg.data)
-                let meta = {
-                    id: this.id,
-                    timestamp: new Date().getTime(),
-                    price: calculations.price === undefined ? 0 : calculations.price,
-                    location:
-                    {
-                        latitude: this.location.latitude,
-                        longitude: this.location.longitude
-                    },
-                    basedOn:
-                    {
-                        workerIDs,
-                        dataIDs
-                    }
+            let calculations = await this.service(msg.data)
+            let meta = {
+                id: this.id,
+                timestamp: new Date().getTime(),
+                price: calculations.price === undefined ? 0 : calculations.price,
+                location:
+                {
+                    latitude: this.location.latitude,
+                    longitude: this.location.longitude
+                },
+                basedOn:
+                {
+                    workerIDs,
+                    dataIDs
                 }
-
-                if (calculations.data === undefined) {
-                    throw new Error("service function has to return an Object with data field and optionally a price field")
-                }
-
-                let receivePromise = new Promise(async (resolve, reject) => {
-                    try {
-                        await publish(calculations.data, meta, statusID, this.key, resolve)
-                    } catch (err) {
-                        reject(err)
-                    }
-
-                })
-                await receivePromise
-
-                status.report(statusID, "Processing", "done", 'calculations done')
-            } else {
-                debug('Message not for this worker')
             }
+
+            if (calculations.data === undefined) {
+                throw new Error("service function has to return an Object with data field and optionally a price field")
+            }
+
+            let receivePromise = new Promise(async (resolve, reject) => {
+                try {
+                    await publish(calculations.data, meta, statusID, this.key, resolve)
+                } catch (err) {
+                    reject(err)
+                }
+
+            })
+            await receivePromise
+
+            status.report(statusID, "Processing", "done", 'calculations done')
         } else {
-            debug('Incoming data does not match the schema')
+            debug('Message not for this worker')
         }
     } catch (err) {
         debug('Error during pull or execution: ' + err)

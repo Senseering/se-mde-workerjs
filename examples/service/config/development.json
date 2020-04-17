@@ -11,10 +11,8 @@
     },
     "schema": {
         "input": "./env/schema/input.json",
-        "output": "./env/schema/output.json",
-        "check": true
+        "output": "./env/schema/output.json"
     },
-    "signature": true,
     "apikey": "918d4acf80344f2cab30cd50acb25d2c",
     "privKey": "./env/key_world.js",
     "apiDomain": "127.0.0.1",
