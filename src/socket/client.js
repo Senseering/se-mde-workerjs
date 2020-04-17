@@ -63,10 +63,8 @@ client.init = async (apiDomain, port, id, apikey) => {
   }
 
   client.socket.onclose = function () {
-    isRegistered = false
     client.unsentQueue = client.unsentQueue.concat(client.pendingQueue)
     client.pendingQueue = []
-    debug('Unable to connect to manager. Trying to connect...')
   }
 
   status = require("./events/status")
@@ -135,7 +133,7 @@ client.isRegistered = async function () {
         reject(false)
         clearInterval(interval)
       } else {
-        debug("Waiting for registration, attempt " + counter)
+        debug("Waiting for registration")
       }
       counter++
     }, 300)
