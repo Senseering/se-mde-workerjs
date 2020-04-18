@@ -1,5 +1,4 @@
-const WebSocket = require('reconnecting-websocket')
-const ws = require('ws')
+const WebSocket = require('ws')
 const config = require("nconf")
 const uuidV1 = require('uuid/v1')
 const debug = require('debug')('ws:client')
@@ -28,9 +27,7 @@ client.init = async (apiDomain, port, id, apikey) => {
     + id + ':'
     + apikey + '@'
     + apiDomain + ":"
-    + port + "/connector/",
-    [],
-    { WebSocket: ws, connectionTimeout: 2000 }
+    + port + "/connector/"
   )
 
   client.socket.emit = function (topic, message) {
