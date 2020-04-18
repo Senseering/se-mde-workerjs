@@ -31,7 +31,7 @@ client.init = async (apiDomain, port, id, apikey) => {
     await client.openConnection()
     debug("Connection to manager established")
     client.processQueue()
-    }
+  }
 
   client.socket.transmit = function (topic, message) {
     let msg
@@ -55,9 +55,17 @@ client.init = async (apiDomain, port, id, apikey) => {
     client.handleMessage(format.input(msg))
   }
 
+  client.socket.onclose = function (event) {
     client.isConnected = false
     client.unsentQueue = client.unsentQueue.concat(client.pendingQueue)
     client.pendingQueue = []
+
+    if (event.code != 1000) {
+      setTimeout(async function () {
+        debug('Connection to manager could not be established. Trying to connect...')
+        await client.init(apiDomain, port, id, apikey)
+      }, 1000)
+    }
   }
 
   status = require("./events/status")
@@ -74,12 +82,12 @@ client.handleMessage = async function (fresponse) {
       } else {
         if (fresponse.code === 200 && fresponse.event === "register") {
           isRegistered = true
-          client.pendingQueue = client.pendingQueue.filter(a => a.eventID != fresponse.eventID)
         }
         if (fresponse.code === 200 && fresponse.event === "publish" && fresponse.id !== undefined) {
-          client.pendingQueue = client.pendingQueue.filter(a => a.eventID != fresponse.eventID)
           sendQueue[fresponse.id]("noticed: " + fresponse.id)
         }
+        client.pendingQueue = client.pendingQueue.filter(a => a.eventID != fresponse.eventID)
+        client.unsentQueue = client.unsentQueue.filter(a => a.eventID != fresponse.eventID)
         debug('(Code ' + fresponse.code + ') ' + (fresponse.code == 200 ? 'Successful' : 'Error') + ' response from "' + fresponse.event + '": ' + fresponse.msg)
       }
     } catch (err) {
@@ -135,6 +143,22 @@ client.isRegistered = async function () {
   })
 }
 
+client.isDisconnected = async function () {
+  return new Promise(function (resolve, reject) {
+    let counter = 1
+    let interval = setInterval(function () {
+      if (!client.isConnected) {
+        resolve(true)
+        clearInterval(interval)
+      } else if (counter > 1000) {
+        reject(false)
+        clearInterval(interval)
+      }
+      counter++
+    }, 300)
+  })
+}
+
 client.openConnection = async function () {
   return new Promise(function (resolve, reject) {
     let counter = 1
@@ -158,10 +182,11 @@ client.succsessfullySend = async function (data_id, resolve) {
 }
 
 client.disconnect = async function () {
-  if (client.socket.readyState != 1) {
+  if (!client.isConnected) {
     debug('Disconnected already. Nothing to be done')
   } else {
-    await client.socket.close()
+    client.socket.close(1000)
+    await client.isDisconnected()
     debug('Closed connection to manager')
   }
 }
