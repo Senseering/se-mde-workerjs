@@ -18,10 +18,6 @@ client.isConnected = false
 
 let sendQueue = []
 
-client.triggerCallback = function (workerCallback) {
-  triggerCallback = workerCallback
-}
-
 client.init = async (apiDomain, port, id, apikey) => {
   client.socket = new WebSocket(
     (config.get('protocol') === 'https' ? 'wss' : 'ws') + '://'
@@ -31,9 +27,10 @@ client.init = async (apiDomain, port, id, apikey) => {
     + port + "/connector/"
   )
 
-  client.socket.emit = function (topic, message) {
-    let msg
-    if (topic === 'queued') {
+  client.socket.onopen = async function () {
+    await client.openConnection()
+    debug("Connection to manager established")
+    client.processQueue()
     }
 
   client.socket.transmit = function (topic, message) {
@@ -54,16 +51,11 @@ client.init = async (apiDomain, port, id, apikey) => {
     }
   }
 
-  client.socket.onopen = function () {
-    debug("Connection to manager established")
-    setTimeout(client.processQueue, 1000)
-  }
-
   client.socket.onmessage = function (msg) {
     client.handleMessage(format.input(msg))
   }
 
-  client.socket.onclose = function () {
+    client.isConnected = false
     client.unsentQueue = client.unsentQueue.concat(client.pendingQueue)
     client.pendingQueue = []
   }
@@ -102,6 +94,8 @@ client.handleMessage = async function (fresponse) {
     debug('trigger initiated :' + JSON.stringify(message))
     status.report(message.statusID, "Processing", "started", 'Service received job')
     client.trigger.execute(message)
+  } else if (fresponse.topic === 'pong') {
+    client.isConnected = true
   } else {
     debug('Unknown message topic received: ' + fresponse.topic)
   }
@@ -135,6 +129,24 @@ client.isRegistered = async function () {
         clearInterval(interval)
       } else {
         debug("Waiting for registration")
+      }
+      counter++
+    }, 300)
+  })
+}
+
+client.openConnection = async function () {
+  return new Promise(function (resolve, reject) {
+    let counter = 1
+    let interval = setInterval(function () {
+      if (client.isConnected) {
+        resolve(true)
+        clearInterval(interval)
+      } else if (counter > 1000) {
+        reject(false)
+        clearInterval(interval)
+      } else {
+        client.socket.transmit('ping', {})
       }
       counter++
     }, 300)
