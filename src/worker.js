@@ -87,7 +87,7 @@ function Worker(params) {
 Worker.prototype.connect = async function () {
 
     debug('Connecting client...')
-    await client.init(config.get('apiDomain'), config.get('port'), config.get('id'), config.get('apikey'))
+    client.init(config.get('apiDomain'), config.get('port'), config.get('id'), config.get('apikey'))
 
     //register worker if not already done in the past
     if (!this.isRegistered) {
