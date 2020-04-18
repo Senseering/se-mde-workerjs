@@ -37,7 +37,10 @@ client.init = async (apiDomain, port, id, apikey) => {
     let msg
     if (topic === 'queued') {
     }
-    if (topic !== 'queued' && typeof (message) == "object") {
+
+  client.socket.transmit = function (topic, message) {
+    let msg
+    if (topic !== 'unsent' && typeof (message) == "object") {
       message.eventID = uuidV1()
       msg = format.output(topic, message)
     } else {
@@ -111,7 +114,7 @@ client.processQueue = function () {
     while (client.socket.readyState == 1 && client.unsentQueue.length > 0) {
       debug((client.unsentQueue.length > 1 ? 'There are ' + client.unsentQueue.length + ' unsent messages. Processing...' : 'There is 1 unsent message. Processing...'))
       let message = client.unsentQueue[0]
-      client.socket.emit('queued', message)
+      client.socket.transmit('unsent', message)
       client.unsentQueue.shift()
     }
     if (client.unsentQueue.length == 0) {

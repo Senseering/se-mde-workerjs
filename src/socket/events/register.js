@@ -12,7 +12,7 @@ const format = require("../../utils/formatMessages")
  */
 let register = async function (registration) {
     try {
-        client.socket.emit('register', registration)
+        client.socket.transmit('register', registration)
     } catch (error) {
         debug(('Error: ' + error).red)
     }
