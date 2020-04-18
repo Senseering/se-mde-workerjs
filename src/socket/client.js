@@ -14,7 +14,8 @@ let isRegistered = false
 let client = {}
 client.unsentQueue = []
 client.pendingQueue = []
-client.waitingQueue = []
+client.isConnected = false
+
 let sendQueue = []
 
 client.triggerCallback = function (workerCallback) {
