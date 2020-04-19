@@ -33,9 +33,9 @@ client.init = async (apiDomain, port, id, apikey) => {
     client.processQueue()
   }
 
-  client.socket.transmit = function (topic, message) {
+  client.socket.transmit = function (topic, status, message) {
     let msg
-    if (topic !== 'unsent' && typeof (message) == "object") {
+    if (status === 'unsent' && typeof (message) == "object") {
       message.eventID = uuidV1()
       msg = format.output(topic, message)
     } else {
@@ -170,7 +170,7 @@ client.openConnection = async function () {
         reject(false)
         clearInterval(interval)
       } else {
-        client.socket.transmit('ping', {})
+        client.socket.transmit('ping', 'unsent', {})
       }
       counter++
     }, 300)

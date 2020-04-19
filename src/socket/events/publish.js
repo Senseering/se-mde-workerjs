@@ -28,7 +28,7 @@ let publish = async function (data, meta, statusID, key, resolve) {
 
         //publish data
         client.succsessfullySend(package.data._id, resolve)
-        client.socket.transmit('publish', package)
+        client.socket.transmit('publish', 'unsent', package)
         return { data: package.data, id: package._id }
     } catch (error) {
         debug(error.message.red)
