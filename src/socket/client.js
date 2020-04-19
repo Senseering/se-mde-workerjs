@@ -8,13 +8,13 @@ const update = require("./events/update")
 let format = require("../utils/formatMessages")
 
 let status
+let isConnected = false
 let isRegistered = false
 
 
 let client = {}
 client.unsentQueue = []
 client.pendingQueue = []
-client.isConnected = false
 
 let sendQueue = []
 
@@ -28,7 +28,7 @@ client.init = async (apiDomain, port, id, apikey) => {
   )
 
   client.socket.onopen = async function () {
-    await client.openConnection()
+    await client.isConnected()
     debug("Connection to manager established")
     client.processQueue()
   }
@@ -56,7 +56,7 @@ client.init = async (apiDomain, port, id, apikey) => {
   }
 
   client.socket.onclose = function (event) {
-    client.isConnected = false
+    isConnected = false
     client.unsentQueue = client.unsentQueue.concat(client.pendingQueue)
     client.pendingQueue = []
 
@@ -103,7 +103,7 @@ client.handleMessage = async function (fresponse) {
     status.report(message.statusID, "Processing", "started", 'Service received job')
     client.trigger.execute(message)
   } else if (fresponse.topic === 'pong') {
-    client.isConnected = true
+    isConnected = true
   } else {
     debug('Unknown message topic received: ' + fresponse.topic)
   }
@@ -114,7 +114,7 @@ client.processQueue = function () {
     while (client.socket.readyState == 1 && client.unsentQueue.length > 0) {
       debug((client.unsentQueue.length > 1 ? 'There are ' + client.unsentQueue.length + ' unsent messages. Processing...' : 'There is 1 unsent message. Processing...'))
       let message = client.unsentQueue[0]
-      client.socket.transmit('unsent', message)
+      client.socket.transmit(message.topic, 'queued', message)
       client.unsentQueue.shift()
     }
     if (client.unsentQueue.length == 0) {
@@ -147,7 +147,7 @@ client.isDisconnected = async function () {
   return new Promise(function (resolve, reject) {
     let counter = 1
     let interval = setInterval(function () {
-      if (!client.isConnected) {
+      if (!isConnected) {
         resolve(true)
         clearInterval(interval)
       } else if (counter > 1000) {
@@ -159,11 +159,13 @@ client.isDisconnected = async function () {
   })
 }
 
-client.openConnection = async function () {
+client.isConnected = async function () {
   return new Promise(function (resolve, reject) {
     let counter = 1
     let interval = setInterval(function () {
-      if (client.isConnected) {
+      if (isConnected) {
+        client.pendingQueue = client.pendingQueue.filter(a => a.topic != 'ping')
+        client.unsentQueue = client.unsentQueue.filter(a => a.topic != 'ping')
         resolve(true)
         clearInterval(interval)
       } else if (counter > 1000) {
@@ -182,7 +184,7 @@ client.succsessfullySend = async function (data_id, resolve) {
 }
 
 client.disconnect = async function () {
-  if (!client.isConnected) {
+  if (!isConnected) {
     debug('Disconnected already. Nothing to be done')
   } else {
     client.socket.close(1000)
