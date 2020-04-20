@@ -55,8 +55,8 @@ client.init = async (apiDomain, port, id, apikey) => {
     client.handleMessage(format.input(msg))
   }
 
-  client.socket.onerror = function () {
-    throw new Error('Connection to manager not possible. Check if manager is set up correctly')
+  client.socket.onerror = function (err) {
+    throw err
   }
 
   client.socket.onclose = function (event) {
