@@ -1,3 +1,4 @@
+const uuidV1 = require('uuid/v1')
 const debug = require('debug')('socket:register')
 require('colors')
 
@@ -11,7 +12,7 @@ const format = require("../../utils/formatMessages")
  */
 let register = async function (registration) {
     try {
-        client.socket.emit(format.output('register', registration))
+        client.socket.transmit('register', 'unsent', registration)
     } catch (error) {
         debug(('Error: ' + error).red)
     }

@@ -75,92 +75,99 @@ function Worker(params) {
             this.community = true
         }
     }
+
+    this.isRegistered = false
 }
 
 
 /**
- * Connect should register the worker at the manager
+ * Connect should establish the websocket connection to the manager and register the worker
  * or load all required data like id, keys and templates
  */
 Worker.prototype.connect = async function () {
 
-    //generate key
-    fsutil.ensureDirectoryExistence(config.get('privKey'))
-    if (fs.existsSync(config.get('privKey'))) {
-        debug("Key found...")
-        let keyModuleString = fs.readFileSync(config.get('privKey'), 'utf8')
-        let keyString = requireFromString(keyModuleString).key
-        this.key = new NodeRSA(keyString)
-        debug("Key imported.");
-    } else {
-        debug("Key generation in progress...")
-        this.key = new NodeRSA({ b: 1024 })
-        fs.writeFileSync(config.get('privKey'), 'module.exports = ' + JSON.stringify({ key: this.key.exportKey('private') }))
-        debug("Key generated.")
-    }
+    debug('Connecting client...')
+    client.init(config.get('apiDomain'), config.get('port'), config.get('id'), config.get('apikey'))
 
-    debug('Fetching registration details')
-
-    let schema = {}
-    let info = {}
-    if (config.get('schema') !== undefined) {
-        if (config.get('schema').link !== undefined) {
-            //worker of a specific community 
-            schema.link = config.get('schema').link
-            if (config.get('schema').commit !== undefined) {
-                schema.commit = config.get('schema').commit
-            }
-            if (fs.existsSync("./env/schema")) {
-                debug("WARNING: Worker joins the community and the custom schema in: ./env/schema was not used".red)
-            }
-            //there are no custon descriptions for input and output schemas of community-workers
-            info.description = fs.readFileSync(config.get('info').description, "utf8")
-            info.tags = config.get('info').tags
+    //register worker if not already done in the past
+    if (!this.isRegistered) {
+        //generate key
+        fsutil.ensureDirectoryExistence(config.get('privKey'))
+        if (fs.existsSync(config.get('privKey'))) {
+            debug("Key found...")
+            let keyModuleString = fs.readFileSync(config.get('privKey'), 'utf8')
+            let keyString = requireFromString(keyModuleString).key
+            this.key = new NodeRSA(keyString)
+            debug("Key imported.");
         } else {
-            //worker without community
-            schema.input = JSON.parse(fs.readFileSync(config.get('schema').input, "utf8"))
-            schema.output = JSON.parse(fs.readFileSync(config.get('schema').output, "utf8"))
-            info = {
-                description: fs.readFileSync(config.get('info').description, "utf8"),
-                tags: config.get('info').tags,
-                input: config.get("info").hasOwnProperty("input") ? {
-                    description: config.get('info').input.hasOwnProperty("description") ? fs.readFileSync(config.get('info').input.description, "utf8") : "",
-                    tags: config.get('info').input.hasOwnProperty("tags") ? config.get('info').input.tags : []
-                } : {
-                        description: "",
-                        tags: []
-                    },
-                output: config.get("info").hasOwnProperty("output") ? {
-                    description: config.get('info').output.hasOwnProperty("description") ? fs.readFileSync(config.get('info').output.description, "utf8") : "",
-                    tags: config.get('info').output.hasOwnProperty("tags") ? config.get('info').output.tags : []
-                } : {
-                        description: "",
-                        tags: []
-                    }
+            debug("Key generation in progress...")
+            this.key = new NodeRSA({ b: 1024 })
+            fs.writeFileSync(config.get('privKey'), 'module.exports = ' + JSON.stringify({ key: this.key.exportKey('private') }))
+            debug("Key generated.")
+        }
 
+        debug('Fetching registration details')
+
+        let schema = {}
+        let info = {}
+        if (config.get('schema') !== undefined) {
+            if (config.get('schema').link !== undefined) {
+                //worker of a specific community 
+                schema.link = config.get('schema').link
+                if (config.get('schema').commit !== undefined) {
+                    schema.commit = config.get('schema').commit
+                }
+                if (fs.existsSync("./env/schema")) {
+                    debug("WARNING: Worker joins the community and the custom schema in: ./env/schema was not used".red)
+                }
+                //there are no custon descriptions for input and output schemas of community-workers
+                info.description = fs.readFileSync(config.get('info').description, "utf8")
+                info.tags = config.get('info').tags
+            } else {
+                //worker without community
+                schema.input = JSON.parse(fs.readFileSync(config.get('schema').input, "utf8"))
+                schema.output = JSON.parse(fs.readFileSync(config.get('schema').output, "utf8"))
+                info = {
+                    description: fs.readFileSync(config.get('info').description, "utf8"),
+                    tags: config.get('info').tags,
+                    input: config.get("info").hasOwnProperty("input") ? {
+                        description: config.get('info').input.hasOwnProperty("description") ? fs.readFileSync(config.get('info').input.description, "utf8") : "",
+                        tags: config.get('info').input.hasOwnProperty("tags") ? config.get('info').input.tags : []
+                    } : {
+                            description: "",
+                            tags: []
+                        },
+                    output: config.get("info").hasOwnProperty("output") ? {
+                        description: config.get('info').output.hasOwnProperty("description") ? fs.readFileSync(config.get('info').output.description, "utf8") : "",
+                        tags: config.get('info').output.hasOwnProperty("tags") ? config.get('info').output.tags : []
+                    } : {
+                            description: "",
+                            tags: []
+                        }
+
+                }
             }
         }
+
+        //initialize websocket client and register worker on manager
+        let registration = {
+            schema: schema,
+            info: info,
+            pubkey: this.key.exportKey('public'),
+            name: config.get('name') || '',
+            payment: config.get('payment') || '',
+            apikey: config.get('apikey') || '',
+            location: config.get('location') || '',
+            id: config.get('id') || ''
+        }
+
+        debug('Registering worker')
+
+        await register(registration)
+        await client.isRegistered()
+        this.isRegistered = true
+        debug('Worker registered in system')
     }
-
-    //initialize websocket client and register worker on manager
-    let registration = {
-        schema: schema,
-        info: info,
-        pubkey: this.key.exportKey('public'),
-        name: config.get('name') || '',
-        payment: config.get('payment') || '',
-        apikey: config.get('apikey') || '',
-        location: config.get('location') || '',
-        id: config.get('id') || ''
-    }
-
-    await client.init(config.get('apiDomain'), config.get('port'), config.get('id'), config.get('apikey'))
-
-    debug('Registering worker')
-    await register(registration)
-    await client.isRegistered()
-
-    debug('Worker registered in system')
     debug('Initialisation done')
 }
 
@@ -220,6 +227,15 @@ Worker.prototype.provide = async function (service) {
     //set trigger
     const Trigger = require('./trigger/trigger')
     this.trigger = new Trigger(this.key, service)
+}
+
+
+/**
+ * This disconnects the client from the manager
+ */
+Worker.prototype.disconnect = async function () {
+    debug('Disconnecting client...')
+    await client.disconnect()
 }
 
 module.exports = Worker
