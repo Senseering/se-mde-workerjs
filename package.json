@@ -1,7 +1,7 @@
 {
-  "name": "@senseering/new_worker_js",
+  "name": "@senseering/worker_js",
   "version": "1.0.0",
-  "description": "Client library to connect to the [edge node](https://github.com/Senseering/edge_node_js).",
+  "description": "Client library to connect to the [manager](https://github.com/Senseering/manager).",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha ./test/** --exclude ./test/component.test.key.pem",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Senseering/component_js.git"
+    "url": "git+https://github.com/Senseering/worker_js.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Senseering/component_js/issues"
+    "url": "https://github.com/Senseering/worker_js/issues"
   },
-  "homepage": "https://github.com/Senseering/component_js#readme",
+  "homepage": "https://github.com/Senseering/worker_js#readme",
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
