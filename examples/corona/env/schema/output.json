@@ -1,0 +1,1118 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The Root Schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "additionalProperties": true,
+    "required": [
+        "Baden-Württem­berg",
+        "Bayern",
+        "Berlin",
+        "Brandenburg",
+        "Bremen",
+        "Hamburg",
+        "Hessen",
+        "Mecklenburg-",
+        "Niedersachsen",
+        "Nordrhein-West­falen",
+        "Rhein­land-Pfalz",
+        "Saarland",
+        "Sachsen",
+        "Sachsen-Anhalt",
+        "Schles­wig-Holstein",
+        "Thüringen",
+        "Deutschland"
+    ],
+    "properties": {
+        "Baden-Württem­berg": {
+            "$id": "#/properties/Baden-Württem­berg",
+            "type": "object",
+            "title": "The Baden-württem­berg Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "confirmed": 28253.0,
+                    "diffYesterday": 370.0,
+                    "deaths": 982.0,
+                    "casesPer100k": 255.0
+                }
+            ],
+            "additionalProperties": true,
+            "required": [
+                "confirmed",
+                "diffYesterday",
+                "casesPer100k",
+                "deaths"
+            ],
+            "properties": {
+                "confirmed": {
+                    "$id": "#/properties/Baden-Württem­berg/properties/confirmed",
+                    "type": "integer",
+                    "title": "The Confirmed Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        28253.0
+                    ]
+                },
+                "diffYesterday": {
+                    "$id": "#/properties/Baden-Württem­berg/properties/diffYesterday",
+                    "type": "integer",
+                    "title": "The Diffyesterday Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        370.0
+                    ]
+                },
+                "casesPer100k": {
+                    "$id": "#/properties/Baden-Württem­berg/properties/casesPer100k",
+                    "type": "integer",
+                    "title": "The Casesper100k Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        255.0
+                    ]
+                },
+                "deaths": {
+                    "$id": "#/properties/Baden-Württem­berg/properties/deaths",
+                    "type": "integer",
+                    "title": "The Deaths Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        982.0
+                    ]
+                }
+            }
+        },
+        "Bayern": {
+            "$id": "#/properties/Bayern",
+            "type": "object",
+            "title": "The Bayern Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "deaths": 1286.0,
+                    "casesPer100k": 289.0,
+                    "confirmed": 37849.0,
+                    "diffYesterday": 442.0
+                }
+            ],
+            "additionalProperties": true,
+            "required": [
+                "confirmed",
+                "diffYesterday",
+                "casesPer100k",
+                "deaths"
+            ],
+            "properties": {
+                "confirmed": {
+                    "$id": "#/properties/Bayern/properties/confirmed",
+                    "type": "integer",
+                    "title": "The Confirmed Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        37849.0
+                    ]
+                },
+                "diffYesterday": {
+                    "$id": "#/properties/Bayern/properties/diffYesterday",
+                    "type": "integer",
+                    "title": "The Diffyesterday Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        442.0
+                    ]
+                },
+                "casesPer100k": {
+                    "$id": "#/properties/Bayern/properties/casesPer100k",
+                    "type": "integer",
+                    "title": "The Casesper100k Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        289.0
+                    ]
+                },
+                "deaths": {
+                    "$id": "#/properties/Bayern/properties/deaths",
+                    "type": "integer",
+                    "title": "The Deaths Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        1286.0
+                    ]
+                }
+            }
+        },
+        "Berlin": {
+            "$id": "#/properties/Berlin",
+            "type": "object",
+            "title": "The Berlin Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "confirmed": 5196.0,
+                    "diffYesterday": 37.0,
+                    "deaths": 94.0,
+                    "casesPer100k": 139.0
+                }
+            ],
+            "additionalProperties": true,
+            "required": [
+                "confirmed",
+                "diffYesterday",
+                "casesPer100k",
+                "deaths"
+            ],
+            "properties": {
+                "confirmed": {
+                    "$id": "#/properties/Berlin/properties/confirmed",
+                    "type": "integer",
+                    "title": "The Confirmed Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        5196.0
+                    ]
+                },
+                "diffYesterday": {
+                    "$id": "#/properties/Berlin/properties/diffYesterday",
+                    "type": "integer",
+                    "title": "The Diffyesterday Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        37.0
+                    ]
+                },
+                "casesPer100k": {
+                    "$id": "#/properties/Berlin/properties/casesPer100k",
+                    "type": "integer",
+                    "title": "The Casesper100k Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        139.0
+                    ]
+                },
+                "deaths": {
+                    "$id": "#/properties/Berlin/properties/deaths",
+                    "type": "integer",
+                    "title": "The Deaths Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        94.0
+                    ]
+                }
+            }
+        },
+        "Brandenburg": {
+            "$id": "#/properties/Brandenburg",
+            "type": "object",
+            "title": "The Brandenburg Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "confirmed": 2238.0,
+                    "diffYesterday": 17.0,
+                    "deaths": 66.0,
+                    "casesPer100k": 89.0
+                }
+            ],
+            "additionalProperties": true,
+            "required": [
+                "confirmed",
+                "diffYesterday",
+                "casesPer100k",
+                "deaths"
+            ],
+            "properties": {
+                "confirmed": {
+                    "$id": "#/properties/Brandenburg/properties/confirmed",
+                    "type": "integer",
+                    "title": "The Confirmed Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        2238.0
+                    ]
+                },
+                "diffYesterday": {
+                    "$id": "#/properties/Brandenburg/properties/diffYesterday",
+                    "type": "integer",
+                    "title": "The Diffyesterday Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        17.0
+                    ]
+                },
+                "casesPer100k": {
+                    "$id": "#/properties/Brandenburg/properties/casesPer100k",
+                    "type": "integer",
+                    "title": "The Casesper100k Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        89.0
+                    ]
+                },
+                "deaths": {
+                    "$id": "#/properties/Brandenburg/properties/deaths",
+                    "type": "integer",
+                    "title": "The Deaths Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        66.0
+                    ]
+                }
+            }
+        },
+        "Bremen": {
+            "$id": "#/properties/Bremen",
+            "type": "object",
+            "title": "The Bremen Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "deaths": 25.0,
+                    "casesPer100k": 88.0,
+                    "confirmed": 604.0,
+                    "diffYesterday": 19.0
+                }
+            ],
+            "additionalProperties": true,
+            "required": [
+                "confirmed",
+                "diffYesterday",
+                "casesPer100k",
+                "deaths"
+            ],
+            "properties": {
+                "confirmed": {
+                    "$id": "#/properties/Bremen/properties/confirmed",
+                    "type": "integer",
+                    "title": "The Confirmed Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        604.0
+                    ]
+                },
+                "diffYesterday": {
+                    "$id": "#/properties/Bremen/properties/diffYesterday",
+                    "type": "integer",
+                    "title": "The Diffyesterday Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        19.0
+                    ]
+                },
+                "casesPer100k": {
+                    "$id": "#/properties/Bremen/properties/casesPer100k",
+                    "type": "integer",
+                    "title": "The Casesper100k Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        88.0
+                    ]
+                },
+                "deaths": {
+                    "$id": "#/properties/Bremen/properties/deaths",
+                    "type": "integer",
+                    "title": "The Deaths Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        25.0
+                    ]
+                }
+            }
+        },
+        "Hamburg": {
+            "$id": "#/properties/Hamburg",
+            "type": "object",
+            "title": "The Hamburg Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "deaths": 91.0,
+                    "casesPer100k": 227.0,
+                    "confirmed": 4185.0,
+                    "diffYesterday": 18.0
+                }
+            ],
+            "additionalProperties": true,
+            "required": [
+                "confirmed",
+                "diffYesterday",
+                "casesPer100k",
+                "deaths"
+            ],
+            "properties": {
+                "confirmed": {
+                    "$id": "#/properties/Hamburg/properties/confirmed",
+                    "type": "integer",
+                    "title": "The Confirmed Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        4185.0
+                    ]
+                },
+                "diffYesterday": {
+                    "$id": "#/properties/Hamburg/properties/diffYesterday",
+                    "type": "integer",
+                    "title": "The Diffyesterday Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        18.0
+                    ]
+                },
+                "casesPer100k": {
+                    "$id": "#/properties/Hamburg/properties/casesPer100k",
+                    "type": "integer",
+                    "title": "The Casesper100k Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        227.0
+                    ]
+                },
+                "deaths": {
+                    "$id": "#/properties/Hamburg/properties/deaths",
+                    "type": "integer",
+                    "title": "The Deaths Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        91.0
+                    ]
+                }
+            }
+        },
+        "Hessen": {
+            "$id": "#/properties/Hessen",
+            "type": "object",
+            "title": "The Hessen Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "deaths": 240.0,
+                    "casesPer100k": 115.0,
+                    "confirmed": 7177.0,
+                    "diffYesterday": 69.0
+                }
+            ],
+            "additionalProperties": true,
+            "required": [
+                "confirmed",
+                "diffYesterday",
+                "casesPer100k",
+                "deaths"
+            ],
+            "properties": {
+                "confirmed": {
+                    "$id": "#/properties/Hessen/properties/confirmed",
+                    "type": "integer",
+                    "title": "The Confirmed Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        7177.0
+                    ]
+                },
+                "diffYesterday": {
+                    "$id": "#/properties/Hessen/properties/diffYesterday",
+                    "type": "integer",
+                    "title": "The Diffyesterday Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        69.0
+                    ]
+                },
+                "casesPer100k": {
+                    "$id": "#/properties/Hessen/properties/casesPer100k",
+                    "type": "integer",
+                    "title": "The Casesper100k Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        115.0
+                    ]
+                },
+                "deaths": {
+                    "$id": "#/properties/Hessen/properties/deaths",
+                    "type": "integer",
+                    "title": "The Deaths Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        240.0
+                    ]
+                }
+            }
+        },
+        "Mecklenburg-": {
+            "$id": "#/properties/Mecklenburg-",
+            "type": "object",
+            "title": "The Mecklenburg- Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "deaths": 15.0,
+                    "casesPer100k": 41.0,
+                    "confirmed": 653.0,
+                    "diffYesterday": 2.0
+                }
+            ],
+            "additionalProperties": true,
+            "required": [
+                "confirmed",
+                "diffYesterday",
+                "casesPer100k",
+                "deaths"
+            ],
+            "properties": {
+                "confirmed": {
+                    "$id": "#/properties/Mecklenburg-/properties/confirmed",
+                    "type": "integer",
+                    "title": "The Confirmed Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        653.0
+                    ]
+                },
+                "diffYesterday": {
+                    "$id": "#/properties/Mecklenburg-/properties/diffYesterday",
+                    "type": "integer",
+                    "title": "The Diffyesterday Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        2.0
+                    ]
+                },
+                "casesPer100k": {
+                    "$id": "#/properties/Mecklenburg-/properties/casesPer100k",
+                    "type": "integer",
+                    "title": "The Casesper100k Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        41.0
+                    ]
+                },
+                "deaths": {
+                    "$id": "#/properties/Mecklenburg-/properties/deaths",
+                    "type": "integer",
+                    "title": "The Deaths Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        15.0
+                    ]
+                }
+            }
+        },
+        "Niedersachsen": {
+            "$id": "#/properties/Niedersachsen",
+            "type": "object",
+            "title": "The Niedersachsen Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "casesPer100k": 111.0,
+                    "confirmed": 8900.0,
+                    "diffYesterday": 103.0,
+                    "deaths": 291.0
+                }
+            ],
+            "additionalProperties": true,
+            "required": [
+                "confirmed",
+                "diffYesterday",
+                "casesPer100k",
+                "deaths"
+            ],
+            "properties": {
+                "confirmed": {
+                    "$id": "#/properties/Niedersachsen/properties/confirmed",
+                    "type": "integer",
+                    "title": "The Confirmed Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        8900.0
+                    ]
+                },
+                "diffYesterday": {
+                    "$id": "#/properties/Niedersachsen/properties/diffYesterday",
+                    "type": "integer",
+                    "title": "The Diffyesterday Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        103.0
+                    ]
+                },
+                "casesPer100k": {
+                    "$id": "#/properties/Niedersachsen/properties/casesPer100k",
+                    "type": "integer",
+                    "title": "The Casesper100k Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        111.0
+                    ]
+                },
+                "deaths": {
+                    "$id": "#/properties/Niedersachsen/properties/deaths",
+                    "type": "integer",
+                    "title": "The Deaths Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        291.0
+                    ]
+                }
+            }
+        },
+        "Nordrhein-West­falen": {
+            "$id": "#/properties/Nordrhein-West­falen",
+            "type": "object",
+            "title": "The Nordrhein-west­falen Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "deaths": 857.0,
+                    "casesPer100k": 162.0,
+                    "confirmed": 28971.0,
+                    "diffYesterday": 500.0
+                }
+            ],
+            "additionalProperties": true,
+            "required": [
+                "confirmed",
+                "diffYesterday",
+                "casesPer100k",
+                "deaths"
+            ],
+            "properties": {
+                "confirmed": {
+                    "$id": "#/properties/Nordrhein-West­falen/properties/confirmed",
+                    "type": "integer",
+                    "title": "The Confirmed Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        28971.0
+                    ]
+                },
+                "diffYesterday": {
+                    "$id": "#/properties/Nordrhein-West­falen/properties/diffYesterday",
+                    "type": "integer",
+                    "title": "The Diffyesterday Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        500.0
+                    ]
+                },
+                "casesPer100k": {
+                    "$id": "#/properties/Nordrhein-West­falen/properties/casesPer100k",
+                    "type": "integer",
+                    "title": "The Casesper100k Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        162.0
+                    ]
+                },
+                "deaths": {
+                    "$id": "#/properties/Nordrhein-West­falen/properties/deaths",
+                    "type": "integer",
+                    "title": "The Deaths Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        857.0
+                    ]
+                }
+            }
+        },
+        "Rhein­land-Pfalz": {
+            "$id": "#/properties/Rhein­land-Pfalz",
+            "type": "object",
+            "title": "The Rhein­land-pfalz Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "deaths": 107.0,
+                    "casesPer100k": 135.0,
+                    "confirmed": 5523.0,
+                    "diffYesterday": 91.0
+                }
+            ],
+            "additionalProperties": true,
+            "required": [
+                "confirmed",
+                "diffYesterday",
+                "casesPer100k",
+                "deaths"
+            ],
+            "properties": {
+                "confirmed": {
+                    "$id": "#/properties/Rhein­land-Pfalz/properties/confirmed",
+                    "type": "integer",
+                    "title": "The Confirmed Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        5523.0
+                    ]
+                },
+                "diffYesterday": {
+                    "$id": "#/properties/Rhein­land-Pfalz/properties/diffYesterday",
+                    "type": "integer",
+                    "title": "The Diffyesterday Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        91.0
+                    ]
+                },
+                "casesPer100k": {
+                    "$id": "#/properties/Rhein­land-Pfalz/properties/casesPer100k",
+                    "type": "integer",
+                    "title": "The Casesper100k Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        135.0
+                    ]
+                },
+                "deaths": {
+                    "$id": "#/properties/Rhein­land-Pfalz/properties/deaths",
+                    "type": "integer",
+                    "title": "The Deaths Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        107.0
+                    ]
+                }
+            }
+        },
+        "Saarland": {
+            "$id": "#/properties/Saarland",
+            "type": "object",
+            "title": "The Saarland Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "deaths": 91.0,
+                    "casesPer100k": 234.0,
+                    "confirmed": 2314.0,
+                    "diffYesterday": 11.0
+                }
+            ],
+            "additionalProperties": true,
+            "required": [
+                "confirmed",
+                "diffYesterday",
+                "casesPer100k",
+                "deaths"
+            ],
+            "properties": {
+                "confirmed": {
+                    "$id": "#/properties/Saarland/properties/confirmed",
+                    "type": "integer",
+                    "title": "The Confirmed Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        2314.0
+                    ]
+                },
+                "diffYesterday": {
+                    "$id": "#/properties/Saarland/properties/diffYesterday",
+                    "type": "integer",
+                    "title": "The Diffyesterday Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        11.0
+                    ]
+                },
+                "casesPer100k": {
+                    "$id": "#/properties/Saarland/properties/casesPer100k",
+                    "type": "integer",
+                    "title": "The Casesper100k Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        234.0
+                    ]
+                },
+                "deaths": {
+                    "$id": "#/properties/Saarland/properties/deaths",
+                    "type": "integer",
+                    "title": "The Deaths Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        91.0
+                    ]
+                }
+            }
+        },
+        "Sachsen": {
+            "$id": "#/properties/Sachsen",
+            "type": "object",
+            "title": "The Sachsen Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "confirmed": 4229.0,
+                    "diffYesterday": 39.0,
+                    "deaths": 109.0,
+                    "casesPer100k": 104.0
+                }
+            ],
+            "additionalProperties": true,
+            "required": [
+                "confirmed",
+                "diffYesterday",
+                "casesPer100k",
+                "deaths"
+            ],
+            "properties": {
+                "confirmed": {
+                    "$id": "#/properties/Sachsen/properties/confirmed",
+                    "type": "integer",
+                    "title": "The Confirmed Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        4229.0
+                    ]
+                },
+                "diffYesterday": {
+                    "$id": "#/properties/Sachsen/properties/diffYesterday",
+                    "type": "integer",
+                    "title": "The Diffyesterday Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        39.0
+                    ]
+                },
+                "casesPer100k": {
+                    "$id": "#/properties/Sachsen/properties/casesPer100k",
+                    "type": "integer",
+                    "title": "The Casesper100k Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        104.0
+                    ]
+                },
+                "deaths": {
+                    "$id": "#/properties/Sachsen/properties/deaths",
+                    "type": "integer",
+                    "title": "The Deaths Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        109.0
+                    ]
+                }
+            }
+        },
+        "Sachsen-Anhalt": {
+            "$id": "#/properties/Sachsen-Anhalt",
+            "type": "object",
+            "title": "The Sachsen-anhalt Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "casesPer100k": 62.0,
+                    "confirmed": 1369.0,
+                    "diffYesterday": 19.0,
+                    "deaths": 30.0
+                }
+            ],
+            "additionalProperties": true,
+            "required": [
+                "confirmed",
+                "diffYesterday",
+                "casesPer100k",
+                "deaths"
+            ],
+            "properties": {
+                "confirmed": {
+                    "$id": "#/properties/Sachsen-Anhalt/properties/confirmed",
+                    "type": "integer",
+                    "title": "The Confirmed Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        1369.0
+                    ]
+                },
+                "diffYesterday": {
+                    "$id": "#/properties/Sachsen-Anhalt/properties/diffYesterday",
+                    "type": "integer",
+                    "title": "The Diffyesterday Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        19.0
+                    ]
+                },
+                "casesPer100k": {
+                    "$id": "#/properties/Sachsen-Anhalt/properties/casesPer100k",
+                    "type": "integer",
+                    "title": "The Casesper100k Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        62.0
+                    ]
+                },
+                "deaths": {
+                    "$id": "#/properties/Sachsen-Anhalt/properties/deaths",
+                    "type": "integer",
+                    "title": "The Deaths Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        30.0
+                    ]
+                }
+            }
+        },
+        "Schles­wig-Holstein": {
+            "$id": "#/properties/Schles­wig-Holstein",
+            "type": "object",
+            "title": "The Schles­wig-holstein Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "deaths": 67.0,
+                    "casesPer100k": 84.0,
+                    "confirmed": 2426.0,
+                    "diffYesterday": 9.0
+                }
+            ],
+            "additionalProperties": true,
+            "required": [
+                "confirmed",
+                "diffYesterday",
+                "casesPer100k",
+                "deaths"
+            ],
+            "properties": {
+                "confirmed": {
+                    "$id": "#/properties/Schles­wig-Holstein/properties/confirmed",
+                    "type": "integer",
+                    "title": "The Confirmed Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        2426.0
+                    ]
+                },
+                "diffYesterday": {
+                    "$id": "#/properties/Schles­wig-Holstein/properties/diffYesterday",
+                    "type": "integer",
+                    "title": "The Diffyesterday Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        9.0
+                    ]
+                },
+                "casesPer100k": {
+                    "$id": "#/properties/Schles­wig-Holstein/properties/casesPer100k",
+                    "type": "integer",
+                    "title": "The Casesper100k Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        84.0
+                    ]
+                },
+                "deaths": {
+                    "$id": "#/properties/Schles­wig-Holstein/properties/deaths",
+                    "type": "integer",
+                    "title": "The Deaths Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        67.0
+                    ]
+                }
+            }
+        },
+        "Thüringen": {
+            "$id": "#/properties/Thüringen",
+            "type": "object",
+            "title": "The Thüringen Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "casesPer100k": 83.0,
+                    "confirmed": 1785.0,
+                    "diffYesterday": 29.0,
+                    "deaths": 53.0
+                }
+            ],
+            "additionalProperties": true,
+            "required": [
+                "confirmed",
+                "diffYesterday",
+                "casesPer100k",
+                "deaths"
+            ],
+            "properties": {
+                "confirmed": {
+                    "$id": "#/properties/Thüringen/properties/confirmed",
+                    "type": "integer",
+                    "title": "The Confirmed Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        1785.0
+                    ]
+                },
+                "diffYesterday": {
+                    "$id": "#/properties/Thüringen/properties/diffYesterday",
+                    "type": "integer",
+                    "title": "The Diffyesterday Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        29.0
+                    ]
+                },
+                "casesPer100k": {
+                    "$id": "#/properties/Thüringen/properties/casesPer100k",
+                    "type": "integer",
+                    "title": "The Casesper100k Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        83.0
+                    ]
+                },
+                "deaths": {
+                    "$id": "#/properties/Thüringen/properties/deaths",
+                    "type": "integer",
+                    "title": "The Deaths Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        53.0
+                    ]
+                }
+            }
+        },
+        "Deutschland": {
+            "$id": "#/properties/Deutschland",
+            "type": "object",
+            "title": "The Deutschland Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "confirmed": 141672.0,
+                    "diffYesterday": 1775.0,
+                    "deaths": 4404.0,
+                    "casesPer100k": 170.0
+                }
+            ],
+            "additionalProperties": true,
+            "required": [
+                "confirmed",
+                "diffYesterday",
+                "casesPer100k",
+                "deaths"
+            ],
+            "properties": {
+                "confirmed": {
+                    "$id": "#/properties/Deutschland/properties/confirmed",
+                    "type": "integer",
+                    "title": "The Confirmed Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        141672.0
+                    ]
+                },
+                "diffYesterday": {
+                    "$id": "#/properties/Deutschland/properties/diffYesterday",
+                    "type": "integer",
+                    "title": "The Diffyesterday Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        1775.0
+                    ]
+                },
+                "casesPer100k": {
+                    "$id": "#/properties/Deutschland/properties/casesPer100k",
+                    "type": "integer",
+                    "title": "The Casesper100k Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        170.0
+                    ]
+                },
+                "deaths": {
+                    "$id": "#/properties/Deutschland/properties/deaths",
+                    "type": "integer",
+                    "title": "The Deaths Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        4404.0
+                    ]
+                }
+            }
+        }
+    }
+}
