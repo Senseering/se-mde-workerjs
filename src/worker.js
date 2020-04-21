@@ -177,26 +177,25 @@ Worker.prototype.connect = async function () {
  *
  * @param {Object} data The data to be published
  */
-Worker.prototype.publish = async function (data) {
+Worker.prototype.publish = async function (data, options) {
     debug('Preparing data for publish on manager...')
     if (typeof config.get('id') === 'undefined') {
         throw new Error('Worker is not initialized')
-    } else if (!data.hasOwnProperty('data')) {
-        throw new Error('publish has to get an Object with "data" field and optionally a "price" field as argument.')
     } else {
-
         let result
         let meta = {
-            id: config.get('id'),
-            timestamp: new Date().getTime(),
-            price: data.price === undefined ? 0 : data.price,
+            worker_id: config.get('id'),
+            created_at: Date.now(),
+            price: options.price === undefined ? 0 : options.price,
             location:
             {
                 latitude: config.get('location.latitude'),
                 longitude: config.get('location.longitude')
-            },
-            basedOn:
-            {
+            }
+        }
+        //append basedOn property just in case of service
+        if (config.get("schema").input) {
+            meta.basedOn = {
                 workerIDs: [],
                 dataIDs: [[]]
             }
@@ -204,7 +203,7 @@ Worker.prototype.publish = async function (data) {
 
         let receivePromise = new Promise(async (resolve, reject) => {
             try {
-                result = await publish(data.data, meta, undefined, this.key, resolve)
+                result = await publish({ data, meta }, { statusID: undefined, key: this.key, resolvePromise: resolve, ttl: options.ttl })
             } catch (err) {
                 reject(err)
             }

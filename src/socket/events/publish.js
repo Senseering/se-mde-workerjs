@@ -13,21 +13,20 @@ const format = require("../../utils/formatMessages")
  * Publishes the output data on the manager
  * @param {Object} data The actual data package that should be published
  */
-let publish = async function (data, meta, statusID, key, resolve) {
+let publish = async function (package, { statusID = undefined, key, resolvePromise, ttl = undefined } = {}) {
     try {
-        let package = {
-            data: {
-                data,
-                meta
-            }
+    
+        verify.appendSignature(package, key)
+
+         //append non signature relevant information here
+        package._id = uuidV1()
+        package.statusID = statusID
+        if (ttl) {
+            package.meta.ttl = ttl
         }
 
-        verify.appendSignature(package.data, key)
-        package.data._id = uuidV1()
-        package.statusID = statusID
-
         //publish data
-        client.succsessfullySend(package.data._id, resolve)
+        client.succsessfullySend(package._id, resolvePromise)
         client.socket.transmit('publish', 'unsent', package)
         return { data: package.data, id: package._id }
     } catch (error) {

@@ -8,6 +8,6 @@ let worker = new Worker(config);
     await worker.connect()
 
     let data = { test: 'Hello world!' }
-    await worker.publish({ data: data, price: 0 })
+    await worker.publish(data, { price: 0, ttl: 500000 })
     await worker.disconnect()
 })();
