@@ -203,7 +203,7 @@ Worker.prototype.publish = async function (data, options) {
 
         let receivePromise = new Promise(async (resolve, reject) => {
             try {
-                result = await publish({ data, meta }, { statusID: undefined, key: this.key, resolvePromise: resolve, ttl: options.ttl })
+                result = await publish({meta, data }, { statusID: undefined, key: this.key, resolvePromise: resolve, ttl: options.ttl })
             } catch (err) {
                 reject(err)
             }
