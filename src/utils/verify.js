@@ -50,11 +50,25 @@ verify.verifyObj = (serializedObj, signature, pubkey) => {
 }
 
 
-verify.appendSignature = function(data, key){
-  debug('Signing the data package of worker: ', data.meta.id)
-  let serializedObj = verify.serializeObj(data);
-  data.signature = key.sign(serializedObj[1]).toString('base64');
-  return data;
+verify.appendSignature = function (package, key) {
+  debug('Signing the data package of worker: ', package.meta.worker_id)
+  let signatureRelevantData = {
+    meta: {
+      worker_id: package.meta.worker_id,
+      location: package.meta.location,
+      created_at: package.meta.created_at,
+      price: package.meta.price
+    },
+    data: package.data
+  }
+
+  //append basedOn if it is available
+  package.meta.basedOn ? signatureRelevantData.meta.basedOn = package.meta.basedOn : ""
+
+  //append signatrue to meta
+  let serializedObj = verify.serializeObj(signatureRelevantData);
+  package.meta.signature = key.sign(serializedObj[1]).toString('base64');
+  return package;
 }
 
 module.exports = verify
