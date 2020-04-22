@@ -8,7 +8,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Debug[disconnect]",
+            "name": "Debug[corona]",
             "skipFiles": [
                 "<node_internals>/**"
             ],
@@ -28,6 +28,18 @@
             "runtimeArgs": ["run-script", "debug"],
             "port": 9229,
             "cwd": "${workspaceFolder}/examples/service"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug[service]",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run-script", "debug"],
+            "port": 9229,
+            "cwd": "${workspaceFolder}/examples/corona"
         }
     ]
 }
