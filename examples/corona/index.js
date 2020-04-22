@@ -33,7 +33,7 @@ let update = "";
             if (update !== JSON.stringify(data)) {
                 update = JSON.stringify(data)
                 await worker.connect()
-                await worker.publish({ data: data, price: 0 })
+                await worker.publish(data, {price: 0 })
                 await worker.disconnect()
             }
             await sleep(1000 * 60 * 30)
