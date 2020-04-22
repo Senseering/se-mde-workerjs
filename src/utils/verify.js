@@ -57,7 +57,7 @@ verify.appendSignature = function (package, key) {
       worker_id: package.meta.worker_id,
       location: package.meta.location,
       created_at: package.meta.created_at,
-      price: package.meta.created_at
+      price: package.meta.price
     },
     data: package.data
   }
