@@ -1,0 +1,39 @@
+{
+    "id": "3918ae80-84b4-11ea-9e80-81529c267e5d",
+    "name": "Force Sensor XFT 2500 Speed v2",
+    "location": {
+        "latitude": 50.780537,
+        "longitude": 6.128502
+    },
+    "payment": {
+        "fixCost": 0,
+        "isFixCostOnly": true
+    },
+    "schema": {
+        "input": "./env/schema/input.json",
+        "output": "./env/schema/output.json"
+    },
+    "apikey": "f91b31b1b7d44d97be07ba1037604bd3",
+    "privKey": "./env/key_world.js",
+    "apiDomain": "rotterbruch-10.wzl.senseering.net",
+    "port": "443",
+    "protocol": "https",
+    "info": {
+        "description": "./env/description/worker.md",
+        "tags": [
+            "image processing"
+        ],
+        "input": {
+            "description": "./env/description/input.md",
+            "tags": [
+                "h"
+            ]
+        },
+        "output": {
+            "description": "./env/description/output.md",
+            "tags": [
+                ""
+            ]
+        }
+    }
+}
