@@ -178,6 +178,9 @@ Worker.prototype.connect = async function () {
  * @param {Object} data The data to be published
  */
 Worker.prototype.publish = async function (data, options) {
+    if(options === undefined){
+        options = {}
+    }
     debug('Preparing data for publish on manager...')
     if (typeof config.get('id') === 'undefined') {
         throw new Error('Worker is not initialized')

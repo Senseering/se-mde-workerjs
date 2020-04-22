@@ -12,7 +12,8 @@ let worker = new Worker(config);
 
     //publishes data only on demand
     let service = async (incomingData) => {
-        return { data: data, price: 0 }
+        //doo something
+        return data
     }
 
     worker.provide(service)
