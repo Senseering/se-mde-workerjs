@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/Senseering/worker_js.svg?token=J8PZydPmZBQA3jayA6F4&branch=master)](https://travis-ci.com/Senseering/worker_js)
+![Node.js Tests](https://github.com/Senseering/worker_js/workflows/Node.js%20CI/badge.svg)
 
 Client library to connect to the [edge node](https://github.com/Senseering/manager).
 
