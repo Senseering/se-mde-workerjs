@@ -4,7 +4,7 @@
   "description": "Client library to connect to the [manager](https://github.com/Senseering/manager).",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha ./test/** --exclude ./test/component.test.key.pem",
+    "test": "mocha 'test/src/test.js'",
     "lint": "./node_modules/.bin/eslint ./lib/**"
   },
   "repository": {
