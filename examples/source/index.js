@@ -1,13 +1,13 @@
-let Worker = require('../../src/worker')
+let Worker = require('../../index')
 
-let config = './config/development.json'
+let config = './config/development.json';
 
-let worker = new Worker(config);
+//let worker = new Worker(config);
 
 (async function () {
-    await worker.connect()
+    //await worker.connect()
 
-    let data = { test: 'Hello world!' }
-    await worker.publish(data)
-    await worker.disconnect()
+    //let data = { test: 'Hello world!' }
+    ///await worker.publish(data)
+    //await worker.disconnect()
 })();

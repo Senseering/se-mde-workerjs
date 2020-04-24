@@ -5,6 +5,7 @@
     "version": "0.2.0",
     "configurations": [
 
+
         {
             "type": "node",
             "request": "launch",
@@ -28,6 +29,18 @@
             "runtimeArgs": ["run-script", "debug"],
             "port": 9229,
             "cwd": "${workspaceFolder}/examples/service"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug[source]",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run-script", "debug"],
+            "port": 9229,
+            "cwd": "${workspaceFolder}/examples/source"
         },
         {
             "type": "node",
