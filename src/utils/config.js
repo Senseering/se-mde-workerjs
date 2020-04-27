@@ -1,6 +1,7 @@
 const debug = require('debug')('utils:config')
 const crypto = require("crypto")
 const fs = require("fs").promises
+const fss = require("fs")
 const VERSION_ORDER = ["schema", "privKey", "profile", "info", "settings"]
 
 
@@ -10,9 +11,10 @@ let config = {}
 /** 
  * Initialisises the config and reads it the first time
 */
-config.init = async function () {
+config.init = async function (path) {
     config.file = new Promise(async (resolve, reject) => {
         try {
+            config.path = path
             resolve(await config.get("full", { fromFile: true }))
         } catch (error) {
             reject(error)
@@ -28,7 +30,7 @@ config.init = async function () {
 config.get = async function (request, { fromFile = false } = {}) {
     debug("Retrieve from config: " + request)
     if (fromFile) {
-        let configFile = JSON.parse(await fs.readFile("./config.json", "utf-8"))
+        let configFile = JSON.parse(await fs.readFile(config.path, "utf-8"))
         if (request === "full") {
             return {
                 "schema": await config.resolve(configFile, "schema"),
@@ -104,7 +106,7 @@ config.update = async function (field, configuration, { recursive = false, spaci
     let managedConfig = await config.file
     config.file = new Promise(async (resolve, reject) => {
         try {
-            let configFile = JSON.parse(await fs.readFile("./config.json", "utf-8"))
+            let configFile = JSON.parse(await fs.readFile(config.path, "utf-8"))
             if (recursive) {
                 switch (field) {
                     case "privKey":
@@ -123,7 +125,7 @@ config.update = async function (field, configuration, { recursive = false, spaci
                         // Overwrite old file with new file 
                         configFile.info = configuration
                         // Write to config
-                        await fs.writeFile("./config.json", JSON.stringify(configFile, null, spacing))
+                        await fs.writeFile(config.path, JSON.stringify(configFile, null, spacing))
                         // Write into provisioned configuration
                         managedConfig.schema = configuration
                         resolve(managedConfig)
@@ -140,14 +142,14 @@ config.update = async function (field, configuration, { recursive = false, spaci
                         // Overwrite old file with new file ( tags missing in old file )
                         configFile.info = configuration
                         // Write to config
-                        await fs.writeFile("./config.json", JSON.stringify(configFile, null, spacing))
+                        await fs.writeFile(config.path, JSON.stringify(configFile, null, spacing))
                         // Write into provisioned configuration
                         managedConfig.info = configuration
                         resolve(managedConfig)
                         break;
                     default:
                         configFile[field] = configuration
-                        await fs.writeFile("./config.json", JSON.stringify(configFile, null, spacing))
+                        await fs.writeFile(config.path, JSON.stringify(configFile, null, spacing))
                         // Write into provisioned configuration
                         managedConfig[field] = configuration
                         resolve(managedConfig)
@@ -155,7 +157,7 @@ config.update = async function (field, configuration, { recursive = false, spaci
                 }
             } else {
                 configFile[field] = configuration
-                await fs.writeFile("./config.json", JSON.stringify(configFile, null, spacing))
+                await fs.writeFile(config.path, JSON.stringify(configFile, null, spacing))
                 switch (field) {
                     case "privKey":
                         break;
