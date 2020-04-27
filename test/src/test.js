@@ -9,7 +9,7 @@ let importTest = function (name, path, data) {
 }
 
 
-describe("Startet testing all manager functions ", function () {
+describe("Startet testing all worker functions ", function () {
 
     //initialize storage 
     before(async () => {

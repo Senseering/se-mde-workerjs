@@ -1,5 +1,5 @@
 {
-  "credentials": "5e0b2680-8484-11ea-bd6c-2b4b0702ce34:8872bad4ed484763bbee806aac62ff1a",
+  "credentials": "5e0b2680-8484-11ea-bd6c-2b4b0702ce348872bad4ed484763bbee806aac62ff1a",
   "url": "http://35.157.82.188",
   "settings": {},
   "profile": {
@@ -13,26 +13,26 @@
       "isFixCostOnly": false
     }
   },
-  "privKey": "./env/key.pem",
+  "privKey": "./test/data/env/key.pem",
   "schema": {
-    "input": "./env/schema/input.json",
-    "output": "./env/schema/output.json"
+    "input": "./test/data/env/schema/input.json",
+    "output": "./test/data/env/schema/output.json"
   },
   "info": {
     "worker": {
-      "description": "./env/description/worker.md",
+      "description": "./test/data/env/description/worker.md",
       "tags": [
         "image processing"
       ]
     },
     "input": {
-      "description": "./env/description/input.md",
+      "description": "./test/data/env/description/input.md",
       "tags": [
         "h"
       ]
     },
     "output": {
-      "description": "./env/description/output.md",
+      "description": "./test/data/env/description/output.md",
       "tags": [
         ""
       ]

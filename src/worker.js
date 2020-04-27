@@ -1,7 +1,7 @@
 const NodeRSA = require('node-rsa')
 const fs = require('fs')
 const requireFromString = require('require-from-string');
-const config = require('nconf')
+const config = require('./utils/config')
 const debug = require('debug')('worker')
 require('colors')
 
@@ -65,13 +65,13 @@ function Worker(params) {
             }
         }
 
-        this.completeManagerLink = config.get('apiDomain') + ':' + config.get('port')
-        if (config.get('apiDomain') === '') {
+        this.completeManagerLink = (new URL(await config.get('url'))).host
+        if (this.completeManagerLink === '') {
             throw new Error('No manager ip used')
         }
 
         this.community = false
-        if (config.get('schema').hasOwnProperty("link")) {
+        if (await config.get('schema').hasOwnProperty("community")) {
             this.community = true
         }
     }
@@ -87,7 +87,7 @@ function Worker(params) {
 Worker.prototype.connect = async function () {
 
     debug('Connecting client...')
-    client.init(config.get('apiDomain'), config.get('port'), config.get('id'), config.get('apikey'))
+    await client.init()
 
     //register worker if not already done in the past
     if (!this.isRegistered) {

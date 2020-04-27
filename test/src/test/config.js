@@ -3,16 +3,29 @@ let config = require("../../../src/utils/config");
 module.exports = function () {
 
     let expect = require('chai').expect;
-
-    //define globally used data here!
-    //initialize storage 
-    before(async () => {
+    beforeEach(async () => {
         await config.init("./test/data/config.json")
     })
 
-    it('Test full config', async function () {
+    it('Bad config should throw (malformed id)', async function () {
+        try {
+            await config.init("./test/data/badIDConfig.json")
+        } catch (err) {
+            expect(err).to.be.an('error');
+        }
+    })
+
+    it('Bad config should throw (malformed url)', async function () {
+        try {
+            await config.init("./test/data/badURLConfig.json")
+        } catch (err) {
+            expect(err).to.be.an('error');
+        }
+    })
+
+    it('Test load full config', async function () {
         let res = await config.get("full")
-        expect(res).to.include.all.keys("profile", "settings", "schema", "privKey", "info")
+        expect(res).to.include.all.keys("profile", "settings", "schema", "privKey", "info", "credentials", "url")
         expect(res.profile.name).to.equal("Example Source")
     })
 
@@ -42,25 +55,25 @@ module.exports = function () {
 
     it('Test comparison with corect version', async function () {
         let res = await config.compare("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=" + "." +
-            "i8Rx+zeLGUATX4DiuZaXmXW1caOpt/BFg7AFhQnuDsI=" + "." +
+            "Y8DlQawRYn8MmAjCUuL54lFWDNojIG2EWiMd0jF3qbs=" + "." +
             "s2B7Jz7m184N5/F2fVibOCT9BMhEooIeSx9r+nBf3cI=" + "." +
-            "qxSxXd4M+iRKnNYRew0iplyBMSoOElGqfmJ4VpOHniM=")
-        expect(res).to.equal("0.1.0.0")
+            "A3Yy7ktfY8fJ8rXN7WTuIsSfC4TDNPWH4kb+LEerq2I=")
+        expect(res).to.equal("0.0.0.0")
     })
 
     it('Update profile and compare for update', async function () {
         let profile = { "name": "Example Source", "location": { "latitude": 52.5297268, "longitude": 13.400391 }, "payment": { "fixCost": 0, "isFixCostOnly": false } }
-        after(async () => { 
+        after(async () => {
             profile.name = "Example Source"
             await config.update("profile", profile)
         })
         profile.name = "test"
         await config.update("profile", profile)
         let res = await config.compare("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=" + "." +
-            "i8Rx+zeLGUATX4DiuZaXmXW1caOpt/BFg7AFhQnuDsI=" + "." +
+            "Y8DlQawRYn8MmAjCUuL54lFWDNojIG2EWiMd0jF3qbs=" + "." +
             "s2B7Jz7m184N5/F2fVibOCT9BMhEooIeSx9r+nBf3cI=" + "." +
-            "qxSxXd4M+iRKnNYRew0iplyBMSoOElGqfmJ4VpOHniM=")
-        expect(res).to.equal("0.1.1.0")
+            "A3Yy7ktfY8fJ8rXN7WTuIsSfC4TDNPWH4kb+LEerq2I=")
+        expect(res).to.equal("0.0.1.0")
     })
 
 }

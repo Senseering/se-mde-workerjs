@@ -1,8 +1,13 @@
 const debug = require('debug')('utils:config')
 const crypto = require("crypto")
 const fs = require("fs").promises
-const fss = require("fs")
+const fsutil = require('./fsutil')
+const Ajv = require('ajv')
+const ajv = new Ajv()
+const NodeRSA = require('node-rsa')
+const validateConfig = ajv.compile(require("./configSchema.json"));
 const VERSION_ORDER = ["schema", "privKey", "profile", "info", "settings"]
+const PRIVAT_KEY_BIT = 1024
 
 
 
@@ -11,15 +16,21 @@ let config = {}
 /** 
  * Initialisises the config and reads it the first time
 */
-config.init = async function (path) {
+config.init = async function (path = "./config.json") {
     config.file = new Promise(async (resolve, reject) => {
         try {
+            let configFile = JSON.parse(await fs.readFile(path, "utf-8"))
+            let valid = validateConfig(configFile)
+            if (!valid)
+                throw new Error(validateConfig.errors[0].dataPath + " " + validateConfig.errors[0].message)
+            new URL(configFile.url)
             config.path = path
             resolve(await config.get("full", { fromFile: true }))
         } catch (error) {
             reject(error)
         }
     })
+    return config.file
 }
 
 
@@ -33,6 +44,8 @@ config.get = async function (request, { fromFile = false } = {}) {
         let configFile = JSON.parse(await fs.readFile(config.path, "utf-8"))
         if (request === "full") {
             return {
+                "credentials": await config.resolve(configFile, "credentials"),
+                "url": await config.resolve(configFile, "url"),
                 "schema": await config.resolve(configFile, "schema"),
                 "privKey": await config.resolve(configFile, "privKey"),
                 "profile": await config.resolve(configFile, "profile"),
@@ -60,16 +73,59 @@ config.resolve = async function (configFile, field) {
     debug("Resolve from file: " + field)
     switch (field) {
         case "privKey":
-            configFile.privKey = await fs.readFile(configFile.privKey, 'utf8')
+            try {
+                configFile.privKey = await fs.readFile(configFile.privKey, 'utf8')
+            } catch (err) {
+                debug("Could not find privat key. Creating one...")
+                fsutil.ensureDirectoryExistence(configFile.privKey)
+                let privKeyLocation = configFile.privKey
+                configFile.privKey = (new NodeRSA({ b: PRIVAT_KEY_BIT })).exportKey('private')
+                await fs.writeFile(privKeyLocation, configFile.privKey)
+            }
             return configFile.privKey
         case "schema":
-            configFile.schema.input = JSON.parse(await fs.readFile(configFile.schema.input, "utf-8"))
-            configFile.schema.output = JSON.parse(await fs.readFile(configFile.schema.output, "utf-8"))
+            try {
+                configFile.schema.input = JSON.parse(await fs.readFile(configFile.schema.input, "utf-8"))
+            } catch (err) {
+                debug("Could not find input schema. Creating one...")
+                fsutil.ensureDirectoryExistence(configFile.schema.input)
+                await fs.writeFile(configFile.schema.input, JSON.stringify({}))
+                configFile.schema.input = {}
+            }
+            try {
+                configFile.schema.output = JSON.parse(await fs.readFile(configFile.schema.output, "utf-8"))
+            } catch (err) {
+                debug("Could not find output schema. Creating one...")
+                fsutil.ensureDirectoryExistence(configFile.schema.output)
+                await fs.writeFile(configFile.schema.output, JSON.stringify({}))
+                configFile.schema.output = {}
+            }
             return configFile.schema
         case "info":
-            configFile.info.worker.description = await fs.readFile(configFile.info.worker.description, "utf-8")
-            configFile.info.input.description = await fs.readFile(configFile.info.input.description, "utf-8")
-            configFile.info.output.description = await fs.readFile(configFile.info.output.description, "utf-8")
+            try {
+                configFile.info.worker.description = await fs.readFile(configFile.info.worker.description, "utf-8")
+            } catch (err) {
+                debug("Could not find worker descrition. Creating one...")
+                fsutil.ensureDirectoryExistence(configFile.info.worker.description)
+                await fs.writeFile(configFile.info.worker.description, "")
+                configFile.info.worker.description = {}
+            }
+            try {
+                configFile.info.input.descriptionn = await fs.readFile(configFile.info.input.description, "utf-8")
+            } catch (err) {
+                debug("Could not find input descrition. Creating one...")
+                fsutil.ensureDirectoryExistence(configFile.info.input.description)
+                await fs.writeFile(configFile.info.input.description, "")
+                configFile.info.input.description = {}
+            }
+            try {
+                configFile.info.output.description = await fs.readFile(configFile.info.output.description, "utf-8")
+            } catch (err) {
+                debug("Could not find output descrition. Creating one...")
+                fsutil.ensureDirectoryExistence(configFile.info.output.description)
+                await fs.writeFile(configFile.info.output.description, "")
+                configFile.info.output.description = {}
+            }
             return configFile.info
         default:
             return configFile[field]
@@ -185,4 +241,5 @@ module.exports = {
     get: config.get,
     init: config.init,
     update: config.update,
+    VERSION_ORDER,
 }
