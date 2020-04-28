@@ -12,6 +12,9 @@ const PRIVAT_KEY_BIT = 1024
 
 
 let config = {}
+config.version = {}
+VERSION_ORDER.forEach((configuration) => config.version[configuration] = {})
+
 
 /** 
  * Initialisises the config and reads it the first time
@@ -76,55 +79,79 @@ config.resolve = async function (configFile, field) {
             try {
                 configFile.privKey = await fs.readFile(configFile.privKey, 'utf8')
             } catch (err) {
-                debug("Could not find privat key. Creating one...")
-                fsutil.ensureDirectoryExistence(configFile.privKey)
-                let privKeyLocation = configFile.privKey
-                configFile.privKey = (new NodeRSA({ b: PRIVAT_KEY_BIT })).exportKey('private')
-                await fs.writeFile(privKeyLocation, configFile.privKey)
+                if (err.code === "ENOENT") {
+                    debug("Could not find privat key. Creating one...")
+                    fsutil.ensureDirectoryExistence(configFile.privKey)
+                    let privKeyLocation = configFile.privKey
+                    configFile.privKey = (new NodeRSA({ b: PRIVAT_KEY_BIT })).exportKey('private')
+                    await fs.writeFile(privKeyLocation, configFile.privKey)
+                } else {
+                    throw err
+                }
             }
             return configFile.privKey
         case "schema":
             try {
                 configFile.schema.input = JSON.parse(await fs.readFile(configFile.schema.input, "utf-8"))
             } catch (err) {
-                debug("Could not find input schema. Creating one...")
-                fsutil.ensureDirectoryExistence(configFile.schema.input)
-                await fs.writeFile(configFile.schema.input, JSON.stringify({}))
-                configFile.schema.input = {}
+                if (err.code === "ENOENT") {
+                    debug("Could not find input schema. Creating one...")
+                    fsutil.ensureDirectoryExistence(configFile.schema.input)
+                    await fs.writeFile(configFile.schema.input, JSON.stringify({}))
+                    configFile.schema.input = {}
+                } else {
+                    throw err
+                }
             }
             try {
                 configFile.schema.output = JSON.parse(await fs.readFile(configFile.schema.output, "utf-8"))
             } catch (err) {
-                debug("Could not find output schema. Creating one...")
-                fsutil.ensureDirectoryExistence(configFile.schema.output)
-                await fs.writeFile(configFile.schema.output, JSON.stringify({}))
-                configFile.schema.output = {}
+                if (err.code === "ENOENT") {
+                    debug("Could not find output schema. Creating one...")
+                    fsutil.ensureDirectoryExistence(configFile.schema.output)
+                    await fs.writeFile(configFile.schema.output, JSON.stringify({}))
+                    configFile.schema.output = {}
+                } else {
+                    throw err
+                }
             }
             return configFile.schema
         case "info":
             try {
                 configFile.info.worker.description = await fs.readFile(configFile.info.worker.description, "utf-8")
             } catch (err) {
-                debug("Could not find worker descrition. Creating one...")
-                fsutil.ensureDirectoryExistence(configFile.info.worker.description)
-                await fs.writeFile(configFile.info.worker.description, "")
-                configFile.info.worker.description = {}
+                if (err.code === "ENOENT") {
+                    debug("Could not find worker descrition. Creating one...")
+                    fsutil.ensureDirectoryExistence(configFile.info.worker.description)
+                    await fs.writeFile(configFile.info.worker.description, "")
+                    configFile.info.worker.description = {}
+                } else {
+                    throw err
+                }
             }
             try {
                 configFile.info.input.descriptionn = await fs.readFile(configFile.info.input.description, "utf-8")
             } catch (err) {
-                debug("Could not find input descrition. Creating one...")
-                fsutil.ensureDirectoryExistence(configFile.info.input.description)
-                await fs.writeFile(configFile.info.input.description, "")
-                configFile.info.input.description = {}
+                if (err.code === "ENOENT") {
+                    debug("Could not find input descrition. Creating one...")
+                    fsutil.ensureDirectoryExistence(configFile.info.input.description)
+                    await fs.writeFile(configFile.info.input.description, "")
+                    configFile.info.input.description = {}
+                } else {
+                    throw err
+                }
             }
             try {
                 configFile.info.output.description = await fs.readFile(configFile.info.output.description, "utf-8")
             } catch (err) {
-                debug("Could not find output descrition. Creating one...")
-                fsutil.ensureDirectoryExistence(configFile.info.output.description)
-                await fs.writeFile(configFile.info.output.description, "")
-                configFile.info.output.description = {}
+                if (err.code === "ENOENT") {
+                    debug("Could not find output descrition. Creating one...")
+                    fsutil.ensureDirectoryExistence(configFile.info.output.description)
+                    await fs.writeFile(configFile.info.output.description, "")
+                    configFile.info.output.description = {}
+                } else {
+                    throw err
+                }
             }
             return configFile.info
         default:
