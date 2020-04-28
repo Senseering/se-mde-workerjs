@@ -48,6 +48,20 @@
             ],
             "port": 9229,
             "cwd": "${workspaceFolder}/examples/corona"
+        },{
+            "type": "node",
+            "request": "launch",
+            "name": "Debug[loadtest]",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run-script",
+                "debug"
+            ],
+            "port": 9229,
+            "cwd": "${workspaceFolder}/examples/loadtest"
         },
         {
             "type": "node",
