@@ -1,0 +1,478 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The Root Schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "additionalProperties": true,
+    "required": [
+        "test"
+    ],
+    "properties": {
+        "test": {
+            "$id": "#/properties/test",
+            "type": "array",
+            "title": "The Test Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "examples": [
+                [
+                    {
+                        "company": "EXOSPEED",
+                        "registered": "2017-06-29T10:43:52 -02:00",
+                        "about": "Fugiat voluptate et pariatur pariatur. Eu commodo do laborum voluptate cupidatat aliquip minim cillum cupidatat dolor do nostrud. Nostrud elit dolor velit consectetur voluptate ullamco. Ea anim minim mollit cillum dolor amet laboris. Id dolor ut cupidatat ut minim officia adipisicing aliquip. Qui nulla est elit nostrud sunt ut enim nostrud aliquip.\r\n",
+                        "friends": [
+                            {
+                                "name": "Lucia Le",
+                                "id": 0.0
+                            },
+                            {
+                                "id": 1.0,
+                                "name": "Joyce Patrick"
+                            },
+                            {
+                                "id": 2.0,
+                                "name": "Florence Buckner"
+                            }
+                        ],
+                        "email": "josiepratt@exospeed.com",
+                        "index": 0.0,
+                        "guid": "dc885edf-8faa-473b-80e9-fb5ee5345689",
+                        "greeting": "Hello, undefined! You have 5 unread messages.",
+                        "tags": [
+                            "est",
+                            "ex",
+                            "ut",
+                            "do",
+                            "magna",
+                            "laborum",
+                            "ipsum"
+                        ],
+                        "favoriteFruit": "strawberry",
+                        "_id": "5ea86514f80fb656c89576ef",
+                        "phone": "+1 (803) 560-2651",
+                        "address": "695 Schaefer Street, Juntura, South Carolina, 9177"
+                    },
+                    {
+                        "guid": "1bf9f571-880c-41a6-9779-f8330b824f62",
+                        "greeting": "Hello, undefined! You have 7 unread messages.",
+                        "tags": [
+                            "nisi",
+                            "ut",
+                            "veniam",
+                            "ea",
+                            "magna",
+                            "dolor",
+                            "incididunt"
+                        ],
+                        "favoriteFruit": "apple",
+                        "_id": "5ea865143146fa7b6bcf9351",
+                        "address": "139 Troy Avenue, Bellamy, Montana, 5382",
+                        "phone": "+1 (814) 523-3006",
+                        "company": "CYTRAK",
+                        "registered": "2014-12-07T04:27:21 -01:00",
+                        "about": "Incididunt aliqua excepteur cillum id occaecat labore commodo qui cillum nisi. Proident mollit tempor magna exercitation exercitation nisi pariatur reprehenderit. Est ipsum qui et aliquip irure laboris consectetur cillum adipisicing. Deserunt tempor aliqua Lorem cillum in nostrud ad ullamco nisi incididunt deserunt in. Aliquip et velit non fugiat mollit in sit deserunt quis velit. Velit est culpa Lorem id et.\r\n",
+                        "friends": [
+                            {
+                                "id": 0.0,
+                                "name": "Nichole Baldwin"
+                            },
+                            {
+                                "id": 1.0,
+                                "name": "Loretta Duke"
+                            },
+                            {
+                                "name": "Janell Velasquez",
+                                "id": 2.0
+                            }
+                        ],
+                        "email": "florencebuckner@cytrak.com",
+                        "index": 1.0
+                    },
+                    {
+                        "favoriteFruit": "banana",
+                        "_id": "5ea86514747797abc16d02f1",
+                        "address": "999 Bills Place, Wells, West Virginia, 2391",
+                        "phone": "+1 (984) 487-2762",
+                        "company": "ZYTREK",
+                        "registered": "2020-03-30T06:52:42 -02:00",
+                        "about": "Non non magna laboris sint veniam velit duis ullamco amet non consequat. Ut ea sint excepteur sunt elit pariatur eu. Ut esse in laborum magna est reprehenderit ut laboris in.\r\n",
+                        "friends": [
+                            {
+                                "name": "Luisa Wilcox",
+                                "id": 0.0
+                            },
+                            {
+                                "id": 1.0,
+                                "name": "Cervantes Thornton"
+                            },
+                            {
+                                "name": "Phoebe Baxter",
+                                "id": 2.0
+                            }
+                        ],
+                        "email": "janellvelasquez@zytrek.com",
+                        "index": 2.0,
+                        "guid": "141dc4bc-044d-4e30-b2d7-f26bd9b2a156",
+                        "greeting": "Hello, undefined! You have 7 unread messages.",
+                        "tags": [
+                            "magna",
+                            "eiusmod",
+                            "proident",
+                            "et",
+                            "sint",
+                            "dolor",
+                            "eiusmod"
+                        ]
+                    }
+                ]
+            ],
+            "additionalItems": true,
+            "items": {
+                "$id": "#/properties/test/items",
+                "type": "object",
+                "title": "The Items Schema",
+                "description": "An explanation about the purpose of this instance.",
+                "default": {},
+                "examples": [
+                    {
+                        "greeting": "Hello, undefined! You have 5 unread messages.",
+                        "tags": [
+                            "est",
+                            "ex",
+                            "ut",
+                            "do",
+                            "magna",
+                            "laborum",
+                            "ipsum"
+                        ],
+                        "favoriteFruit": "strawberry",
+                        "_id": "5ea86514f80fb656c89576ef",
+                        "phone": "+1 (803) 560-2651",
+                        "address": "695 Schaefer Street, Juntura, South Carolina, 9177",
+                        "company": "EXOSPEED",
+                        "registered": "2017-06-29T10:43:52 -02:00",
+                        "friends": [
+                            {
+                                "name": "Lucia Le",
+                                "id": 0.0
+                            },
+                            {
+                                "id": 1.0,
+                                "name": "Joyce Patrick"
+                            },
+                            {
+                                "name": "Florence Buckner",
+                                "id": 2.0
+                            }
+                        ],
+                        "about": "Fugiat voluptate et pariatur pariatur. Eu commodo do laborum voluptate cupidatat aliquip minim cillum cupidatat dolor do nostrud. Nostrud elit dolor velit consectetur voluptate ullamco. Ea anim minim mollit cillum dolor amet laboris. Id dolor ut cupidatat ut minim officia adipisicing aliquip. Qui nulla est elit nostrud sunt ut enim nostrud aliquip.\r\n",
+                        "email": "josiepratt@exospeed.com",
+                        "index": 0.0,
+                        "guid": "dc885edf-8faa-473b-80e9-fb5ee5345689"
+                    },
+                    {
+                        "email": "florencebuckner@cytrak.com",
+                        "index": 1.0,
+                        "guid": "1bf9f571-880c-41a6-9779-f8330b824f62",
+                        "greeting": "Hello, undefined! You have 7 unread messages.",
+                        "tags": [
+                            "nisi",
+                            "ut",
+                            "veniam",
+                            "ea",
+                            "magna",
+                            "dolor",
+                            "incididunt"
+                        ],
+                        "favoriteFruit": "apple",
+                        "_id": "5ea865143146fa7b6bcf9351",
+                        "phone": "+1 (814) 523-3006",
+                        "address": "139 Troy Avenue, Bellamy, Montana, 5382",
+                        "company": "CYTRAK",
+                        "registered": "2014-12-07T04:27:21 -01:00",
+                        "friends": [
+                            {
+                                "id": 0.0,
+                                "name": "Nichole Baldwin"
+                            },
+                            {
+                                "id": 1.0,
+                                "name": "Loretta Duke"
+                            },
+                            {
+                                "id": 2.0,
+                                "name": "Janell Velasquez"
+                            }
+                        ],
+                        "about": "Incididunt aliqua excepteur cillum id occaecat labore commodo qui cillum nisi. Proident mollit tempor magna exercitation exercitation nisi pariatur reprehenderit. Est ipsum qui et aliquip irure laboris consectetur cillum adipisicing. Deserunt tempor aliqua Lorem cillum in nostrud ad ullamco nisi incididunt deserunt in. Aliquip et velit non fugiat mollit in sit deserunt quis velit. Velit est culpa Lorem id et.\r\n"
+                    },
+                    {
+                        "registered": "2020-03-30T06:52:42 -02:00",
+                        "about": "Non non magna laboris sint veniam velit duis ullamco amet non consequat. Ut ea sint excepteur sunt elit pariatur eu. Ut esse in laborum magna est reprehenderit ut laboris in.\r\n",
+                        "friends": [
+                            {
+                                "name": "Luisa Wilcox",
+                                "id": 0.0
+                            },
+                            {
+                                "name": "Cervantes Thornton",
+                                "id": 1.0
+                            },
+                            {
+                                "name": "Phoebe Baxter",
+                                "id": 2.0
+                            }
+                        ],
+                        "email": "janellvelasquez@zytrek.com",
+                        "index": 2.0,
+                        "guid": "141dc4bc-044d-4e30-b2d7-f26bd9b2a156",
+                        "greeting": "Hello, undefined! You have 7 unread messages.",
+                        "tags": [
+                            "magna",
+                            "eiusmod",
+                            "proident",
+                            "et",
+                            "sint",
+                            "dolor",
+                            "eiusmod"
+                        ],
+                        "favoriteFruit": "banana",
+                        "_id": "5ea86514747797abc16d02f1",
+                        "address": "999 Bills Place, Wells, West Virginia, 2391",
+                        "phone": "+1 (984) 487-2762",
+                        "company": "ZYTREK"
+                    }
+                ],
+                "additionalProperties": true,
+                "required": [
+                    "_id",
+                    "index",
+                    "guid",
+                    "company",
+                    "email",
+                    "phone",
+                    "address",
+                    "about",
+                    "registered",
+                    "tags",
+                    "friends",
+                    "greeting",
+                    "favoriteFruit"
+                ],
+                "properties": {
+                    "_id": {
+                        "$id": "#/properties/test/items/properties/_id",
+                        "type": "string",
+                        "title": "The _id Schema",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": "",
+                        "examples": [
+                            "5ea86514f80fb656c89576ef"
+                        ]
+                    },
+                    "index": {
+                        "$id": "#/properties/test/items/properties/index",
+                        "type": "integer",
+                        "title": "The Index Schema",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": 0,
+                        "examples": [
+                            0.0
+                        ]
+                    },
+                    "guid": {
+                        "$id": "#/properties/test/items/properties/guid",
+                        "type": "string",
+                        "title": "The Guid Schema",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": "",
+                        "examples": [
+                            "dc885edf-8faa-473b-80e9-fb5ee5345689"
+                        ]
+                    },
+                    "company": {
+                        "$id": "#/properties/test/items/properties/company",
+                        "type": "string",
+                        "title": "The Company Schema",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": "",
+                        "examples": [
+                            "EXOSPEED"
+                        ]
+                    },
+                    "email": {
+                        "$id": "#/properties/test/items/properties/email",
+                        "type": "string",
+                        "title": "The Email Schema",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": "",
+                        "examples": [
+                            "josiepratt@exospeed.com"
+                        ]
+                    },
+                    "phone": {
+                        "$id": "#/properties/test/items/properties/phone",
+                        "type": "string",
+                        "title": "The Phone Schema",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": "",
+                        "examples": [
+                            "+1 (803) 560-2651"
+                        ]
+                    },
+                    "address": {
+                        "$id": "#/properties/test/items/properties/address",
+                        "type": "string",
+                        "title": "The Address Schema",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": "",
+                        "examples": [
+                            "695 Schaefer Street, Juntura, South Carolina, 9177"
+                        ]
+                    },
+                    "about": {
+                        "$id": "#/properties/test/items/properties/about",
+                        "type": "string",
+                        "title": "The About Schema",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": "",
+                        "examples": [
+                            "Fugiat voluptate et pariatur pariatur. Eu commodo do laborum voluptate cupidatat aliquip minim cillum cupidatat dolor do nostrud. Nostrud elit dolor velit consectetur voluptate ullamco. Ea anim minim mollit cillum dolor amet laboris. Id dolor ut cupidatat ut minim officia adipisicing aliquip. Qui nulla est elit nostrud sunt ut enim nostrud aliquip.\r\n"
+                        ]
+                    },
+                    "registered": {
+                        "$id": "#/properties/test/items/properties/registered",
+                        "type": "string",
+                        "title": "The Registered Schema",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": "",
+                        "examples": [
+                            "2017-06-29T10:43:52 -02:00"
+                        ]
+                    },
+                    "tags": {
+                        "$id": "#/properties/test/items/properties/tags",
+                        "type": "array",
+                        "title": "The Tags Schema",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": [],
+                        "examples": [
+                            [
+                                "est",
+                                "ex",
+                                "ut"
+                            ]
+                        ],
+                        "additionalItems": true,
+                        "items": {
+                            "$id": "#/properties/test/items/properties/tags/items",
+                            "type": "string",
+                            "title": "The Items Schema",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": "",
+                            "examples": [
+                                "est",
+                                "ex",
+                                "ut"
+                            ]
+                        }
+                    },
+                    "friends": {
+                        "$id": "#/properties/test/items/properties/friends",
+                        "type": "array",
+                        "title": "The Friends Schema",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": [],
+                        "examples": [
+                            [
+                                {
+                                    "id": 0.0,
+                                    "name": "Lucia Le"
+                                },
+                                {
+                                    "name": "Joyce Patrick",
+                                    "id": 1.0
+                                },
+                                {
+                                    "name": "Florence Buckner",
+                                    "id": 2.0
+                                }
+                            ]
+                        ],
+                        "additionalItems": true,
+                        "items": {
+                            "$id": "#/properties/test/items/properties/friends/items",
+                            "type": "object",
+                            "title": "The Items Schema",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": {},
+                            "examples": [
+                                {
+                                    "id": 0.0,
+                                    "name": "Lucia Le"
+                                },
+                                {
+                                    "name": "Joyce Patrick",
+                                    "id": 1.0
+                                },
+                                {
+                                    "name": "Florence Buckner",
+                                    "id": 2.0
+                                }
+                            ],
+                            "additionalProperties": true,
+                            "required": [
+                                "id",
+                                "name"
+                            ],
+                            "properties": {
+                                "id": {
+                                    "$id": "#/properties/test/items/properties/friends/items/properties/id",
+                                    "type": "integer",
+                                    "title": "The Id Schema",
+                                    "description": "An explanation about the purpose of this instance.",
+                                    "default": 0,
+                                    "examples": [
+                                        0.0
+                                    ]
+                                },
+                                "name": {
+                                    "$id": "#/properties/test/items/properties/friends/items/properties/name",
+                                    "type": "string",
+                                    "title": "The Name Schema",
+                                    "description": "An explanation about the purpose of this instance.",
+                                    "default": "",
+                                    "examples": [
+                                        "Lucia Le"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "greeting": {
+                        "$id": "#/properties/test/items/properties/greeting",
+                        "type": "string",
+                        "title": "The Greeting Schema",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": "",
+                        "examples": [
+                            "Hello, undefined! You have 5 unread messages."
+                        ]
+                    },
+                    "favoriteFruit": {
+                        "$id": "#/properties/test/items/properties/favoriteFruit",
+                        "type": "string",
+                        "title": "The Favoritefruit Schema",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": "",
+                        "examples": [
+                            "strawberry"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}
