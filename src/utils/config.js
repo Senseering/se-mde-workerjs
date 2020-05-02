@@ -89,7 +89,7 @@ config.resolve = async function (configFile, field) {
                     throw err
                 }
             }
-            return configFile.privKey
+            break;
         case "schema":
             try {
                 configFile.schema.input = JSON.parse(await fs.readFile(configFile.schema.input, "utf-8"))
@@ -115,7 +115,7 @@ config.resolve = async function (configFile, field) {
                     throw err
                 }
             }
-            return configFile.schema
+            break;
         case "info":
             try {
                 configFile.info.worker.description = await fs.readFile(configFile.info.worker.description, "utf-8")
@@ -153,10 +153,57 @@ config.resolve = async function (configFile, field) {
                     throw err
                 }
             }
-            return configFile.info
+            break;
         default:
-            return configFile[field]
+            break;
     }
+    if (VERSION_ORDER.includes(field))
+        await config.updateVersion(field, configFile[field])
+    return configFile[field]
+}
+
+/***
+ * Returns the current verison
+ */
+config.getVersion = async function () {
+    await config.file
+    let versions = []
+    VERSION_ORDER.forEach((field) => {
+        versions.push(config.version[field].hash + "@" + config.version[field].timestamp)
+    })
+    return versions.join(".")
+}
+
+
+
+/**
+ * @param configuration the full config opject
+ * @param field the field to update e.g. schema, info etc.
+*/
+config.updateVersion = async function (field, configuration) {
+    let configFile = JSON.parse(await fs.readFile(config.path, "utf-8"))
+    let configurationHash = crypto.createHash('sha256').update(JSON.stringify(configuration)).digest('base64')
+    let configurationTimestamp = parseInt((await fs.lstat(config.path)).mtimeMs)
+    let valid = validateConfig(configFile)
+    if (!valid)
+        throw new Error(validateConfig.errors[0].dataPath + " " + validateConfig.errors[0].message)
+    switch (field) {
+        case "privKey":
+            configurationTimestamp = Math.max(configurationTimestamp, parseInt((await fs.lstat(configFile.privKey)).mtimeMs))
+            break;
+        case "schema":
+            configurationTimestamp = Math.max(configurationTimestamp, parseInt((await fs.lstat(configFile.schema.input)).mtimeMs))
+            configurationTimestamp = Math.max(configurationTimestamp, parseInt((await fs.lstat(configFile.schema.output)).mtimeMs))
+            break;
+        case "info":
+            configurationTimestamp = Math.max(configurationTimestamp, parseInt((await fs.lstat(configFile.info.input.description)).mtimeMs))
+            configurationTimestamp = Math.max(configurationTimestamp, parseInt((await fs.lstat(configFile.info.output.description)).mtimeMs))
+            configurationTimestamp = Math.max(configurationTimestamp, parseInt((await fs.lstat(configFile.info.worker.description)).mtimeMs))
+        default:
+            break;
+    }
+    config.version[field].hash = configurationHash
+    config.version[field].timestamp = configurationTimestamp
 }
 
 /** 
@@ -165,15 +212,19 @@ config.resolve = async function (configFile, field) {
 */
 config.compare = async function (version) {
     debug("Compare the version with: " + version)
+    await config.file
     let hashes = version.split(".")
     let change = []
-    for (const [index, hash] of hashes.entries()) {
-        let configuration = await config.get(VERSION_ORDER[index])
-        let configurationHash = crypto.createHash('sha256').update(JSON.stringify(configuration)).digest('base64')
-        if (hash === configurationHash) {
+    for (const [index, version] of hashes.entries()) {
+        let [hash, timestamp] = version.split("@")
+        if (hash === config.version[VERSION_ORDER[index]].hash) {
             change[index] = 0
         } else {
-            change[index] = 1
+            if(timestamp >= config.version[VERSION_ORDER[index]].timestamp){
+                change[index] = 1
+            }else{
+                change[index] = -1
+            }
         }
     }
     return change.join(".")
@@ -194,9 +245,6 @@ config.update = async function (field, configuration, { recursive = false, spaci
                 switch (field) {
                     case "privKey":
                         await fs.writeFile(configFile.privKey, configuration)
-                        // Write into provisioned configuration
-                        managedConfig.privKey = configuration
-                        resolve(managedConfig)
                         break;
                     case "schema":
                         // Recursive write schenmas
@@ -209,9 +257,6 @@ config.update = async function (field, configuration, { recursive = false, spaci
                         configFile.info = configuration
                         // Write to config
                         await fs.writeFile(config.path, JSON.stringify(configFile, null, spacing))
-                        // Write into provisioned configuration
-                        managedConfig.schema = configuration
-                        resolve(managedConfig)
                         break;
                     case "info":
                         // Recursive write descriptions
@@ -226,16 +271,10 @@ config.update = async function (field, configuration, { recursive = false, spaci
                         configFile.info = configuration
                         // Write to config
                         await fs.writeFile(config.path, JSON.stringify(configFile, null, spacing))
-                        // Write into provisioned configuration
-                        managedConfig.info = configuration
-                        resolve(managedConfig)
                         break;
                     default:
                         configFile[field] = configuration
                         await fs.writeFile(config.path, JSON.stringify(configFile, null, spacing))
-                        // Write into provisioned configuration
-                        managedConfig[field] = configuration
-                        resolve(managedConfig)
                         break;
                 }
             } else {
@@ -254,9 +293,11 @@ config.update = async function (field, configuration, { recursive = false, spaci
                         delete configuration.worker.description
                         break;
                 }
-                managedConfig[field] = configuration
-                resolve(managedConfig)
             }
+            managedConfig[field] = configuration
+            if (VERSION_ORDER.includes(field))
+                await config.updateVersion(field, managedConfig[field])
+            resolve(managedConfig)
         } catch (error) {
             reject(error)
         }
@@ -268,5 +309,6 @@ module.exports = {
     get: config.get,
     init: config.init,
     update: config.update,
+    getVersion: config.getVersion,
     VERSION_ORDER,
 }

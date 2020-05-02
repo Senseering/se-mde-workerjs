@@ -1,10 +1,12 @@
 let config = require("../../../src/utils/config");
+const fs = require("fs").promises
+let CONFIG_PATH = "./test/data/config.json"
 
 module.exports = function () {
 
     let expect = require('chai').expect;
     beforeEach(async () => {
-        await config.init("./test/data/config.json")
+        await config.init(CONFIG_PATH)
     })
 
     it('Bad config should throw (malformed id)', async function () {
@@ -49,16 +51,17 @@ module.exports = function () {
     })
 
     it('Test comparison with rubish version', async function () {
-        let res = await config.compare("test.test2.trest2.ts")
+        let res = await config.compare("test@200000000000000000.test2@200000000000000000.trest2@200000000000000000.ts@200000000000000000")
         expect(res).to.equal("1.1.1.1")
     })
 
-    it('Test comparison with corect version', async function () {
+    it('Test comparison with corect version & without timestamp', async function () {
         let res = await config.compare("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=" + "." +
             "Y8DlQawRYn8MmAjCUuL54lFWDNojIG2EWiMd0jF3qbs=" + "." +
             "s2B7Jz7m184N5/F2fVibOCT9BMhEooIeSx9r+nBf3cI=" + "." +
-            "A3Yy7ktfY8fJ8rXN7WTuIsSfC4TDNPWH4kb+LEerq2I=")
-        expect(res).to.equal("0.0.0.0")
+            "A3Yy7ktfY8fJ8rXN7WTuIsSfC4TDNPWH4kb+LEerq2I=." +
+            "RBNvo1WzZ4oRRq0W9+hknpT7T8If536DEMBg9hyq/4o=")
+        expect(res).to.equal("0.0.0.0.0")
     })
 
     it('Update profile and compare for update', async function () {
@@ -67,14 +70,24 @@ module.exports = function () {
             profile.name = "Example Source"
             await config.update("profile", profile)
         })
-        profile.name = "test"
+        profile.name = "tests"
         await config.update("profile", profile)
-        let res = await config.compare("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=" + "." +
-            "Y8DlQawRYn8MmAjCUuL54lFWDNojIG2EWiMd0jF3qbs=" + "." +
-            "s2B7Jz7m184N5/F2fVibOCT9BMhEooIeSx9r+nBf3cI=" + "." +
-            "A3Yy7ktfY8fJ8rXN7WTuIsSfC4TDNPWH4kb+LEerq2I=")
-        expect(res).to.equal("0.0.1.0")
+        let res = await config.compare("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=@1588256356160." +
+        "Y8DlQawRYn8MmAjCUuL54lFWDNojIG2EWiMd0jF3qbs=@1588256356160." +
+        "GTVXi3GneC5fTl2I6+k6e3N4a+9SZ0dOIRZImwltT9M=@1588256356160." +
+        "A3Yy7ktfY8fJ8rXN7WTuIsSfC4TDNPWH4kb+LEerq2I=@1588256356160." +
+        "RBNvo1WzZ4oRRq0W9+hknpT7T8If536DEMBg9hyq/4o=@1588256356160")
+        expect(res).to.equal("0.0.-1.0.0")
     })
 
+    it('Check getVersion for correct result', async function () {
+        let res = await config.getVersion()
+
+        expect(res).to.equal("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
+            "Y8DlQawRYn8MmAjCUuL54lFWDNojIG2EWiMd0jF3qbs=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
+            "GTVXi3GneC5fTl2I6+k6e3N4a+9SZ0qOIRZImwltT9M=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
+            "A3Yy7ktfY8fJ8rXN7WTuIsSfC4TDNPWH4kb+LEerq2I=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
+            "RBNvo1WzZ4oRRq0W9+hknpT7T8If536DEMBg9hyq/4o=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs))
+    })
 }
 
