@@ -66,10 +66,6 @@ module.exports = function () {
 
     it('Update profile and compare for update', async function () {
         let profile = { "name": "Example Source", "location": { "latitude": 52.5297268, "longitude": 13.400391 }, "payment": { "fixCost": 0, "isFixCostOnly": false } }
-        after(async () => {
-            profile.name = "Example Source"
-            await config.update("profile", profile)
-        })
         profile.name = "tests"
         await config.update("profile", profile)
         let res = await config.compare("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=@1588256356160." +
@@ -78,6 +74,8 @@ module.exports = function () {
         "A3Yy7ktfY8fJ8rXN7WTuIsSfC4TDNPWH4kb+LEerq2I=@1588256356160." +
         "RBNvo1WzZ4oRRq0W9+hknpT7T8If536DEMBg9hyq/4o=@1588256356160")
         expect(res).to.equal("0.0.-1.0.0")
+        profile.name = "Example Source"
+        await config.update("profile", profile)
     })
 
     it('Check getVersion for correct result', async function () {
@@ -85,9 +83,18 @@ module.exports = function () {
 
         expect(res).to.equal("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
             "Y8DlQawRYn8MmAjCUuL54lFWDNojIG2EWiMd0jF3qbs=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
-            "GTVXi3GneC5fTl2I6+k6e3N4a+9SZ0qOIRZImwltT9M=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
+            "s2B7Jz7m184N5/F2fVibOCT9BMhEooIeSx9r+nBf3cI=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
             "A3Yy7ktfY8fJ8rXN7WTuIsSfC4TDNPWH4kb+LEerq2I=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
             "RBNvo1WzZ4oRRq0W9+hknpT7T8If536DEMBg9hyq/4o=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs))
+    })
+
+    it('Update profile with wrong config and throw', async function () {
+        let profile = { "name": "Example Source", "location": { "latitude": "52.5297268", "longitude": 13.400391 }, "payment": { "fixCost": 0, "isFixCostOnly": false } }
+        try {
+            await config.update("profile", profile)
+        } catch (err) {
+            expect(err).to.be.an('error');
+        }
     })
 }
 

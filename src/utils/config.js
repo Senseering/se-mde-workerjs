@@ -220,9 +220,9 @@ config.compare = async function (version) {
         if (hash === config.version[VERSION_ORDER[index]].hash) {
             change[index] = 0
         } else {
-            if(timestamp >= config.version[VERSION_ORDER[index]].timestamp){
+            if (timestamp >= config.version[VERSION_ORDER[index]].timestamp) {
                 change[index] = 1
-            }else{
+            } else {
                 change[index] = -1
             }
         }
@@ -238,9 +238,45 @@ config.compare = async function (version) {
 config.update = async function (field, configuration, { recursive = false, spacing = 2 } = {}) {
     debug("Updating: " + field)
     let managedConfig = await config.file
+
     config.file = new Promise(async (resolve, reject) => {
         try {
             let configFile = JSON.parse(await fs.readFile(config.path, "utf-8"))
+
+            // Check against schema -- Too Hacky
+            // Copy to not mess with actual work later
+            let configCopy = JSON.parse(JSON.stringify(configFile))
+            let configurationCopy = JSON.parse(JSON.stringify(configuration))
+            // Rewrite fields to be comparable
+            if (recursive) {
+                switch (field) {
+                    case "privKey":
+                        break;
+                    case "schema":
+                        configurationCopy.schema.output = configCopy.output
+                        configurationCopy.schema.input = configCopy.input
+                        configCopy.schema = configurationCopy
+                        break;
+                    case "info":
+                        configurationCopy.output.description = configCopy.info.output.description
+                        configurationCopy.input.description = configCopy.info.input.description
+                        configurationCopy.worker.description = configCopy.info.worker.description
+                        // Overwrite old file with new file ( tags missing in old file )
+                        configCopy.info = configurationCopy
+                        break;
+                    default:
+                        configCopy[field] = configurationCopy
+                        break;
+                }
+            } else {
+                configCopy[field] = configurationCopy
+            }
+            // Check against schema
+            let valid = validateConfig(configCopy)
+            if (!valid){
+                throw new Error(validateConfig.errors[0].dataPath + " " + validateConfig.errors[0].message)
+            } 
+
             if (recursive) {
                 switch (field) {
                     case "privKey":
@@ -254,7 +290,7 @@ config.update = async function (field, configuration, { recursive = false, spaci
                         configuration.schema.output = configFile.output
                         configuration.schema.input = configFile.input
                         // Overwrite old file with new file 
-                        configFile.info = configuration
+                        configFile.schema = configuration
                         // Write to config
                         await fs.writeFile(config.path, JSON.stringify(configFile, null, spacing))
                         break;
@@ -302,6 +338,7 @@ config.update = async function (field, configuration, { recursive = false, spaci
             reject(error)
         }
     })
+    return config.file
 }
 
 module.exports = {
