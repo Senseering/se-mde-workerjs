@@ -21,7 +21,8 @@ function Worker() {
  * Connect should establish the websocket connection to the manager and register the worker
  * or load all required data like id, keys and templates
  */
-Worker.prototype.connect = async function () {
+Worker.prototype.connect = async function (location) {
+    await config.init(location)
     this.community = false
     if ((await config.get('schema')).hasOwnProperty("community")) {
         this.community = true
@@ -60,7 +61,7 @@ Worker.prototype.connect = async function () {
             payment: (await config.get('profile')).payment,
             apikey: (await config.get('credentials')).split(":")[1],
             location: (await config.get('profile')).location,
-            id: (await config.get('credentials').split(":"))[0]
+            id: (await config.get('credentials')).split(":")[0]
         }
 
         debug('Registering worker')
@@ -107,9 +108,9 @@ Worker.prototype.publish = async function (data, options) {
         }
     })
 
-    await receivePromise
+    let test = await receivePromise
+    console.log("test")
     return result
-
 }
 
 
