@@ -2,15 +2,15 @@
     "credentials": "d7eb5d30-8dfd-11ea-ae54-5da7079424ea:981574c0128342c485f6069297d377e0",
     "url": "https://terminator.timo.senseering.net/",
     "settings": {},
+    "payment": {
+      "fixCost": 0,
+      "isFixCostOnly": false
+    },
     "profile": {
       "name": "Corona Germany",
       "location": {
         "latitude": 52.5297268,
         "longitude": 13.400391
-      },
-      "payment": {
-        "fixCost": 0,
-        "isFixCostOnly": false
       }
     },
     "privKey": "./env/key.pem",

@@ -48,6 +48,7 @@ config.get = async function (request, { fromFile = false } = {}) {
         if (request === "full") {
             return {
                 "credentials": await config.resolve(configFile, "credentials"),
+                "payment": await config.resolve(configFile, "payment"),
                 "url": await config.resolve(configFile, "url"),
                 "schema": await config.resolve(configFile, "schema"),
                 "privKey": await config.resolve(configFile, "privKey"),

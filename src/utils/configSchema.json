@@ -9,7 +9,8 @@
         "profile",
         "privKey",
         "schema",
-        "info"
+        "info",
+        "payment"
     ],
     "properties": {
         "credentials": {
@@ -32,14 +33,32 @@
             "$id": "#/properties/settings",
             "type": "object"
         },
+        "payment": {
+            "$id": "#/properties/profile/properties/payment",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "fixCost",
+                "isFixCostOnly"
+            ],
+            "properties": {
+                "fixCost": {
+                    "$id": "#/properties/profile/properties/payment/properties/fixCost",
+                    "type": "integer"
+                },
+                "isFixCostOnly": {
+                    "$id": "#/properties/profile/properties/payment/properties/isFixCostOnly",
+                    "type": "boolean"
+                }
+            }
+        },
         "profile": {
             "$id": "#/properties/profile",
             "type": "object",
             "additionalProperties": false,
             "required": [
                 "name",
-                "location",
-                "payment"
+                "location"
             ],
             "properties": {
                 "name": {
@@ -64,25 +83,6 @@
                         "longitude": {
                             "$id": "#/properties/profile/properties/location/properties/longitude",
                             "type": "number"
-                        }
-                    }
-                },
-                "payment": {
-                    "$id": "#/properties/profile/properties/payment",
-                    "type": "object",
-                    "additionalProperties": false,
-                    "required": [
-                        "fixCost",
-                        "isFixCostOnly"
-                    ],
-                    "properties": {
-                        "fixCost": {
-                            "$id": "#/properties/profile/properties/payment/properties/fixCost",
-                            "type": "integer"
-                        },
-                        "isFixCostOnly": {
-                            "$id": "#/properties/profile/properties/payment/properties/isFixCostOnly",
-                            "type": "boolean"
                         }
                     }
                 }

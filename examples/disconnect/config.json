@@ -2,15 +2,15 @@
   "credentials": "c65cedd0-8dfe-11ea-ae54-5da7079424ea:7f81402ddc6943ffa0e880f8095dca5a",
   "url": "https://terminator.timo.senseering.net/",
   "settings": {},
+  "payment": {
+    "fixCost": 0,
+    "isFixCostOnly": false
+  },
   "profile": {
     "name": "Example Reconnect Source",
     "location": {
       "latitude": 52.5297268,
       "longitude": 13.400391
-    },
-    "payment": {
-      "fixCost": 0,
-      "isFixCostOnly": false
     }
   },
   "privKey": "./env/key.pem",

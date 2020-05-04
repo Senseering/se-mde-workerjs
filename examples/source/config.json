@@ -2,15 +2,15 @@
   "credentials": "2e568230-8de5-11ea-ae54-5da7079424ea:33b2e3ea28094b09a9b8b35af67feb2a",
   "url": "https://terminator.timo.senseering.net/",
   "settings": {},
+  "payment": {
+    "fixCost": 0,
+    "isFixCostOnly": false
+  },
   "profile": {
     "name": "Example Source",
     "location": {
       "latitude": 52.5297268,
       "longitude": 13.400391
-    },
-    "payment": {
-      "fixCost": 0,
-      "isFixCostOnly": false
     }
   },
   "privKey": "./env/key.pem",
