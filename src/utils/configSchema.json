@@ -1,0 +1,232 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "credentials",
+        "url",
+        "settings",
+        "profile",
+        "privKey",
+        "schema",
+        "info",
+        "payment"
+    ],
+    "properties": {
+        "credentials": {
+            "$id": "#/properties/credentials",
+            "type": "string",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}:[0-9a-f]{32}$",
+            "examples": [
+                "5e0b2680-8484-11ea-bd6c-2b4b0702ce34:8872bad4ed484763bbee806aac62ff1a"
+            ]
+        },
+        "url": {
+            "$id": "#/properties/url",
+            "type": "string",
+            "format": "uri-reference",
+            "examples": [
+                "http://35.157.82.188"
+            ]
+        },
+        "settings": {
+            "$id": "#/properties/settings",
+            "type": "object"
+        },
+        "payment": {
+            "$id": "#/properties/profile/properties/payment",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "fixCost",
+                "isFixCostOnly"
+            ],
+            "properties": {
+                "fixCost": {
+                    "$id": "#/properties/profile/properties/payment/properties/fixCost",
+                    "type": "integer"
+                },
+                "isFixCostOnly": {
+                    "$id": "#/properties/profile/properties/payment/properties/isFixCostOnly",
+                    "type": "boolean"
+                }
+            }
+        },
+        "profile": {
+            "$id": "#/properties/profile",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "name",
+                "location"
+            ],
+            "properties": {
+                "name": {
+                    "$id": "#/properties/profile/properties/name",
+                    "type": "string",
+                    "minLength": 5,
+                    "maxLength": 32
+                },
+                "location": {
+                    "$id": "#/properties/profile/properties/location",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                        "latitude",
+                        "longitude"
+                    ],
+                    "properties": {
+                        "latitude": {
+                            "$id": "#/properties/profile/properties/location/properties/latitude",
+                            "type": "number"
+                        },
+                        "longitude": {
+                            "$id": "#/properties/profile/properties/location/properties/longitude",
+                            "type": "number"
+                        }
+                    }
+                }
+            }
+        },
+        "privKey": {
+            "$id": "#/properties/privKey",
+            "type": "string",
+            "format": "uri-reference",
+            "examples": [
+                "./env/key.pem"
+            ]
+        },
+        "schema": {
+            "$id": "#/properties/schema",
+            "type": "object",
+            "additionalProperties": {
+                "community": {
+                    "$id": "#/properties/schema/properties/community",
+                    "type": "string",
+                    "format": "uri-reference",
+                    "examples": [
+                        "https://github.com/Senseering/worker_js/tree/bf3c27c50ece0ed9830e272e485112b4c8558ead"
+                    ]
+                }
+            },
+            "required": [
+                "input",
+                "output"
+            ],
+            "properties": {
+                "input": {
+                    "$id": "#/properties/schema/properties/input",
+                    "type": "string",
+                    "format": "uri-reference",
+                    "examples": [
+                        "./env/schema/input.json"
+                    ]
+                },
+                "output": {
+                    "$id": "#/properties/schema/properties/output",
+                    "type": "string",
+                    "format": "uri-reference",
+                    "examples": [
+                        "./env/schema/output.json"
+                    ]
+                }
+            }
+        },
+        "info": {
+            "$id": "#/properties/info",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "worker",
+                "input",
+                "output"
+            ],
+            "properties": {
+                "worker": {
+                    "$id": "#/properties/info/properties/worker",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                        "description",
+                        "tags"
+                    ],
+                    "properties": {
+                        "description": {
+                            "$id": "#/properties/info/properties/worker/properties/description",
+                            "type": "string",
+                            "format": "uri-reference",
+                            "examples": [
+                                "./env/description/worker.md"
+                            ]
+                        },
+                        "tags": {
+                            "$id": "#/properties/info/properties/worker/properties/tags",
+                            "type": "array",
+                            "additionalItems": true,
+                            "items": {
+                                "$id": "#/properties/info/properties/worker/properties/tags/items",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "input": {
+                    "$id": "#/properties/info/properties/input",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                        "description",
+                        "tags"
+                    ],
+                    "properties": {
+                        "description": {
+                            "$id": "#/properties/info/properties/input/properties/description",
+                            "type": "string",
+                            "format": "uri-reference",
+                            "examples": [
+                                "./env/description/input.md"
+                            ]
+                        },
+                        "tags": {
+                            "$id": "#/properties/info/properties/input/properties/tags",
+                            "type": "array",
+                            "additionalItems": true,
+                            "items": {
+                                "$id": "#/properties/info/properties/input/properties/tags/items",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "output": {
+                    "$id": "#/properties/info/properties/output",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                        "description",
+                        "tags"
+                    ],
+                    "properties": {
+                        "description": {
+                            "$id": "#/properties/info/properties/output/properties/description",
+                            "type": "string",
+                            "format": "uri-reference",
+                            "examples": [
+                                "./env/description/output.md"
+                            ]
+                        },
+                        "tags": {
+                            "$id": "#/properties/info/properties/output/properties/tags",
+                            "type": "array",
+                            "additionalItems": true,
+                            "items": {
+                                "$id": "#/properties/info/properties/output/properties/tags/items",
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

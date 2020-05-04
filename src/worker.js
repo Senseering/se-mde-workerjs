@@ -1,15 +1,8 @@
 const NodeRSA = require('node-rsa')
-const fs = require('fs')
-const requireFromString = require('require-from-string');
-const config = require('nconf')
+const config = require('./utils/config')
 const debug = require('debug')('worker')
 require('colors')
 
-const Ajv = require('ajv')
-let ajv = new Ajv({ useDefaults: true })
-let configSchema = ajv.compile(require('./schema/config/config'))
-
-const fsutil = require('./utils/fsutil')
 const client = require('./socket/client')
 const publish = require('./socket/events/publish')
 const register = require('./socket/events/register')
@@ -19,64 +12,8 @@ const register = require('./socket/events/register')
  * registered and registers it automatically if not.
  * @param {Object} params Object which configures the worker
  */
-function Worker(params) {
-    //check if updated version of config exists (meaning worker exists already)
-    if (fs.existsSync('./config/development.json')) {
-        debug("Loading configuration... ")
-        config.file({ file: './config/development.json', logicalSeparator: '.' })
-    } else {
-        //worker started the first time.. get full config for registration
-        let conf_object = {}
-        if (params !== undefined) {
-            if (typeof (params) == 'object') {
-                conf_object = params
-                //save object to file for config manager to get
-                debug('Using given config object')
-                fs.writeFileSync('./config/config.json', JSON.stringify(params, null, 4), 'utf8')
-                config.file({ file: './config/config.json', logicalSeparator: '.' })
-                fs.unlinkSync('.config/config.json')
-            } else if (typeof (params) == 'string') {
-                if (fs.existsSync(params)) {
-                    debug('Using config file in given location')
-                    config.file({ file: params, logicalSeparator: '.' })
-                    conf_object = JSON.parse(fs.readFileSync(params, 'utf8'))
-                } else {
-                    throw new Error('Config file not found')
-                }
-            }
-        } else {
-            debug('Using default config file development.json')
-            config.file({ file: './config/development.json', logicalSeparator: '.' })
-            conf_object = JSON.parse(fs.readFileSync('./config/development.json', 'utf8'))
-        }
+function Worker() {
 
-        let validated = configSchema(conf_object)
-        if (!validated) {
-            throw new Error('Config schema does not match')
-        }
-
-        if (conf_object.id === 'not_provided' || conf_object.name === 'not_provided' || conf_object.apikey === 'not_provided') {
-            let development_config = (JSON.parse(fs.readFileSync('./config/development.json', 'utf8')))
-
-            for (var key of ['id', 'name', 'apikey']) {
-                if (conf_object[key] === 'not_provided') {
-                    config.set(key, development_config[key])
-                }
-            }
-        }
-
-        this.completeManagerLink = config.get('apiDomain') + ':' + config.get('port')
-        if (config.get('apiDomain') === '') {
-            throw new Error('No manager ip used')
-        }
-
-        this.community = false
-        if (config.get('schema').hasOwnProperty("link")) {
-            this.community = true
-        }
-    }
-
-    this.isRegistered = false
 }
 
 
@@ -84,81 +21,47 @@ function Worker(params) {
  * Connect should establish the websocket connection to the manager and register the worker
  * or load all required data like id, keys and templates
  */
-Worker.prototype.connect = async function () {
-
+Worker.prototype.connect = async function (location) {
+    await config.init(location)
+    this.community = false
+    if ((await config.get('schema')).hasOwnProperty("community")) {
+        this.community = true
+    }
+    this.completeManagerLink = (new URL(await config.get('url'))).host
     debug('Connecting client...')
-    client.init(config.get('apiDomain'), config.get('port'), config.get('id'), config.get('apikey'))
+    await client.init()
+
 
     //register worker if not already done in the past
     if (!this.isRegistered) {
-        //generate key
-        fsutil.ensureDirectoryExistence(config.get('privKey'))
-        if (fs.existsSync(config.get('privKey'))) {
-            debug("Key found...")
-            let keyModuleString = fs.readFileSync(config.get('privKey'), 'utf8')
-            let keyString = requireFromString(keyModuleString).key
-            this.key = new NodeRSA(keyString)
-            debug("Key imported.");
-        } else {
-            debug("Key generation in progress...")
-            this.key = new NodeRSA({ b: 1024 })
-            fs.writeFileSync(config.get('privKey'), 'module.exports = ' + JSON.stringify({ key: this.key.exportKey('private') }))
-            debug("Key generated.")
-        }
+        this.key = new NodeRSA(await config.get('privKey'))
 
         debug('Fetching registration details')
 
         let schema = {}
         let info = {}
-        if (config.get('schema') !== undefined) {
-            if (config.get('schema').link !== undefined) {
-                //worker of a specific community 
-                schema.link = config.get('schema').link
-                if (config.get('schema').commit !== undefined) {
-                    schema.commit = config.get('schema').commit
-                }
-                if (fs.existsSync("./env/schema")) {
-                    debug("WARNING: Worker joins the community and the custom schema in: ./env/schema was not used".red)
-                }
-                //there are no custon descriptions for input and output schemas of community-workers
-                info.description = fs.readFileSync(config.get('info').description, "utf8")
-                info.tags = config.get('info').tags
-            } else {
-                //worker without community
-                schema.input = JSON.parse(fs.readFileSync(config.get('schema').input, "utf8"))
-                schema.output = JSON.parse(fs.readFileSync(config.get('schema').output, "utf8"))
-                info = {
-                    description: fs.readFileSync(config.get('info').description, "utf8"),
-                    tags: config.get('info').tags,
-                    input: config.get("info").hasOwnProperty("input") ? {
-                        description: config.get('info').input.hasOwnProperty("description") ? fs.readFileSync(config.get('info').input.description, "utf8") : "",
-                        tags: config.get('info').input.hasOwnProperty("tags") ? config.get('info').input.tags : []
-                    } : {
-                            description: "",
-                            tags: []
-                        },
-                    output: config.get("info").hasOwnProperty("output") ? {
-                        description: config.get('info').output.hasOwnProperty("description") ? fs.readFileSync(config.get('info').output.description, "utf8") : "",
-                        tags: config.get('info').output.hasOwnProperty("tags") ? config.get('info').output.tags : []
-                    } : {
-                            description: "",
-                            tags: []
-                        }
+        //worker without community
+        schema.input = (await config.get('schema')).input
+        schema.output = (await config.get('schema')).output
+        info = {
+            description: (await config.get('info')).worker.description,
+            tags: (await config.get('info')).worker.tags,
+            input: (await config.get('info')),
+            output: (await config.get('info'))
 
-                }
-            }
         }
+
 
         //initialize websocket client and register worker on manager
         let registration = {
             schema: schema,
             info: info,
             pubkey: this.key.exportKey('public'),
-            name: config.get('name') || '',
-            payment: config.get('payment') || '',
-            apikey: config.get('apikey') || '',
-            location: config.get('location') || '',
-            id: config.get('id') || ''
+            name: (await config.get('profile')).name,
+            payment: (await config.get('payment')),
+            apikey: (await config.get('credentials')).split(":")[1],
+            location: (await config.get('profile')).location,
+            id: (await config.get('credentials')).split(":")[0]
         }
 
         debug('Registering worker')
@@ -178,43 +81,35 @@ Worker.prototype.connect = async function () {
  * @param {Object} data The data to be published
  */
 Worker.prototype.publish = async function (data, options) {
-    if(options === undefined){
+    if (options === undefined) {
         options = {}
     }
     debug('Preparing data for publish on manager...')
-    if (typeof config.get('id') === 'undefined') {
-        throw new Error('Worker is not initialized')
-    } else {
-        let result
-        let meta = {
-            worker_id: config.get('id'),
-            created_at: Date.now(),
-            price: options.price === undefined ? 0 : options.price,
-            location:
-            {
-                latitude: config.get('location.latitude'),
-                longitude: config.get('location.longitude')
-            }
-        }
-        //append basedOn property just in case of service
-        if (config.get("schema").input) {
-            meta.basedOn = {
-                workerIDs: [],
-                dataIDs: [[]]
-            }
-        }
-
-        let receivePromise = new Promise(async (resolve, reject) => {
-            try {
-                result = await publish({meta, data }, { statusID: undefined, key: this.key, resolvePromise: resolve, ttl: options.ttl })
-            } catch (err) {
-                reject(err)
-            }
-        })
-
-        await receivePromise
-        return result
+    let result
+    let meta = {
+        worker_id: (await config.get('credentials')).split(":")[0],
+        created_at: Date.now(),
+        price: options.price === undefined ? 0 : options.price,
+        location: (await config.get('profile')).location
     }
+    //append basedOn property just in case of service
+    if (Object.keys((await config.get('schema')).input).length) {
+        meta.basedOn = {
+            workerIDs: [],
+            dataIDs: [[]]
+        }
+    }
+
+    let receivePromise = new Promise(async (resolve, reject) => {
+        try {
+            result = await publish({ meta, data }, { statusID: undefined, key: this.key, resolvePromise: resolve, ttl: options.ttl })
+        } catch (err) {
+            reject(err)
+        }
+    })
+
+    let test = await receivePromise
+    return result
 }
 
 

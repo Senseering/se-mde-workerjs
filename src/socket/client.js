@@ -1,5 +1,5 @@
 const WebSocket = require('ws')
-const config = require("nconf")
+const config = require('../utils/config')
 const uuidV1 = require('uuid/v1')
 const debug = require('debug')('ws:client')
 require('colors')
@@ -18,13 +18,13 @@ client.pendingQueue = []
 
 let sendQueue = []
 
-client.init = async (apiDomain, port, id, apikey) => {
+client.init = async () => {
+  let fullConfig = await config.get("full")
+  let url = new URL(fullConfig.url)
   client.socket = new WebSocket(
-    (config.get('protocol') === 'https' ? 'wss' : 'ws') + '://'
-    + id + ':'
-    + apikey + '@'
-    + apiDomain + ":"
-    + port + "/connector/"
+    (url.protocol === 'https:' ? 'wss' : 'ws') + '://'
+    + fullConfig.credentials + '@'
+    + url.host + "/connector/"
   )
 
   client.socket.onopen = async function () {
@@ -67,7 +67,7 @@ client.init = async (apiDomain, port, id, apikey) => {
     if (event.code != 1000) {
       setTimeout(async function () {
         debug('Connection to manager could not be established. Trying to connect...')
-        await client.init(apiDomain, port, id, apikey)
+        await client.init()
       }, 1000)
     }
   }

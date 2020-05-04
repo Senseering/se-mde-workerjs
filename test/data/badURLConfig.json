@@ -1,0 +1,41 @@
+{
+  "credentials": "5e0b2680-8484-11ea-bd6c-2b4b0702ce34:8872bad4ed484763bbee806aac62ff1a",
+  "url": "35.157.82.188",
+  "settings": {},
+  "payment": {
+    "fixCost": 0,
+    "isFixCostOnly": false
+  },
+  "profile": {
+    "name": "Example Source",
+    "location": {
+      "latitude": 52.5297268,
+      "longitude": 13.400391
+    }
+  },
+  "privKey": "./test/data/env/key.pem",
+  "schema": {
+    "input": "./test/data/env/schema/input.json",
+    "output": "./test/data/env/schema/output.json"
+  },
+  "info": {
+    "worker": {
+      "description": "./test/data/env/description/worker.md",
+      "tags": [
+        "image processing"
+      ]
+    },
+    "input": {
+      "description": "./test/data/env/description/input.md",
+      "tags": [
+        "h"
+      ]
+    },
+    "output": {
+      "description": "./test/data/env/description/output.md",
+      "tags": [
+        ""
+      ]
+    }
+  }
+}

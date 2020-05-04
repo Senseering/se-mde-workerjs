@@ -1,4 +1,4 @@
-const config = require('nconf')
+const config = require("../utils/config")
 const debug = require('debug')('trigger')
 require('colors')
 
@@ -13,17 +13,17 @@ let client = require('../socket/client')
  * @param {String} service The function that will be run on trigger
  */
 function Trigger(key, service) {
-    this.id = config.get('id')
-    this.key = key
-    this.service = service
-    this.fixCost = config.get('payment').fixCost
-    this.isFixCostOnly = config.get('payment').isFixCostOnly
-    this.manager = config.get('apiDomain')
-    this.completeManagerLink = config.get('apiDomain') + ':' + config.get('port')
-    this.location = config.get('location')
-    this.name = config.get('name')
-    client.trigger = this
-    debug("Trigger: " + this.name + " now available.")
+    (async () => {
+        this.id = (await config.get('credentials')).split(":")[0]
+        this.key = key
+        this.service = service
+        this.fixCost = (await config.get('payment')).fixCost
+        this.isFixCostOnly = (await config.get('payment')).isFixCostOnly
+        this.location = (await config.get('profile')).location
+        this.name = (await config.get('profile')).name
+        client.trigger = this
+        debug("Trigger: " + this.name + " now available.")
+    })()
 }
 
 
