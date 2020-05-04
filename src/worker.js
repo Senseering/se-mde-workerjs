@@ -109,7 +109,6 @@ Worker.prototype.publish = async function (data, options) {
     })
 
     let test = await receivePromise
-    console.log("test")
     return result
 }
 

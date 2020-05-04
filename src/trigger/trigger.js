@@ -13,15 +13,17 @@ let client = require('../socket/client')
  * @param {String} service The function that will be run on trigger
  */
 function Trigger(key, service) {
-    this.id = (await config.get('credentials')).split(":")[0]
-    this.key = key
-    this.service = service
-    this.fixCost = (await config.get('profile')).payment.fixCost
-    this.isFixCostOnly = (await config.get('payment')).payment.isFixCostOnly
-    this.location = (await config.get('profile')).location
-    this.name = (await config.get('profile')).name
-    client.trigger = this
-    debug("Trigger: " + this.name + " now available.")
+    (async () => {
+        this.id = (await config.get('credentials')).split(":")[0]
+        this.key = key
+        this.service = service
+        this.fixCost = (await config.get('profile')).payment.fixCost
+        this.isFixCostOnly = (await config.get('profile')).payment.isFixCostOnly
+        this.location = (await config.get('profile')).location
+        this.name = (await config.get('profile')).name
+        client.trigger = this
+        debug("Trigger: " + this.name + " now available.")
+    })()
 }
 
 
