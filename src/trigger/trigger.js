@@ -17,8 +17,8 @@ function Trigger(key, service) {
         this.id = (await config.get('credentials')).split(":")[0]
         this.key = key
         this.service = service
-        this.fixCost = (await config.get('profile')).payment.fixCost
-        this.isFixCostOnly = (await config.get('profile')).payment.isFixCostOnly
+        this.fixCost = (await config.get('payment')).fixCost
+        this.isFixCostOnly = (await config.get('payment')).isFixCostOnly
         this.location = (await config.get('profile')).location
         this.name = (await config.get('profile')).name
         client.trigger = this

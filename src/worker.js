@@ -58,7 +58,7 @@ Worker.prototype.connect = async function (location) {
             info: info,
             pubkey: this.key.exportKey('public'),
             name: (await config.get('profile')).name,
-            payment: (await config.get('profile')).payment,
+            payment: (await config.get('payment')),
             apikey: (await config.get('credentials')).split(":")[1],
             location: (await config.get('profile')).location,
             id: (await config.get('credentials')).split(":")[0]
