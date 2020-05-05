@@ -6,7 +6,7 @@ const Ajv = require('ajv')
 const ajv = new Ajv()
 const NodeRSA = require('node-rsa')
 const validateConfig = ajv.compile(require("./configSchema.json"));
-const VERSION_ORDER = ["schema", "privKey", "profile", "info", "settings"]
+const VERSION_ORDER = ["schema", "privKey", "profile", "info", "settings", "payment"]
 const PRIVAT_KEY_BIT = 1024
 
 
@@ -183,7 +183,13 @@ config.getVersion = async function () {
 */
 config.updateVersion = async function (field, configuration) {
     let configFile = JSON.parse(await fs.readFile(config.path, "utf-8"))
-    let configurationHash = crypto.createHash('sha256').update(JSON.stringify(configuration)).digest('base64')
+    let configurationHash
+    if(field === "privKey"){
+        let key = (new NodeRSA(configuration)).exportKey('public')
+        configurationHash = crypto.createHash('sha256').update(key).digest('base64')
+    }else{
+        configurationHash = crypto.createHash('sha256').update(JSON.stringify(configuration)).digest('base64')
+    }
     let configurationTimestamp = parseInt((await fs.lstat(config.path)).mtimeMs)
     let valid = validateConfig(configFile)
     if (!valid)
