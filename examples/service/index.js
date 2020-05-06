@@ -15,10 +15,10 @@ let worker = new Worker();
         //do something
         log('Processing data')
 
-        if (typeof ('test') !== 'object') {
+        /*if (typeof ('test') !== 'object') {
             throw new Error('Invalid data')
-        }
-        return data
+        }*/
+        return { data: data, price: 0 }
     }
 
     worker.provide(service)
