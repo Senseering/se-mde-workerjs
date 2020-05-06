@@ -11,8 +11,13 @@ let worker = new Worker(config);
     await worker.publish(data, { price: 0 })
 
     //publishes data only on demand
-    let service = async (incomingData) => {
-        //doo something
+    let service = async (incomingData, statusID) => {
+        //do something
+        worker.log({ msg: 'Processing data', statusID: statusID })
+        if (typeof (data) !== 'object') {
+            worker.error({ msg: 'Invalid data', code: 1, statusID: statusID })
+            throw new Error('Invalid data')
+        }
         return data
     }
 
