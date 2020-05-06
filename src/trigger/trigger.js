@@ -19,7 +19,6 @@ function Trigger(key, service) {
         this.service = service
         this.fixCost = (await config.get('payment')).fixCost
         this.isFixCostOnly = (await config.get('payment')).isFixCostOnly
-        this.location = (await config.get('profile')).location
         this.name = (await config.get('profile')).name
         client.trigger = this
         debug("Trigger: " + this.name + " now available.")
@@ -41,48 +40,51 @@ Trigger.prototype.execute = async function (msg) {
         if (this.id === msg.serviceID) {
             debug('Running service function with foreign data...')
 
-            let dataIDs = msg.data.map(a => a._id)
-            let workerIDs = msg.workerIDs
+            let dataIDs = typeof (msg.workerIDs)[0] == 'string' ? [msg.data.map(a => a._id)] : msg.data.map(a => a._id)
+            let workerIDs = typeof (msg.workerIDs) == 'string' ? [msg.workerIDs] : msg.workerIDs
 
-            let calculations
             try {
-                calculations = await this.service(msg.data, function (message) { status.report(statusID, message) })
+                let calculations = await this.service(msg.data, function (message) { status.report(statusID, 'Processing', 'log', message) })
+
+                let data = calculations
+                let options = {}
+                if (typeof (calculations) == 'object' && Object.keys(calculations).every(a => ['data', 'price'].includes(a))) {
+                    data = calculations.data
+                    options = calculations.options === undefined ? {} : calculations.options
+                }
+
+                let meta = {
+                    worker_id: this.id,
+                    created_at: Date.now(),
+                    price: options.price === undefined ? 0 : options.price,
+                    location: (await config.get('profile')).location,
+                    basedOn:
+                    {
+                        workerIDs,
+                        dataIDs
+                    }
+                }
+
+                if (data === undefined) {
+                    throw new Error("service function has to return either a data object or an Object with data field and optionally an options object")
+                }
+
+                let receivePromise = new Promise(async (resolve, reject) => {
+                    try {
+                        await publish({ meta, data }, { statusID: statusID, key: this.key, resolvePromise: resolve })
+                    } catch (err) {
+                        reject(err)
+                    }
+
+                })
+                await receivePromise
+
+                status.report(statusID, 'Processing', 'done', 'calculations done')
             }
             catch (error) {
-                status.report(statusID, JSON.stringify(error), 'Processing', 'error', 1)
+                debug('Error during execution of service: ' + error)
+                status.report(statusID, 'Processing', 'error', error.message, 1)
             }
-
-            let meta = {
-                id: this.id,
-                timestamp: new Date().getTime(),
-                price: calculations.price === undefined ? 0 : calculations.price,
-                location:
-                {
-                    latitude: this.location.latitude,
-                    longitude: this.location.longitude
-                },
-                basedOn:
-                {
-                    workerIDs,
-                    dataIDs
-                }
-            }
-
-            if (calculations.data === undefined) {
-                throw new Error("service function has to return an Object with data field and optionally a price field")
-            }
-
-            let receivePromise = new Promise(async (resolve, reject) => {
-                try {
-                    await publish(calculations.data, meta, statusID, this.key, resolve)
-                } catch (err) {
-                    reject(err)
-                }
-
-            })
-            await receivePromise
-
-            status.report(statusID, 'calculations done', "Processing", "done")
         } else {
             debug('Message not for this worker')
         }
