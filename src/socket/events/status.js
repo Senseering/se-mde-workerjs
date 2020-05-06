@@ -6,7 +6,7 @@ let format = require("../../utils/formatMessages")
 
 let status = {}
 
-status.report = function (statusID, msg = "", step, status, code = null) {
+status.report = function (statusID, step, status, msg = "", code = null) {
   try {
     let toPublishMsg = {
       statusID: statusID,
@@ -16,6 +16,7 @@ status.report = function (statusID, msg = "", step, status, code = null) {
       msg: msg,
       code: code
     }
+
     client.socket.transmit('log', 'unsent', toPublishMsg)
   } catch (err) {
     debug(("error occured on reporting worker status:" + err).red)
