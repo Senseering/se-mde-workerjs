@@ -46,10 +46,10 @@ Trigger.prototype.execute = async function (msg) {
 
             let calculations
             try {
-                calculations = await this.service(msg.data, statusID)
+                calculations = await this.service(msg.data, function (message) { status.report(statusID, message) })
             }
             catch (error) {
-                status.report(statusID, 'Processing', 'error', JSON.stringify(error), 1)
+                status.report(statusID, JSON.stringify(error), 'Processing', 'error', 1)
             }
 
             let meta = {
@@ -82,7 +82,7 @@ Trigger.prototype.execute = async function (msg) {
             })
             await receivePromise
 
-            status.report(statusID, "Processing", "done", 'calculations done')
+            status.report(statusID, 'calculations done', "Processing", "done")
         } else {
             debug('Message not for this worker')
         }

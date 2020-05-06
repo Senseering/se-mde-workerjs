@@ -6,10 +6,10 @@ let format = require("../../utils/formatMessages")
 
 let status = {}
 
-status.report = function (id, step, status, msg = "", code = null) {
+status.report = function (statusID, msg = "", step, status, code = null) {
   try {
     let toPublishMsg = {
-      statusID: id,
+      statusID: statusID,
       timestamp: Date.now(),
       status: status,
       step: step,

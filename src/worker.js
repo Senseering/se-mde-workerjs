@@ -142,7 +142,7 @@ Worker.prototype.disconnect = async function () {
  */
 Worker.prototype.log = async function (message, statusID) {
     if (this.trigger !== undefined && statusID !== undefined) {
-        status.report(statusID, undefined, undefined, message)
+        status.report(statusID, message)
     } else if (statusID === undefined) {
         debug('Can not publish a log without the statusID of the job.')
     } else {
