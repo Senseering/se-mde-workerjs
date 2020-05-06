@@ -139,18 +139,6 @@ Worker.prototype.disconnect = async function () {
 
 
 /**
- * This sends an error to the manager
- */
-Worker.prototype.error = async function (message) {
-    if (this.trigger !== undefined) {
-        await error(message)
-    } else {
-        debug('Worker is not a service and can not publish errors.')
-    }
-}
-
-
-/**
  * This sends a log to the manager
  */
 Worker.prototype.log = async function (message) {

@@ -38,13 +38,20 @@ Trigger.prototype.execute = async function (msg) {
         let statusID = msg.statusID
         delete msg.statusID
 
-        if (this.id == msg.serviceID) {
+        if (this.id === msg.serviceID) {
             debug('Running service function with foreign data...')
 
             let dataIDs = msg.data.map(a => a._id)
             let workerIDs = msg.workerIDs
 
-            let calculations = await this.service(msg.data, statusID)
+            let calculations
+            try {
+                calculations = await this.service(msg.data, statusID)
+            }
+            catch (error) {
+                status.report(statusID, 'Processing', 'error', JSON.stringify(error), 1)
+            }
+
             let meta = {
                 id: this.id,
                 timestamp: new Date().getTime(),
