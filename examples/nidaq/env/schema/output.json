@@ -1,0 +1,175 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The Root Schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "required": [
+        "pos",
+        "FFT",
+        "max_amp_rechts",
+        "max_amp_links",
+        "stdDev_rechts",
+        "stdDev_links",
+        "skew_rechts",
+        "skew_links",
+        "kurtosis_rechts",
+        "kurtosis_links",
+        "AE_rechts",
+        "AE_rinks"
+    ],
+    "properties": {
+        "pos": {
+            "$id": "#/properties/pos",
+            "type": "array",
+            "title": "The Pos Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "items": {
+                "$id": "#/properties/pos/items",
+                "type": "number",
+                "title": "The Items Schema",
+                "description": "An explanation about the purpose of this instance.",
+                "default": 0,
+                "examples": [
+                    1.2,
+                    3
+                ]
+            }
+        },
+        "FFT": {
+            "$id": "#/properties/FFT",
+            "type": "array",
+            "title": "The Fft Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "items": {
+                "$id": "#/properties/FFT/items",
+                "type": "number",
+                "title": "The Items Schema",
+                "description": "An explanation about the purpose of this instance.",
+                "default": 0,
+                "examples": [
+                    1.2,
+                    3
+                ]
+            }
+        },
+        "max_amp_rechts": {
+            "$id": "#/properties/max_amp_rechts",
+            "type": "number",
+            "title": "The Max_amp_rechts Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                2.3
+            ]
+        },
+        "max_amp_links": {
+            "$id": "#/properties/max_amp_links",
+            "type": "number",
+            "title": "The Max_amp_links Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                2.3
+            ]
+        },
+        "stdDev_rechts": {
+            "$id": "#/properties/stdDev_rechts",
+            "type": "number",
+            "title": "The Stddev_rechts Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                2.3
+            ]
+        },
+        "stdDev_links": {
+            "$id": "#/properties/stdDev_links",
+            "type": "number",
+            "title": "The Stddev_links Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                2.3
+            ]
+        },
+        "skew_rechts": {
+            "$id": "#/properties/skew_rechts",
+            "type": "number",
+            "title": "The Skew_rechts Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                2.3
+            ]
+        },
+        "skew_links": {
+            "$id": "#/properties/skew_links",
+            "type": "number",
+            "title": "The Skew_links Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                2.3
+            ]
+        },
+        "kurtosis_rechts": {
+            "$id": "#/properties/kurtosis_rechts",
+            "type": "number",
+            "title": "The Kurtosis_rechts Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                2.3
+            ]
+        },
+        "kurtosis_links": {
+            "$id": "#/properties/kurtosis_links",
+            "type": "number",
+            "title": "The Kurtosis_links Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                2.3
+            ]
+        },
+        "AE_rechts": {
+            "$id": "#/properties/AE_rechts",
+            "type": "array",
+            "title": "The Ae_rechts Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "items": {
+                "$id": "#/properties/AE_rechts/items",
+                "type": "number",
+                "title": "The Items Schema",
+                "description": "An explanation about the purpose of this instance.",
+                "default": 0,
+                "examples": [
+                    1.2,
+                    3
+                ]
+            }
+        },
+        "AE_rinks": {
+            "$id": "#/properties/AE_rinks",
+            "type": "array",
+            "title": "The Ae_rinks Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "items": {
+                "$id": "#/properties/AE_rinks/items",
+                "type": "number",
+                "title": "The Items Schema",
+                "description": "An explanation about the purpose of this instance.",
+                "default": 0,
+                "examples": [
+                    1.2,
+                    3
+                ]
+            }
+        }
+    }
+}

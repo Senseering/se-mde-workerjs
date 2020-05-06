@@ -42,7 +42,10 @@
                 "<node_internals>/**"
             ],
             "runtimeExecutable": "npm",
-            "runtimeArgs": ["run-script", "debug"],
+            "runtimeArgs": [
+                "run-script",
+                "debug"
+            ],
             "port": 9229,
             "cwd": "${workspaceFolder}/examples/source"
         },
@@ -60,10 +63,11 @@
             ],
             "port": 9229,
             "cwd": "${workspaceFolder}/examples/corona"
-        },{
+        },
+        {
             "type": "node",
             "request": "launch",
-            "name": "Debug[loadtest]",
+            "name": "Debug[corona]",
             "skipFiles": [
                 "<node_internals>/**"
             ],
@@ -73,7 +77,22 @@
                 "debug"
             ],
             "port": 9229,
-            "cwd": "${workspaceFolder}/examples/loadtest"
+            "cwd": "${workspaceFolder}/examples/corona"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug[nidaq]",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run-script",
+                "debug"
+            ],
+            "port": 9229,
+            "cwd": "${workspaceFolder}/examples/nidaq"
         },
         {
             "type": "node",
