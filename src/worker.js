@@ -6,8 +6,7 @@ require('colors')
 const client = require('./socket/client')
 const publish = require('./socket/events/publish')
 const register = require('./socket/events/register')
-const error = require('./socket/events/error')
-const log = require('./socket/events/log')
+const status = require('./socket/events/status')
 
 /**
  * Is used to register at a manager with the necessary options given. It checks if the worker is
@@ -141,9 +140,11 @@ Worker.prototype.disconnect = async function () {
 /**
  * This sends a log to the manager
  */
-Worker.prototype.log = async function (message) {
-    if (this.trigger !== undefined) {
-        await log(message)
+Worker.prototype.log = async function (message, statusID) {
+    if (this.trigger !== undefined && statusID !== undefined) {
+        status.report(statusID, undefined, undefined, message)
+    } else if (statusID === undefined) {
+        debug('Can not publish a log without the statusID of the job.')
     } else {
         debug('Worker is not a service and can not publish logs.')
     }
