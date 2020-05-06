@@ -1,11 +1,11 @@
 let Worker = require('../../src/worker')
 
-let config = './config/development.json'
+let config = './config.json'
 
-let worker = new Worker(config);
+let worker = new Worker();
 
 (async function () {
-    await worker.connect()
+    await worker.connect(config)
 
     let data = { test: 'Hello World!' }
     await worker.publish(data, { price: 0 })
