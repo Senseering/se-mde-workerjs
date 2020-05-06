@@ -136,18 +136,4 @@ Worker.prototype.disconnect = async function () {
     await client.disconnect()
 }
 
-
-/**
- * This sends a log to the manager
- */
-Worker.prototype.log = async function (message, statusID) {
-    if (this.trigger !== undefined && statusID !== undefined) {
-        status.report(statusID, message)
-    } else if (statusID === undefined) {
-        debug('Can not publish a log without the statusID of the job.')
-    } else {
-        debug('Worker is not a service and can not publish logs.')
-    }
-}
-
 module.exports = Worker
