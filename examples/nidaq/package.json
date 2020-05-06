@@ -1,0 +1,18 @@
+{
+  "name": "worker_example_source",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "NODE_CONFIG_DIR='./config/' NODE_ENV='development' NODE_TLS_REJECT_UNAUTHORIZED='0' DEBUG=*,-follow-redirects node index.js",
+    "debug": "NODE_CONFIG_DIR='./config/' NODE_ENV='development' NODE_TLS_REJECT_UNAUTHORIZED='0' DEBUG=*,-follow-redirects node --nolazy --inspect-brk=9229 index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "base64-img": "^1.0.4",
+    "debug": "^4.1.1",
+    "socket.io-client": "^2.3.0",
+    "split": "^1.0.1"
+  }
+}

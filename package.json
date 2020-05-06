@@ -1,6 +1,6 @@
 {
-  "name": "@senseering/worker_js",
-  "version": "1.0.0",
+  "name": "@senseering/worker",
+  "version": "1.0.2",
   "description": "Client library to connect to the [manager](https://github.com/Senseering/manager).",
   "main": "index.js",
   "scripts": {
@@ -39,6 +39,7 @@
     "node-persist": "^3.0.4",
     "node-rsa": "^1.0.5",
     "queue": "^6.0.1",
-    "require-from-string": "^2.0.2"
+    "require-from-string": "^2.0.2",
+    "ws": "^7.2.5"
   }
 }
