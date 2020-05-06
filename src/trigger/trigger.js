@@ -44,7 +44,7 @@ Trigger.prototype.execute = async function (msg) {
             let dataIDs = msg.data.map(a => a._id)
             let workerIDs = msg.workerIDs
 
-            let calculations = await this.service(msg.data)
+            let calculations = await this.service(msg.data, statusID)
             let meta = {
                 id: this.id,
                 timestamp: new Date().getTime(),

@@ -6,6 +6,8 @@ require('colors')
 const client = require('./socket/client')
 const publish = require('./socket/events/publish')
 const register = require('./socket/events/register')
+const error = require('./socket/events/error')
+const log = require('./socket/events/log')
 
 /**
  * Is used to register at a manager with the necessary options given. It checks if the worker is
@@ -133,6 +135,30 @@ Worker.prototype.provide = async function (service) {
 Worker.prototype.disconnect = async function () {
     debug('Disconnecting client...')
     await client.disconnect()
+}
+
+
+/**
+ * This sends an error to the manager
+ */
+Worker.prototype.error = async function (message) {
+    if (this.trigger !== undefined) {
+        await error(message)
+    } else {
+        debug('Worker is not a service and can not publish errors.')
+    }
+}
+
+
+/**
+ * This sends a log to the manager
+ */
+Worker.prototype.log = async function (message) {
+    if (this.trigger !== undefined) {
+        await log(message)
+    } else {
+        debug('Worker is not a service and can not publish logs.')
+    }
 }
 
 module.exports = Worker
