@@ -131,7 +131,7 @@ config.resolve = async function (configFile, field) {
                 }
             }
             try {
-                configFile.info.input.descriptionn = await fs.readFile(configFile.info.input.description, "utf-8")
+                configFile.info.input.description = await fs.readFile(configFile.info.input.description, "utf-8")
             } catch (err) {
                 if (err.code === "ENOENT") {
                     debug("Could not find input descrition. Creating one...")
@@ -274,9 +274,9 @@ config.update = async function (field, configuration, { recursive = false, spaci
             }
             // Check against schema
             let valid = validateConfig(configCopy)
-            if (!valid){
+            if (!valid) {
                 throw new Error(validateConfig.errors[0].dataPath + " " + validateConfig.errors[0].message)
-            } 
+            }
 
             if (recursive) {
                 switch (field) {
