@@ -104,7 +104,7 @@ client.handleMessage = async function (fresponse) {
     delete fresponse.id
     await update(fresponse)
   } else if (fresponse.topic === "trigger" && client.hasOwnProperty('trigger')) {
-    debug('trigger initiated :' + JSON.stringify(fresponse))
+    debug('trigger initiated')
     status.report(fresponse.statusID, "Processing", "started", 'Service received job')
     client.trigger.execute(fresponse)
   } else if (fresponse.topic === 'pong') {

@@ -131,7 +131,7 @@ config.resolve = async function (configFile, field) {
                 }
             }
             try {
-                configFile.info.input.descriptionn = await fs.readFile(configFile.info.input.description, "utf-8")
+                configFile.info.input.description = await fs.readFile(configFile.info.input.description, "utf-8")
             } catch (err) {
                 if (err.code === "ENOENT") {
                     debug("Could not find input descrition. Creating one...")
