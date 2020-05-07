@@ -1,6 +1,6 @@
 ![Node.js Tests](https://github.com/Senseering/worker_js/workflows/Node.js%20CI/badge.svg)
 
-Client library to connect to the [edge node](https://github.com/Senseering/manager).
+Client library to connect to the [manager](https://github.com/Senseering/manager).
 
 ## Development lifecycle
 
@@ -15,17 +15,17 @@ And run all tests:
 
 ## Example usage
 ```js
-let Worker = require('../../src/worker')
+let Worker = require('@senseering/worker')
 
-let config = './config/development.json'
+let config = './config.json'
 
-let worker = new Worker(config);
+let worker = new Worker();
 
 (async function () {
-    await worker.connect()
+    await worker.connect(config)
 
     let data = { test: 'Hello world!' }
-    await worker.publish({ data: data, price: 0 })
+    await worker.publish(data, options: {price: 0})
 })();
 ```
 
@@ -35,31 +35,34 @@ This should give a short introduction to workers and the possible use cases. Bel
 
 ### Config object high level description
 
-| Property | Subproperty | Type | Description |
+| Property | Subproperty |  | Type | Description |
 |--------|--------|----------|------|
-| id |  | String | Identifier for connection to manager |
-| name |  | String  | The fully qualified name by which the worker should be called | 
-| location |  | Object | 2D GPS coordinate of the worker |
-|  | latitude | Number | Latitude of worker location |
-|  | longitude | Number | Longitude of worker location |
-| payment |  | Object | Fixed price and boolean option for additional pricing |
-|  | fixCost | Integer | Fixed costs of the data packages |
-|  | isFixCostOnly | Boolean | Can additional costs apply? |
+| credentials |  |  | String | Identifier for connection to manager in format '<id>:<apikey>' |
+| url |  |  | String | Protocol and domain of manager |
+| settings |  |  | Object | Some general settings on the worker's behaviour |
+|  | qualityOfService |  | Number | 0: receive at most once, 1: receive at least once |
+| payment |  |  | Object | Fixed price and boolean option for additional pricing |
+|  | fixCost |  | Integer | Fixed costs of the data packages |
+|  | isFixCostOnly |  | Boolean | Can additional costs apply? |
+| profile |  |  | Object | General information on worker |
+|  | name |  | String  | The fully qualified name by which the worker should be called | 
+|  | location |  | Object | 2D GPS coordinate of the worker |
+|  |  | latitude | Number | Latitude of worker location |
+|  |  | longitude | Number | Longitude of worker location |
+| privKey |  | String  | URI reference to the private key used to signing |
 | schema |  | Object | Either single or community schema and boolean option for schema check on worker |
 |  | input | String | URI reference to the input schema in .json format |
 |  | output | String | URI reference to the output schema in .json format |
-|  | check | Boolean | Is the data checked against the schema by the worker itself? |
-| signature |  | Boolean | Is the data signed by the worker |
-| apikey |  | String  | API-Key to access the manager |
-| privKey |  | String  | URI reference to the private key used to signing |
-| apiDomain |  | String | Domain of manager |
-| port |  | String | port on which to connect to manager |
-| protocol |  | String | http or https |
-| info |  | Object | object containing all relevant information |
-|  | description | String | URI reference to the info in .md format |
-|  | tags | Array | tags under which this worker wnats to be found |
-|  | input | String | URI reference to the input info in .md format |
-|  | output | String | URI reference to the output info in .md format |
+| info |  |  | Object | object containing all relevant information |
+|  | worker |  | Object | information for worker |
+|  |  | description | String | URI reference to the worker info in .md format |
+|  |  | tags | Array | tags under which this worker wants to be found |
+|  | input |  | Object | information for input data |
+|  |  | description | String | URI reference to the input info in .md format |
+|  |  | tags | Array | tags under which this worker wants to be found |
+|  | output |  | Object | information for output data |
+|  |  | description | String | URI reference to the output info in .md format |
+|  |  | tags | Array | tags under which this worker wants to be found |
 
 ### Worker API
 
@@ -69,6 +72,8 @@ Sets up the connection to the manager, registers the worker and generates keys
 Publishes desired data on the manager
 #### worker.provide:
 Provides the service function that can be triggered on demand
+#### worker.disconnect : 
+Stops the connection to the manager
 
 ### Templates in workers
 
