@@ -1,0 +1,164 @@
+{
+    "definitions": {},
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://example.com/root.json",
+    "type": "object",
+    "title": "The Root Schema",
+    "required": [
+        "DiCo_Gegenhalter",
+        "DiCo_Niederhalter_1",
+        "DiCo_Niederhalter_2",
+        "DiCo_Position_Ma",
+        "DiCo_Position_NH",
+        "DiCo_Stempel_1",
+        "DiCo_Stempel_2",
+        "DiCo_Stempel_3",
+        "DiCo_Stempel_4"
+    ],
+    "properties": {
+        "DiCo_Gegenhalter": {
+            "$id": "#/properties/DiCo_Gegenhalter",
+            "type": "array",
+            "title": "The Dico_gegenhalter Schema",
+            "items": {
+                "$id": "#/properties/DiCo_Gegenhalter/items",
+                "type": "number",
+                "title": "The Items Schema",
+                "default": 0,
+                "examples": [
+                    1,
+                    2,
+                    3
+                ]
+            }
+        },
+        "DiCo_Niederhalter_1": {
+            "$id": "#/properties/DiCo_Niederhalter_1",
+            "type": "array",
+            "title": "The Dico_niederhalter_1 Schema",
+            "items": {
+                "$id": "#/properties/DiCo_Niederhalter_1/items",
+                "type": "number",
+                "title": "The Items Schema",
+                "default": 0,
+                "examples": [
+                    1,
+                    2,
+                    3
+                ]
+            }
+        },
+        "DiCo_Niederhalter_2": {
+            "$id": "#/properties/DiCo_Niederhalter_2",
+            "type": "array",
+            "title": "The Dico_niederhalter_2 Schema",
+            "items": {
+                "$id": "#/properties/DiCo_Niederhalter_2/items",
+                "type": "number",
+                "title": "The Items Schema",
+                "default": 0,
+                "examples": [
+                    1,
+                    2,
+                    3
+                ]
+            }
+        },
+        "DiCo_Position_Ma": {
+            "$id": "#/properties/DiCo_Position_Ma",
+            "type": "array",
+            "title": "The Dico_position_ma Schema",
+            "items": {
+                "$id": "#/properties/DiCo_Position_Ma/items",
+                "type": "number",
+                "title": "The Items Schema",
+                "default": 0,
+                "examples": [
+                    1,
+                    2,
+                    3
+                ]
+            }
+        },
+        "DiCo_Position_NH": {
+            "$id": "#/properties/DiCo_Position_NH",
+            "type": "array",
+            "title": "The Dico_position_nh Schema",
+            "items": {
+                "$id": "#/properties/DiCo_Position_NH/items",
+                "type": "number",
+                "title": "The Items Schema",
+                "default": 0,
+                "examples": [
+                    1,
+                    2,
+                    3
+                ]
+            }
+        },
+        "DiCo_Stempel_1": {
+            "$id": "#/properties/DiCo_Stempel_1",
+            "type": "array",
+            "title": "The Dico_stempel_1 Schema",
+            "items": {
+                "$id": "#/properties/DiCo_Stempel_1/items",
+                "type": "number",
+                "title": "The Items Schema",
+                "default": 0,
+                "examples": [
+                    1,
+                    2,
+                    3
+                ]
+            }
+        },
+        "DiCo_Stempel_2": {
+            "$id": "#/properties/DiCo_Stempel_2",
+            "type": "array",
+            "title": "The Dico_stempel_2 Schema",
+            "items": {
+                "$id": "#/properties/DiCo_Stempel_2/items",
+                "type": "number",
+                "title": "The Items Schema",
+                "default": 0,
+                "examples": [
+                    1,
+                    2,
+                    3
+                ]
+            }
+        },
+        "DiCo_Stempel_3": {
+            "$id": "#/properties/DiCo_Stempel_3",
+            "type": "array",
+            "title": "The Dico_stempel_3 Schema",
+            "items": {
+                "$id": "#/properties/DiCo_Stempel_3/items",
+                "type": "number",
+                "title": "The Items Schema",
+                "default": 0,
+                "examples": [
+                    1,
+                    2,
+                    3
+                ]
+            }
+        },
+        "DiCo_Stempel_4": {
+            "$id": "#/properties/DiCo_Stempel_4",
+            "type": "array",
+            "title": "The Dico_stempel_4 Schema",
+            "items": {
+                "$id": "#/properties/DiCo_Stempel_4/items",
+                "type": "number",
+                "title": "The Items Schema",
+                "default": 0,
+                "examples": [
+                    1,
+                    2,
+                    3
+                ]
+            }
+        }
+    }
+}
