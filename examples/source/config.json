@@ -1,8 +1,8 @@
 {
-  "credentials": "b4e17cf0-903e-11ea-bf54-ed0839cb6a35:4bcece8470d14279b265065395035737",
-  "url": "http://54.93.47.73/",
+  "credentials": "386ecc70-9045-11ea-9aca-234ce0d47534:4a3ad8514a6d40d3bcb555c3f9fd40cb",
+  "url": "http://localhost/",
   "settings": {
-    "qualityOfService": 0
+    "qualityOfService": 1
   },
   "payment": {
     "fixCost": 0,
