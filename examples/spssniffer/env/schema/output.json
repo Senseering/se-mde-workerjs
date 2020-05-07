@@ -6,30 +6,30 @@
     "description": "The root schema comprises the entire JSON document.",
     "default": {},
     "required": [
-        "EC_91U5-014U3(EL3403).PMInputsChannel3.Voltage",
-        "EC_91U5-014U3(EL3403).PMInputsChannel2.Voltage",
-        "EC_91U5-014U3(EL3403).PMInputsChannel1.Voltage",
-        "EC_91U5-014U3(EL3403).PMInputsChannel3.Current",
-        "EC_91U5-014U3(EL3403).PMInputsChannel2.Current",
-        "EC_91U5-014U3(EL3403).PMInputsChannel1.Current",
-        "MainDriveleft51U0(UnidriveM701RFC-S).TransmitPDOMapping3.Positionactualvalue",
-        "MainDriveleft51U0(UnidriveM701RFC-S).TransmitPDOMapping3.Currentactualvalue",
-        "MainDriveleft51U0(UnidriveM701RFC-S).TransmitPDOMapping3.DCBusVoltage",
-        "MainDriveright51U04(UnidriveM701RFC-S).TransmitPDOMapping3.DCBusVoltage",
-        "MainDriveright51U04(UnidriveM701RFC-S).TransmitPDOMapping3.CurrentActualValue",
-        "MainDriveright51U04(UnidriveM701RFC-S).TransmitPDOMapping3.Positionactualvalue",
-        "SupplyUnit50U4(UnidriveM701Regen).TransmitPDOMapping8.Current1",
-        "SupplyUnit50U4(UnidriveM701Regen).TransmitPDOMapping8.Leistung",
-        "EC_91U5-014U3(EL3403).PMInputsChannel3.Activepower",
-        "EC_91U5-014U3(EL3403).PMInputsChannel2.Activepower",
-        "EC_91U5-014U3(EL3403).PMInputsChannel1.Activepower"
+        "EC_91U5014U3EL3403PMInputsChannel3Voltage",
+        "EC_91U5014U3EL3403PMInputsChannel2Voltage",
+        "EC_91U5014U3EL3403PMInputsChannel1Voltage",
+        "EC_91U5014U3EL3403PMInputsChannel3Current",
+        "EC_91U5014U3EL3403PMInputsChannel2Current",
+        "EC_91U5014U3EL3403PMInputsChannel1Current",
+        "MainDriveleft51U0UnidriveM701RFCSTransmitPDOMapping3Positionactualvalue",
+        "MainDriveleft51U0UnidriveM701RFCSTransmitPDOMapping3Currentactualvalue",
+        "MainDriveleft51U0UnidriveM701RFCSTransmitPDOMapping3DCBusVoltage",
+        "MainDriveright51U04UnidriveM701RFCSTransmitPDOMapping3DCBusVoltage",
+        "MainDriveright51U04UnidriveM701RFCSTransmitPDOMapping3CurrentActualValue",
+        "MainDriveright51U04UnidriveM701RFCSTransmitPDOMapping3Positionactualvalue",
+        "SupplyUnit50U4UnidriveM701RegenTransmitPDOMapping8Current1",
+        "SupplyUnit50U4UnidriveM701RegenTransmitPDOMapping8Leistung",
+        "EC_91U5014U3EL3403PMInputsChannel3Activepower",
+        "EC_91U5014U3EL3403PMInputsChannel2Activepower",
+        "EC_91U5014U3EL3403PMInputsChannel1Activepower"
     ],
     "additionalProperties": true,
     "properties": {
-        "EC_91U5-014U3(EL3403).PMInputsChannel3.Voltage": {
-            "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel3.Voltage",
+        "EC_91U5014U3EL3403PMInputsChannel3Voltage": {
+            "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel3Voltage",
             "type": "array",
-            "title": "The EC_91U5-014U3(EL3403).PMInputsChannel3.Voltage schema",
+            "title": "The EC_91U5014U3EL3403PMInputsChannel3Voltage schema",
             "description": "An explanation about the purpose of this instance.",
             "default": [],
             "examples": [
@@ -40,10 +40,10 @@
             ],
             "additionalItems": true,
             "items": {
-                "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel3.Voltage/items",
+                "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel3Voltage/items",
                 "anyOf": [
                     {
-                        "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel3.Voltage/items/anyOf/0",
+                        "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel3Voltage/items/anyOf/0",
                         "type": "integer",
                         "title": "The first anyOf schema",
                         "description": "An explanation about the purpose of this instance.",
@@ -56,10 +56,10 @@
                 ]
             }
         },
-        "EC_91U5-014U3(EL3403).PMInputsChannel2.Voltage": {
-            "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel2.Voltage",
+        "EC_91U5014U3EL3403PMInputsChannel2Voltage": {
+            "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel2Voltage",
             "type": "array",
-            "title": "The EC_91U5-014U3(EL3403).PMInputsChannel2.Voltage schema",
+            "title": "The EC_91U5014U3EL3403PMInputsChannel2Voltage schema",
             "description": "An explanation about the purpose of this instance.",
             "default": [],
             "examples": [
@@ -70,10 +70,10 @@
             ],
             "additionalItems": true,
             "items": {
-                "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel2.Voltage/items",
+                "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel2Voltage/items",
                 "anyOf": [
                     {
-                        "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel2.Voltage/items/anyOf/0",
+                        "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel2Voltage/items/anyOf/0",
                         "type": "integer",
                         "title": "The first anyOf schema",
                         "description": "An explanation about the purpose of this instance.",
@@ -86,10 +86,10 @@
                 ]
             }
         },
-        "EC_91U5-014U3(EL3403).PMInputsChannel1.Voltage": {
-            "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel1.Voltage",
+        "EC_91U5014U3EL3403PMInputsChannel1Voltage": {
+            "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel1Voltage",
             "type": "array",
-            "title": "The EC_91U5-014U3(EL3403).PMInputsChannel1.Voltage schema",
+            "title": "The EC_91U5014U3EL3403PMInputsChannel1Voltage schema",
             "description": "An explanation about the purpose of this instance.",
             "default": [],
             "examples": [
@@ -100,10 +100,10 @@
             ],
             "additionalItems": true,
             "items": {
-                "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel1.Voltage/items",
+                "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel1Voltage/items",
                 "anyOf": [
                     {
-                        "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel1.Voltage/items/anyOf/0",
+                        "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel1Voltage/items/anyOf/0",
                         "type": "integer",
                         "title": "The first anyOf schema",
                         "description": "An explanation about the purpose of this instance.",
@@ -116,10 +116,10 @@
                 ]
             }
         },
-        "EC_91U5-014U3(EL3403).PMInputsChannel3.Current": {
-            "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel3.Current",
+        "EC_91U5014U3EL3403PMInputsChannel3Current": {
+            "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel3Current",
             "type": "array",
-            "title": "The EC_91U5-014U3(EL3403).PMInputsChannel3.Current schema",
+            "title": "The EC_91U5014U3EL3403PMInputsChannel3Current schema",
             "description": "An explanation about the purpose of this instance.",
             "default": [],
             "examples": [
@@ -130,10 +130,10 @@
             ],
             "additionalItems": true,
             "items": {
-                "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel3.Current/items",
+                "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel3Current/items",
                 "anyOf": [
                     {
-                        "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel3.Current/items/anyOf/0",
+                        "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel3Current/items/anyOf/0",
                         "type": "integer",
                         "title": "The first anyOf schema",
                         "description": "An explanation about the purpose of this instance.",
@@ -146,10 +146,10 @@
                 ]
             }
         },
-        "EC_91U5-014U3(EL3403).PMInputsChannel2.Current": {
-            "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel2.Current",
+        "EC_91U5014U3EL3403PMInputsChannel2Current": {
+            "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel2Current",
             "type": "array",
-            "title": "The EC_91U5-014U3(EL3403).PMInputsChannel2.Current schema",
+            "title": "The EC_91U5014U3EL3403PMInputsChannel2Current schema",
             "description": "An explanation about the purpose of this instance.",
             "default": [],
             "examples": [
@@ -160,10 +160,10 @@
             ],
             "additionalItems": true,
             "items": {
-                "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel2.Current/items",
+                "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel2Current/items",
                 "anyOf": [
                     {
-                        "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel2.Current/items/anyOf/0",
+                        "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel2Current/items/anyOf/0",
                         "type": "integer",
                         "title": "The first anyOf schema",
                         "description": "An explanation about the purpose of this instance.",
@@ -176,10 +176,10 @@
                 ]
             }
         },
-        "EC_91U5-014U3(EL3403).PMInputsChannel1.Current": {
-            "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel1.Current",
+        "EC_91U5014U3EL3403PMInputsChannel1Current": {
+            "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel1Current",
             "type": "array",
-            "title": "The EC_91U5-014U3(EL3403).PMInputsChannel1.Current schema",
+            "title": "The EC_91U5014U3EL3403PMInputsChannel1Current schema",
             "description": "An explanation about the purpose of this instance.",
             "default": [],
             "examples": [
@@ -190,10 +190,10 @@
             ],
             "additionalItems": true,
             "items": {
-                "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel1.Current/items",
+                "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel1Current/items",
                 "anyOf": [
                     {
-                        "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel1.Current/items/anyOf/0",
+                        "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel1Current/items/anyOf/0",
                         "type": "integer",
                         "title": "The first anyOf schema",
                         "description": "An explanation about the purpose of this instance.",
@@ -206,10 +206,10 @@
                 ]
             }
         },
-        "MainDriveleft51U0(UnidriveM701RFC-S).TransmitPDOMapping3.Positionactualvalue": {
-            "$id": "#/properties/MainDriveleft51U0(UnidriveM701RFC-S).TransmitPDOMapping3.Positionactualvalue",
+        "MainDriveleft51U0UnidriveM701RFCSTransmitPDOMapping3Positionactualvalue": {
+            "$id": "#/properties/MainDriveleft51U0UnidriveM701RFCSTransmitPDOMapping3Positionactualvalue",
             "type": "array",
-            "title": "The MainDriveleft51U0(UnidriveM701RFC-S).TransmitPDOMapping3.Positionactualvalue schema",
+            "title": "The MainDriveleft51U0UnidriveM701RFCSTransmitPDOMapping3Positionactualvalue schema",
             "description": "An explanation about the purpose of this instance.",
             "default": [],
             "examples": [
@@ -220,10 +220,10 @@
             ],
             "additionalItems": true,
             "items": {
-                "$id": "#/properties/MainDriveleft51U0(UnidriveM701RFC-S).TransmitPDOMapping3.Positionactualvalue/items",
+                "$id": "#/properties/MainDriveleft51U0UnidriveM701RFCSTransmitPDOMapping3Positionactualvalue/items",
                 "anyOf": [
                     {
-                        "$id": "#/properties/MainDriveleft51U0(UnidriveM701RFC-S).TransmitPDOMapping3.Positionactualvalue/items/anyOf/0",
+                        "$id": "#/properties/MainDriveleft51U0UnidriveM701RFCSTransmitPDOMapping3Positionactualvalue/items/anyOf/0",
                         "type": "integer",
                         "title": "The first anyOf schema",
                         "description": "An explanation about the purpose of this instance.",
@@ -236,10 +236,10 @@
                 ]
             }
         },
-        "MainDriveleft51U0(UnidriveM701RFC-S).TransmitPDOMapping3.Currentactualvalue": {
-            "$id": "#/properties/MainDriveleft51U0(UnidriveM701RFC-S).TransmitPDOMapping3.Currentactualvalue",
+        "MainDriveleft51U0UnidriveM701RFCSTransmitPDOMapping3Currentactualvalue": {
+            "$id": "#/properties/MainDriveleft51U0UnidriveM701RFCSTransmitPDOMapping3Currentactualvalue",
             "type": "array",
-            "title": "The MainDriveleft51U0(UnidriveM701RFC-S).TransmitPDOMapping3.Currentactualvalue schema",
+            "title": "The MainDriveleft51U0UnidriveM701RFCSTransmitPDOMapping3Currentactualvalue schema",
             "description": "An explanation about the purpose of this instance.",
             "default": [],
             "examples": [
@@ -250,10 +250,10 @@
             ],
             "additionalItems": true,
             "items": {
-                "$id": "#/properties/MainDriveleft51U0(UnidriveM701RFC-S).TransmitPDOMapping3.Currentactualvalue/items",
+                "$id": "#/properties/MainDriveleft51U0UnidriveM701RFCSTransmitPDOMapping3Currentactualvalue/items",
                 "anyOf": [
                     {
-                        "$id": "#/properties/MainDriveleft51U0(UnidriveM701RFC-S).TransmitPDOMapping3.Currentactualvalue/items/anyOf/0",
+                        "$id": "#/properties/MainDriveleft51U0UnidriveM701RFCSTransmitPDOMapping3Currentactualvalue/items/anyOf/0",
                         "type": "integer",
                         "title": "The first anyOf schema",
                         "description": "An explanation about the purpose of this instance.",
@@ -266,10 +266,10 @@
                 ]
             }
         },
-        "MainDriveleft51U0(UnidriveM701RFC-S).TransmitPDOMapping3.DCBusVoltage": {
-            "$id": "#/properties/MainDriveleft51U0(UnidriveM701RFC-S).TransmitPDOMapping3.DCBusVoltage",
+        "MainDriveleft51U0UnidriveM701RFCSTransmitPDOMapping3DCBusVoltage": {
+            "$id": "#/properties/MainDriveleft51U0UnidriveM701RFCSTransmitPDOMapping3DCBusVoltage",
             "type": "array",
-            "title": "The MainDriveleft51U0(UnidriveM701RFC-S).TransmitPDOMapping3.DCBusVoltage schema",
+            "title": "The MainDriveleft51U0UnidriveM701RFCSTransmitPDOMapping3DCBusVoltage schema",
             "description": "An explanation about the purpose of this instance.",
             "default": [],
             "examples": [
@@ -280,10 +280,10 @@
             ],
             "additionalItems": true,
             "items": {
-                "$id": "#/properties/MainDriveleft51U0(UnidriveM701RFC-S).TransmitPDOMapping3.DCBusVoltage/items",
+                "$id": "#/properties/MainDriveleft51U0UnidriveM701RFCSTransmitPDOMapping3DCBusVoltage/items",
                 "anyOf": [
                     {
-                        "$id": "#/properties/MainDriveleft51U0(UnidriveM701RFC-S).TransmitPDOMapping3.DCBusVoltage/items/anyOf/0",
+                        "$id": "#/properties/MainDriveleft51U0UnidriveM701RFCSTransmitPDOMapping3DCBusVoltage/items/anyOf/0",
                         "type": "integer",
                         "title": "The first anyOf schema",
                         "description": "An explanation about the purpose of this instance.",
@@ -296,10 +296,10 @@
                 ]
             }
         },
-        "MainDriveright51U04(UnidriveM701RFC-S).TransmitPDOMapping3.DCBusVoltage": {
-            "$id": "#/properties/MainDriveright51U04(UnidriveM701RFC-S).TransmitPDOMapping3.DCBusVoltage",
+        "MainDriveright51U04UnidriveM701RFCSTransmitPDOMapping3DCBusVoltage": {
+            "$id": "#/properties/MainDriveright51U04UnidriveM701RFCSTransmitPDOMapping3DCBusVoltage",
             "type": "array",
-            "title": "The MainDriveright51U04(UnidriveM701RFC-S).TransmitPDOMapping3.DCBusVoltage schema",
+            "title": "The MainDriveright51U04UnidriveM701RFCSTransmitPDOMapping3DCBusVoltage schema",
             "description": "An explanation about the purpose of this instance.",
             "default": [],
             "examples": [
@@ -310,10 +310,10 @@
             ],
             "additionalItems": true,
             "items": {
-                "$id": "#/properties/MainDriveright51U04(UnidriveM701RFC-S).TransmitPDOMapping3.DCBusVoltage/items",
+                "$id": "#/properties/MainDriveright51U04UnidriveM701RFCSTransmitPDOMapping3DCBusVoltage/items",
                 "anyOf": [
                     {
-                        "$id": "#/properties/MainDriveright51U04(UnidriveM701RFC-S).TransmitPDOMapping3.DCBusVoltage/items/anyOf/0",
+                        "$id": "#/properties/MainDriveright51U04UnidriveM701RFCSTransmitPDOMapping3DCBusVoltage/items/anyOf/0",
                         "type": "integer",
                         "title": "The first anyOf schema",
                         "description": "An explanation about the purpose of this instance.",
@@ -326,10 +326,10 @@
                 ]
             }
         },
-        "MainDriveright51U04(UnidriveM701RFC-S).TransmitPDOMapping3.CurrentActualValue": {
-            "$id": "#/properties/MainDriveright51U04(UnidriveM701RFC-S).TransmitPDOMapping3.CurrentActualValue",
+        "MainDriveright51U04UnidriveM701RFCSTransmitPDOMapping3CurrentActualValue": {
+            "$id": "#/properties/MainDriveright51U04UnidriveM701RFCSTransmitPDOMapping3CurrentActualValue",
             "type": "array",
-            "title": "The MainDriveright51U04(UnidriveM701RFC-S).TransmitPDOMapping3.CurrentActualValue schema",
+            "title": "The MainDriveright51U04UnidriveM701RFCSTransmitPDOMapping3CurrentActualValue schema",
             "description": "An explanation about the purpose of this instance.",
             "default": [],
             "examples": [
@@ -340,10 +340,10 @@
             ],
             "additionalItems": true,
             "items": {
-                "$id": "#/properties/MainDriveright51U04(UnidriveM701RFC-S).TransmitPDOMapping3.CurrentActualValue/items",
+                "$id": "#/properties/MainDriveright51U04UnidriveM701RFCSTransmitPDOMapping3CurrentActualValue/items",
                 "anyOf": [
                     {
-                        "$id": "#/properties/MainDriveright51U04(UnidriveM701RFC-S).TransmitPDOMapping3.CurrentActualValue/items/anyOf/0",
+                        "$id": "#/properties/MainDriveright51U04UnidriveM701RFCSTransmitPDOMapping3CurrentActualValue/items/anyOf/0",
                         "type": "integer",
                         "title": "The first anyOf schema",
                         "description": "An explanation about the purpose of this instance.",
@@ -356,10 +356,10 @@
                 ]
             }
         },
-        "MainDriveright51U04(UnidriveM701RFC-S).TransmitPDOMapping3.Positionactualvalue": {
-            "$id": "#/properties/MainDriveright51U04(UnidriveM701RFC-S).TransmitPDOMapping3.Positionactualvalue",
+        "MainDriveright51U04UnidriveM701RFCSTransmitPDOMapping3Positionactualvalue": {
+            "$id": "#/properties/MainDriveright51U04UnidriveM701RFCSTransmitPDOMapping3Positionactualvalue",
             "type": "array",
-            "title": "The MainDriveright51U04(UnidriveM701RFC-S).TransmitPDOMapping3.Positionactualvalue schema",
+            "title": "The MainDriveright51U04UnidriveM701RFCSTransmitPDOMapping3Positionactualvalue schema",
             "description": "An explanation about the purpose of this instance.",
             "default": [],
             "examples": [
@@ -370,10 +370,10 @@
             ],
             "additionalItems": true,
             "items": {
-                "$id": "#/properties/MainDriveright51U04(UnidriveM701RFC-S).TransmitPDOMapping3.Positionactualvalue/items",
+                "$id": "#/properties/MainDriveright51U04UnidriveM701RFCSTransmitPDOMapping3Positionactualvalue/items",
                 "anyOf": [
                     {
-                        "$id": "#/properties/MainDriveright51U04(UnidriveM701RFC-S).TransmitPDOMapping3.Positionactualvalue/items/anyOf/0",
+                        "$id": "#/properties/MainDriveright51U04UnidriveM701RFCSTransmitPDOMapping3Positionactualvalue/items/anyOf/0",
                         "type": "integer",
                         "title": "The first anyOf schema",
                         "description": "An explanation about the purpose of this instance.",
@@ -386,10 +386,10 @@
                 ]
             }
         },
-        "SupplyUnit50U4(UnidriveM701Regen).TransmitPDOMapping8.Current1": {
-            "$id": "#/properties/SupplyUnit50U4(UnidriveM701Regen).TransmitPDOMapping8.Current1",
+        "SupplyUnit50U4UnidriveM701RegenTransmitPDOMapping8Current1": {
+            "$id": "#/properties/SupplyUnit50U4UnidriveM701RegenTransmitPDOMapping8Current1",
             "type": "array",
-            "title": "The SupplyUnit50U4(UnidriveM701Regen).TransmitPDOMapping8.Current1 schema",
+            "title": "The SupplyUnit50U4UnidriveM701RegenTransmitPDOMapping8Current1 schema",
             "description": "An explanation about the purpose of this instance.",
             "default": [],
             "examples": [
@@ -400,10 +400,10 @@
             ],
             "additionalItems": true,
             "items": {
-                "$id": "#/properties/SupplyUnit50U4(UnidriveM701Regen).TransmitPDOMapping8.Current1/items",
+                "$id": "#/properties/SupplyUnit50U4UnidriveM701RegenTransmitPDOMapping8Current1/items",
                 "anyOf": [
                     {
-                        "$id": "#/properties/SupplyUnit50U4(UnidriveM701Regen).TransmitPDOMapping8.Current1/items/anyOf/0",
+                        "$id": "#/properties/SupplyUnit50U4UnidriveM701RegenTransmitPDOMapping8Current1/items/anyOf/0",
                         "type": "integer",
                         "title": "The first anyOf schema",
                         "description": "An explanation about the purpose of this instance.",
@@ -416,10 +416,10 @@
                 ]
             }
         },
-        "SupplyUnit50U4(UnidriveM701Regen).TransmitPDOMapping8.Leistung": {
-            "$id": "#/properties/SupplyUnit50U4(UnidriveM701Regen).TransmitPDOMapping8.Leistung",
+        "SupplyUnit50U4UnidriveM701RegenTransmitPDOMapping8Leistung": {
+            "$id": "#/properties/SupplyUnit50U4UnidriveM701RegenTransmitPDOMapping8Leistung",
             "type": "array",
-            "title": "The SupplyUnit50U4(UnidriveM701Regen).TransmitPDOMapping8.Leistung schema",
+            "title": "The SupplyUnit50U4UnidriveM701RegenTransmitPDOMapping8Leistung schema",
             "description": "An explanation about the purpose of this instance.",
             "default": [],
             "examples": [
@@ -430,10 +430,10 @@
             ],
             "additionalItems": true,
             "items": {
-                "$id": "#/properties/SupplyUnit50U4(UnidriveM701Regen).TransmitPDOMapping8.Leistung/items",
+                "$id": "#/properties/SupplyUnit50U4UnidriveM701RegenTransmitPDOMapping8Leistung/items",
                 "anyOf": [
                     {
-                        "$id": "#/properties/SupplyUnit50U4(UnidriveM701Regen).TransmitPDOMapping8.Leistung/items/anyOf/0",
+                        "$id": "#/properties/SupplyUnit50U4UnidriveM701RegenTransmitPDOMapping8Leistung/items/anyOf/0",
                         "type": "integer",
                         "title": "The first anyOf schema",
                         "description": "An explanation about the purpose of this instance.",
@@ -446,10 +446,10 @@
                 ]
             }
         },
-        "EC_91U5-014U3(EL3403).PMInputsChannel3.Activepower": {
-            "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel3.Activepower",
+        "EC_91U5014U3EL3403PMInputsChannel3Activepower": {
+            "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel3Activepower",
             "type": "array",
-            "title": "The EC_91U5-014U3(EL3403).PMInputsChannel3.Activepower schema",
+            "title": "The EC_91U5014U3EL3403PMInputsChannel3Activepower schema",
             "description": "An explanation about the purpose of this instance.",
             "default": [],
             "examples": [
@@ -460,10 +460,10 @@
             ],
             "additionalItems": true,
             "items": {
-                "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel3.Activepower/items",
+                "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel3Activepower/items",
                 "anyOf": [
                     {
-                        "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel3.Activepower/items/anyOf/0",
+                        "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel3Activepower/items/anyOf/0",
                         "type": "integer",
                         "title": "The first anyOf schema",
                         "description": "An explanation about the purpose of this instance.",
@@ -476,10 +476,10 @@
                 ]
             }
         },
-        "EC_91U5-014U3(EL3403).PMInputsChannel2.Activepower": {
-            "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel2.Activepower",
+        "EC_91U5014U3EL3403PMInputsChannel2Activepower": {
+            "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel2Activepower",
             "type": "array",
-            "title": "The EC_91U5-014U3(EL3403).PMInputsChannel2.Activepower schema",
+            "title": "The EC_91U5014U3EL3403PMInputsChannel2Activepower schema",
             "description": "An explanation about the purpose of this instance.",
             "default": [],
             "examples": [
@@ -490,10 +490,10 @@
             ],
             "additionalItems": true,
             "items": {
-                "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel2.Activepower/items",
+                "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel2Activepower/items",
                 "anyOf": [
                     {
-                        "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel2.Activepower/items/anyOf/0",
+                        "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel2Activepower/items/anyOf/0",
                         "type": "integer",
                         "title": "The first anyOf schema",
                         "description": "An explanation about the purpose of this instance.",
@@ -506,10 +506,10 @@
                 ]
             }
         },
-        "EC_91U5-014U3(EL3403).PMInputsChannel1.Activepower": {
-            "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel1.Activepower",
+        "EC_91U5014U3EL3403PMInputsChannel1Activepower": {
+            "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel1Activepower",
             "type": "array",
-            "title": "The EC_91U5-014U3(EL3403).PMInputsChannel1.Activepower schema",
+            "title": "The EC_91U5014U3EL3403PMInputsChannel1Activepower schema",
             "description": "An explanation about the purpose of this instance.",
             "default": [],
             "examples": [
@@ -520,10 +520,10 @@
             ],
             "additionalItems": true,
             "items": {
-                "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel1.Activepower/items",
+                "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel1Activepower/items",
                 "anyOf": [
                     {
-                        "$id": "#/properties/EC_91U5-014U3(EL3403).PMInputsChannel1.Activepower/items/anyOf/0",
+                        "$id": "#/properties/EC_91U5014U3EL3403PMInputsChannel1Activepower/items/anyOf/0",
                         "type": "integer",
                         "title": "The first anyOf schema",
                         "description": "An explanation about the purpose of this instance.",

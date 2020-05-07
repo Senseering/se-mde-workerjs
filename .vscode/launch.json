@@ -37,6 +37,21 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Debug[spssniffer]",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run-script",
+                "debug"
+            ],
+            "port": 9229,
+            "cwd": "${workspaceFolder}/examples/spssniffer"
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Debug[source]",
             "skipFiles": [
                 "<node_internals>/**"
