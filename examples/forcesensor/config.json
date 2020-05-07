@@ -1,6 +1,6 @@
 {
-  "credentials": "f2e0ec20-8f94-11ea-a2a5-81e89185deb0:b6ebf9ce2e954484bba6dc17e7944ad4",
-  "url": "https://rotterbruch-12.wzl.senseering.net/",
+  "credentials": "0805bbe0-9048-11ea-951d-2f69f9e627e0:b22197b29d5e48d68d2d0bac2d85f257",
+  "url": "https://rotter-bruch-10.wzl.senseering.net",
   "settings": {
     "qualityOfService": 1
   },
@@ -9,7 +9,7 @@
     "isFixCostOnly": false
   },
   "profile": {
-    "name": "NI-Daq importer",
+    "name": "XFT2500 Speed Force Sensor",
     "location": {
       "latitude": 52.5297268,
       "longitude": 13.400391

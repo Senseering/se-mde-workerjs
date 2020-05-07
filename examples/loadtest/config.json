@@ -1,6 +1,6 @@
 {
-  "credentials": "f2e0ec20-8f94-11ea-a2a5-81e89185deb0:b6ebf9ce2e954484bba6dc17e7944ad4",
-  "url": "https://rotterbruch-12.wzl.senseering.net/",
+  "credentials": "2ebcb4b0-8dfe-11ea-ae54-5da7079424ea:1bd094ee1f8f4ca4a9563dbd80fb7027",
+  "url": "https://terminator.timo.senseering.net/",
   "settings": {
     "qualityOfService": 1
   },
@@ -9,7 +9,7 @@
     "isFixCostOnly": false
   },
   "profile": {
-    "name": "NI-Daq importer",
+    "name": "Loadtest",
     "location": {
       "latitude": 52.5297268,
       "longitude": 13.400391

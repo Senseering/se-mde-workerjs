@@ -31,7 +31,19 @@
         },
         "settings": {
             "$id": "#/properties/settings",
-            "type": "object"
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "qualityOfService"
+            ],
+            "properties": {
+                "qualityOfService": {
+                    "$id": "#/properties/profile/properties/settings/properties/qualityOfService",
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 1
+                }
+            }
         },
         "payment": {
             "$id": "#/properties/profile/properties/payment",

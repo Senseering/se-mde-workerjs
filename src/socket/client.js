@@ -88,7 +88,9 @@ client.handleMessage = async function (fresponse) {
           isRegistered = true
         }
         if (fresponse.code === 200 && fresponse.event === "publish" && fresponse.id !== undefined) {
-          sendQueue[fresponse.id]("noticed: " + fresponse.id)
+          if (sendQueue[fresponse.id] !== undefined) {
+            sendQueue[fresponse.id]("noticed: " + fresponse.id)
+          }
         }
         client.pendingQueue = client.pendingQueue.filter(a => a.eventID != fresponse.eventID)
         client.unsentQueue = client.unsentQueue.filter(a => a.eventID != fresponse.eventID)
