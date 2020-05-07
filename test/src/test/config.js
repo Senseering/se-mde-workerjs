@@ -60,21 +60,21 @@ module.exports = function () {
             "Y8DlQawRYn8MmAjCUuL54lFWDNojIG2EWiMd0jF3qbs=" + "." +
             "VQeu2MgSOLu34V4Kjbxu0A1+Gd0f7VWtHPWx+IbkvO8=" + "." +
             "A3Yy7ktfY8fJ8rXN7WTuIsSfC4TDNPWH4kb+LEerq2I=." +
-            "RBNvo1WzZ4oRRq0W9+hknpT7T8If536DEMBg9hyq/4o=")
+            "6IwsTmsYTop89NViiVKu/BSM/6H7myb3sR691R35L+Q=")
         expect(res).to.equal("0.0.0.0.0")
     })
 
     it('Update profile and compare for update', async function () {
         let profile = { "name": "Example Source", "location": { "latitude": 52.5297268, "longitude": 13.400391 } }
         profile.name = "tests"
-        
-        let verison = await config.getVersion()
+
+        let version = await config.getVersion()
         await config.update("profile", profile)
         let res = await config.compare("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=@1588256356160." +
-        "Y8DlQawRYn8MmAjCUuL54lFWDNojIG2EWiMd0jF3qbs=@1588256356160." +
-        "VQeu2MgSOLu34V4Kjbxu0A1+Gd0f7VWtHPWx+IbkvO8=@1588256356160." +
-        "A3Yy7ktfY8fJ8rXN7WTuIsSfC4TDNPWH4kb+LEerq2I=@1588256356160." +
-        "RBNvo1WzZ4oRRq0W9+hknpT7T8If536DEMBg9hyq/4o=@1588256356160")
+            "Y8DlQawRYn8MmAjCUuL54lFWDNojIG2EWiMd0jF3qbs=@1588256356160." +
+            "VQeu2MgSOLu34V4Kjbxu0A1+Gd0f7VWtHPWx+IbkvO8=@1588256356160." +
+            "A3Yy7ktfY8fJ8rXN7WTuIsSfC4TDNPWH4kb+LEerq2I=@1588256356160." +
+            "6IwsTmsYTop89NViiVKu/BSM/6H7myb3sR691R35L+Q=@1588256356160")
         expect(res).to.equal("0.0.-1.0.0")
         profile.name = "Example Source"
         await config.update("profile", profile)
@@ -87,7 +87,7 @@ module.exports = function () {
             "Y8DlQawRYn8MmAjCUuL54lFWDNojIG2EWiMd0jF3qbs=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
             "VQeu2MgSOLu34V4Kjbxu0A1+Gd0f7VWtHPWx+IbkvO8=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
             "A3Yy7ktfY8fJ8rXN7WTuIsSfC4TDNPWH4kb+LEerq2I=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
-            "RBNvo1WzZ4oRRq0W9+hknpT7T8If536DEMBg9hyq/4o=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs))
+            "6IwsTmsYTop89NViiVKu/BSM/6H7myb3sR691R35L+Q=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs))
     })
 
     it('Update profile with wrong config and throw', async function () {

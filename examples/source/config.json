@@ -1,7 +1,9 @@
 {
-  "credentials": "2e568230-8de5-11ea-ae54-5da7079424ea:33b2e3ea28094b09a9b8b35af67feb2a",
-  "url": "https://terminator.timo.senseering.net/",
-  "settings": {},
+  "credentials": "386ecc70-9045-11ea-9aca-234ce0d47534:4a3ad8514a6d40d3bcb555c3f9fd40cb",
+  "url": "http://localhost/",
+  "settings": {
+    "qualityOfService": 1
+  },
   "payment": {
     "fixCost": 0,
     "isFixCostOnly": false

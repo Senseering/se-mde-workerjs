@@ -1,7 +1,9 @@
 {
   "credentials": "85c46c80-8f11-11ea-a2a5-81e89185deb0:3f586d96dcec4bb3868dde5179df7302",
   "url": "https://rotterbruch-12.wzl.senseering.net/",
-  "settings": {},
+  "settings": {
+    "qualityOfService": 1
+  },
   "payment": {
     "fixCost": 0,
     "isFixCostOnly": false
