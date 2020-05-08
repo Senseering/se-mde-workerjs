@@ -1,6 +1,8 @@
 const NodeRSA = require('node-rsa')
 const config = require('./utils/config')
 const debug = require('debug')('worker')
+const compare = require("./socket/methods/compare")
+const update = require("./socket/methods/update")
 require('colors')
 
 const client = require('./socket/client')
@@ -56,6 +58,7 @@ Worker.prototype.connect = async function (location) {
         let registration = {
             schema: schema,
             info: info,
+            settings: (await config.get("settings")),
             pubkey: this.key.exportKey('public'),
             name: (await config.get('profile')).name,
             payment: (await config.get('payment')),
@@ -65,9 +68,20 @@ Worker.prototype.connect = async function (location) {
         }
 
         debug('Registering worker')
-
-        await register(registration)
-        await client.isRegistered()
+        for (let i = 0; i < (await config.get("settings")).messageRetries; i++) {
+            try {
+                let version = await config.getVersion()
+                let changes = await compare.send(version)
+                if (changes.split(".").map((change) => !Boolean(Number(change))).reduce((a, b) => a && b))
+                    break;
+                let missingConfig = await config.getChanges(changes)
+                await update.send(missingConfig)
+            } catch (err) {
+                debug(err.message)
+                if(i === (await config.get("settings")).messageRetries)
+                    throw err
+            }
+        }
         this.isRegistered = true
         debug('Worker registered in system')
     }

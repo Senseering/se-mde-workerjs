@@ -131,7 +131,7 @@ config.resolve = async function (configFile, field) {
                 }
             }
             try {
-                configFile.info.input.descriptionn = await fs.readFile(configFile.info.input.description, "utf-8")
+                configFile.info.input.description = await fs.readFile(configFile.info.input.description, "utf-8")
             } catch (err) {
                 if (err.code === "ENOENT") {
                     debug("Could not find input descrition. Creating one...")
@@ -235,6 +235,22 @@ config.compare = async function (version) {
         }
     }
     return change.join(".")
+}
+
+/**
+ * Returns the requested changes
+ * @param changes Requested changes e.g. 1.1.1.1.1
+ */
+config.getChanges = async function (changes){
+    let result = {}
+    for (const [index, change] of (changes.split(".")).entries()) {
+        if(VERSION_ORDER[index] !== "privKey"){
+            result[VERSION_ORDER[index]] = await config.get(VERSION_ORDER[index])
+        } else {
+            result["pubkey"] =  (new NodeRSA(await config.get(VERSION_ORDER[index]))).exportKey('public')
+        }
+    }
+    return result
 }
 
 /** 
@@ -354,5 +370,6 @@ module.exports = {
     init: config.init,
     update: config.update,
     getVersion: config.getVersion,
+    getChanges: config.getChanges,
     VERSION_ORDER,
 }

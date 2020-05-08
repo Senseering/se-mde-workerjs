@@ -107,6 +107,14 @@ client.handleMessage = async function (fresponse) {
     client.trigger.execute(fresponse)
   } else if (fresponse.topic === 'pong') {
     isConnected = true
+  } else if (fresponse.topic === 'change') {
+    if(client.config.isCompared.resolve){
+      client.config.isCompared.resolve(fresponse.message)
+    }
+  } else if (fresponse.topic === 'compare') {
+    console.log(fresponse.topic)
+  } else if (fresponse.topic === 'update') {
+    console.log(fresponse.topic)
   } else {
     debug('Unknown message topic received: ' + fresponse.topic)
   }
@@ -127,6 +135,11 @@ client.processQueue = function () {
     debug('No leftover messages to be send')
   }
 }
+
+client.config = {}
+client.config.isCompared = {}
+client.config.isChanged = {}
+client.config.isUpdated = {}
 
 client.isRegistered = async function () {
   return new Promise(function (resolve, reject) {

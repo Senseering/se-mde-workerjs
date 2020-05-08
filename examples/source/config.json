@@ -1,7 +1,10 @@
 {
-  "credentials": "2e568230-8de5-11ea-ae54-5da7079424ea:33b2e3ea28094b09a9b8b35af67feb2a",
-  "url": "https://terminator.timo.senseering.net/",
-  "settings": {},
+  "credentials": "a6da4760-9122-11ea-a062-51c61c38fa39:19b2ebe3920846e5ae2d2c5322f6c48a",
+  "url": "http://localhost/",
+  "settings": {
+    "messageTimeout": 320000,
+    "messageRetries": 3
+  },
   "payment": {
     "fixCost": 0,
     "isFixCostOnly": false
