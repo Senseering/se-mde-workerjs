@@ -1,0 +1,43 @@
+{
+  "credentials": "0805bbe0-9048-11ea-951d-2f69f9e627e0:b22197b29d5e48d68d2d0bac2d85f257",
+  "url": "https://rotter-bruch-10.wzl.senseering.net",
+  "settings": {
+    "qualityOfService": 1
+  },
+  "payment": {
+    "fixCost": 0,
+    "isFixCostOnly": false
+  },
+  "profile": {
+    "name": "XFT2500 Speed Force Sensor",
+    "location": {
+      "latitude": 52.5297268,
+      "longitude": 13.400391
+    }
+  },
+  "privKey": "./env/key.pem",
+  "schema": {
+    "input": "./env/schema/input.json",
+    "output": "./env/schema/output.json"
+  },
+  "info": {
+    "worker": {
+      "description": "./env/description/worker.md",
+      "tags": [
+        "image processing"
+      ]
+    },
+    "input": {
+      "description": "./env/description/input.md",
+      "tags": [
+        "h"
+      ]
+    },
+    "output": {
+      "description": "./env/description/output.md",
+      "tags": [
+        ""
+      ]
+    }
+  }
+}

@@ -296,9 +296,9 @@ config.update = async function (field, configuration, { recursive = false, spaci
             }
             // Check against schema
             let valid = validateConfig(configCopy)
-            if (!valid){
+            if (!valid) {
                 throw new Error(validateConfig.errors[0].dataPath + " " + validateConfig.errors[0].message)
-            } 
+            }
 
             if (recursive) {
                 switch (field) {

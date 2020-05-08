@@ -1,0 +1,43 @@
+{
+  "credentials": "85c46c80-8f11-11ea-a2a5-81e89185deb0:3f586d96dcec4bb3868dde5179df7302",
+  "url": "https://rotterbruch-12.wzl.senseering.net/",
+  "settings": {
+    "qualityOfService": 1
+  },
+  "payment": {
+    "fixCost": 0,
+    "isFixCostOnly": false
+  },
+  "profile": {
+    "name": "SPS XFT 2500 Speed",
+    "location": {
+      "latitude": 52.5297268,
+      "longitude": 13.400391
+    }
+  },
+  "privKey": "./env/key.pem",
+  "schema": {
+    "input": "./env/schema/input.json",
+    "output": "./env/schema/output.json"
+  },
+  "info": {
+    "worker": {
+      "description": "./env/description/worker.md",
+      "tags": [
+        "sps"
+      ]
+    },
+    "input": {
+      "description": "./env/description/input.md",
+      "tags": [
+        "h"
+      ]
+    },
+    "output": {
+      "description": "./env/description/output.md",
+      "tags": [
+        ""
+      ]
+    }
+  }
+}

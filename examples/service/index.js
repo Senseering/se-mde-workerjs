@@ -1,19 +1,24 @@
 let Worker = require('../../src/worker')
 
-let config = './config/development.json'
+let config = './config.json'
 
-let worker = new Worker(config);
+let worker = new Worker();
 
 (async function () {
-    await worker.connect()
+    await worker.connect(config)
 
     let data = { test: 'Hello World!' }
     await worker.publish(data, { price: 0 })
 
     //publishes data only on demand
-    let service = async (incomingData) => {
-        //doo something
-        return data
+    let service = async (incomingData, log) => {
+        //do something
+        log('Processing data')
+
+        /*if (typeof ('test') !== 'object') {
+            throw new Error('Invalid data')
+        }*/
+        return { data: data, price: 0 }
     }
 
     worker.provide(service)

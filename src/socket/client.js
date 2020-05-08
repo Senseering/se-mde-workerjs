@@ -88,7 +88,9 @@ client.handleMessage = async function (fresponse) {
           isRegistered = true
         }
         if (fresponse.code === 200 && fresponse.event === "publish" && fresponse.id !== undefined) {
-          sendQueue[fresponse.id]("noticed: " + fresponse.id)
+          if (sendQueue[fresponse.id] !== undefined) {
+            sendQueue[fresponse.id]("noticed: " + fresponse.id)
+          }
         }
         client.pendingQueue = client.pendingQueue.filter(a => a.eventID != fresponse.eventID)
         client.unsentQueue = client.unsentQueue.filter(a => a.eventID != fresponse.eventID)
@@ -102,7 +104,7 @@ client.handleMessage = async function (fresponse) {
     delete fresponse.id
     await update(fresponse)
   } else if (fresponse.topic === "trigger" && client.hasOwnProperty('trigger')) {
-    debug('trigger initiated :' + JSON.stringify(fresponse))
+    debug('trigger initiated')
     status.report(fresponse.statusID, "Processing", "started", 'Service received job')
     client.trigger.execute(fresponse)
   } else if (fresponse.topic === 'pong') {

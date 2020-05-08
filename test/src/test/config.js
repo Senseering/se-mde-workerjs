@@ -68,8 +68,8 @@ module.exports = function () {
     it('Update profile and compare for update', async function () {
         let profile = { "name": "Example Source", "location": { "latitude": 52.5297268, "longitude": 13.400391 } }
         profile.name = "tests"
-        
-        let verison = await config.getVersion()
+
+        let version = await config.getVersion()
         await config.update("profile", profile)
         let res = await config.compare("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=@1588256356160." +
         "fvPRSm1EDCPeIrw9qaanppdW3L/Eb2V5Dxc7/mH0rP8=@1588256356160." +

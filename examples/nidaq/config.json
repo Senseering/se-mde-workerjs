@@ -1,0 +1,43 @@
+{
+  "credentials": "f2e0ec20-8f94-11ea-a2a5-81e89185deb0:b6ebf9ce2e954484bba6dc17e7944ad4",
+  "url": "https://rotterbruch-12.wzl.senseering.net/",
+  "settings": {
+    "qualityOfService": 1
+  },
+  "payment": {
+    "fixCost": 0,
+    "isFixCostOnly": false
+  },
+  "profile": {
+    "name": "NI-Daq importer",
+    "location": {
+      "latitude": 52.5297268,
+      "longitude": 13.400391
+    }
+  },
+  "privKey": "./env/key.pem",
+  "schema": {
+    "input": "./env/schema/input.json",
+    "output": "./env/schema/output.json"
+  },
+  "info": {
+    "worker": {
+      "description": "./env/description/worker.md",
+      "tags": [
+        "image processing"
+      ]
+    },
+    "input": {
+      "description": "./env/description/input.md",
+      "tags": [
+        "h"
+      ]
+    },
+    "output": {
+      "description": "./env/description/output.md",
+      "tags": [
+        ""
+      ]
+    }
+  }
+}

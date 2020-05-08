@@ -3,7 +3,8 @@
   "url": "http://localhost/",
   "settings": {
     "messageTimeout": 320000,
-    "messageRetries": 3
+    "messageRetries": 3,
+    "qualityOfService": 1
   },
   "payment": {
     "fixCost": 0,
