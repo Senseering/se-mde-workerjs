@@ -78,6 +78,7 @@ Worker.prototype.connect = async function (location) {
                 let missingConfig = await config.getChanges(changes)
                 await update.send(missingConfig)
             } catch (err) {
+                
                 debug(err.message)
                 if(i === (await config.get("settings")).messageRetries)
                     throw err

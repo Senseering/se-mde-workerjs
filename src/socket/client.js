@@ -117,6 +117,10 @@ client.handleMessage = async function (fresponse) {
     console.log(fresponse.topic)
   } else if (fresponse.topic === 'update') {
     console.log(fresponse.topic)
+  } else if (fresponse.topic === 'update-status') {
+    if(client.config.isUpdated.resolve){
+      client.config.isUpdated.resolve(fresponse.message)
+    }
   } else {
     debug('Unknown message topic received: ' + fresponse.topic)
   }
