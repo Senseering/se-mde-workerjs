@@ -44,8 +44,12 @@ client.init = async () => {
     }
 
     if (client.socket.readyState == 1) {
-      client.socket.send(msg)
-      client.pendingQueue.push({ eventID: message.eventID, topic: topic, message: msg })
+
+      if (topic == 'publish') {
+        if (!(await config.get('settings')).qualityOfService) {
+          event.resolvePromise('noticed: ' + eventID)
+        }
+      }
     } else {
       client.unsentQueue.push({ eventID: message.eventID, topic: topic, message: msg })
     }
@@ -88,8 +92,12 @@ client.handleMessage = async function (fresponse) {
           isRegistered = true
         }
         if (fresponse.code === 200 && fresponse.event === "publish" && fresponse.id !== undefined) {
-          if (sendQueue[fresponse.id] !== undefined) {
-            sendQueue[fresponse.id]("noticed: " + fresponse.id)
+          if ((await config.get('settings')).qualityOfService) {
+            if (client.pendingQueue[fresponse.id] !== undefined) {
+              client.pendingQueue[fresponse.id].resolvePromise("noticed: " + fresponse.id)
+            } else {
+              client.unsentQueue[fresponse.id].resolvePromise("noticed: " + fresponse.id)
+            }
           }
         }
         client.pendingQueue = client.pendingQueue.filter(a => a.eventID != fresponse.eventID)
