@@ -23,7 +23,9 @@ let publish = async function (package, { statusID = undefined, key, resolvePromi
         }
 
         //publish data
+        package.resolvePromise = resolvePromise
         await client.socket.transmit('publish', 'initial', package, package._id)
+
         return { data: package.data, id: package._id }
     } catch (error) {
         debug(error.message.red)
