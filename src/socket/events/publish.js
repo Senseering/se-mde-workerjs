@@ -9,7 +9,7 @@ const verify = require('../../utils/verify')
  * Publishes the output data on the manager
  * @param {Object} data The actual data package that should be published
  */
-let publish = async function (package, { statusID = undefined, key, resolvePromise, ttl = undefined, qos } = {}) {
+let publish = async function (package, { statusID = undefined, key, resolvePromise, ttl = undefined } = {}) {
     try {
         verify.appendSignature(package, key)
 
@@ -23,13 +23,9 @@ let publish = async function (package, { statusID = undefined, key, resolvePromi
         }
 
         //publish data
-        if (qos) {
-            client.succsessfullySend(package._id, resolvePromise)
-            client.socket.transmit('publish', 'unsent', package)
-        } else {
-            resolvePromise('noticed: ' + package._id)
-            client.socket.transmit('publish', 'unsent', package)
-        }
+        package.resolvePromise = resolvePromise
+        await client.socket.transmit('publish', 'initial', package, package._id)
+
         return { data: package.data, id: package._id }
     } catch (error) {
         debug(error.message.red)

@@ -44,7 +44,7 @@ Trigger.prototype.execute = async function (msg) {
             let workerIDs = typeof (msg.workerIDs) == 'string' ? [msg.workerIDs] : msg.workerIDs
 
             try {
-                let calculations = await this.service(msg.data, function (message) { status.report(statusID, 'Processing', 'log', message) })
+                let calculations = await this.service(msg.data, function (message) { await status.report(statusID, 'Processing', 'log', message) })
 
                 let data = calculations
                 let options = {}
@@ -79,11 +79,11 @@ Trigger.prototype.execute = async function (msg) {
                 })
                 await receivePromise
 
-                status.report(statusID, 'Processing', 'done', 'calculations done')
+                await status.report(statusID, 'Processing', 'done', 'calculations done')
             }
             catch (error) {
                 debug('Error during execution of service: ' + error)
-                status.report(statusID, 'Processing', 'error', error.message, 1)
+                await status.report(statusID, 'Processing', 'error', error.message, 1)
             }
         } else {
             debug('Message not for this worker')
