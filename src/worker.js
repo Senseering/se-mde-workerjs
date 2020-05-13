@@ -91,10 +91,9 @@ Worker.prototype.publish = async function (data, options) {
         }
     }
 
-    let qos = (await config.get('settings')).qualityOfService
     let receivePromise = new Promise(async (resolve, reject) => {
         try {
-            result = await publish({ meta, data }, { statusID: undefined, key: this.key, resolvePromise: resolve, ttl: options.ttl, qos: qos })
+            result = await publish({ meta, data }, { statusID: undefined, key: this.key, resolvePromise: resolve, ttl: options.ttl })
         } catch (err) {
             reject(err)
         }

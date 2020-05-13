@@ -16,8 +16,6 @@ let client = {}
 client.unsentQueue = []
 client.pendingQueue = []
 
-let sendQueue = []
-
 client.init = async () => {
   let fullConfig = await config.get("full")
   let url = new URL(fullConfig.url)
@@ -33,21 +31,39 @@ client.init = async () => {
     client.processQueue()
   }
 
-  client.socket.transmit = function (topic, status, message) {
-    let msg
-    if (status === 'unsent' && typeof (message) == "object") {
-      message.eventID = uuidV1()
-      msg = format.output(topic, message)
+  client.socket.transmit = async function (topic, status, message, eventID) {
+
+    let event = {
+      topic: topic
+    }
+    eventID = (eventID === undefined) ? uuidV1() : eventID
+
+    if (status === 'initial' && typeof (message) == "object") {
+      message.eventID = eventID
+      if (topic == 'publish') {
+        event.resolvePromise = message.resolvePromise
+        delete message.resolvePromise
+      }
+      event.message = format.output(topic, message)
     } else {
-      msg = message.message
-      delete msg.topic
+      if (topic == 'publish') {
+        event.resolvePromise = message.resolvePromise
+        delete message.resolvePromise
+      }
+      event.message = message.message
     }
 
     if (client.socket.readyState == 1) {
-      client.socket.send(msg)
-      client.pendingQueue.push({ eventID: message.eventID, topic: topic, message: msg })
+      client.socket.send(event.message)
+      client.pendingQueue[eventID] = event
+
+      if (topic == 'publish') {
+        if (!(await config.get('settings')).qualityOfService) {
+          event.resolvePromise('noticed: ' + eventID)
+        }
+      }
     } else {
-      client.unsentQueue.push({ eventID: message.eventID, topic: topic, message: msg })
+      client.unsentQueue[eventID] = event
     }
   }
 
@@ -88,12 +104,16 @@ client.handleMessage = async function (fresponse) {
           isRegistered = true
         }
         if (fresponse.code === 200 && fresponse.event === "publish" && fresponse.id !== undefined) {
-          if (sendQueue[fresponse.id] !== undefined) {
-            sendQueue[fresponse.id]("noticed: " + fresponse.id)
+          if ((await config.get('settings')).qualityOfService) {
+            if (client.pendingQueue[fresponse.id] !== undefined) {
+              client.pendingQueue[fresponse.id].resolvePromise("noticed: " + fresponse.id)
+            } else {
+              client.unsentQueue[fresponse.id].resolvePromise("noticed: " + fresponse.id)
+            }
           }
         }
-        client.pendingQueue = client.pendingQueue.filter(a => a.eventID != fresponse.eventID)
-        client.unsentQueue = client.unsentQueue.filter(a => a.eventID != fresponse.eventID)
+        delete client.pendingQueue[fresponse.id]
+        delete client.unsentQueue[fresponse.id]
         debug('(Code ' + fresponse.code + ') ' + (fresponse.code == 200 ? 'Successful' : 'Error') + ' response from "' + fresponse.event + '": ' + fresponse.msg)
       }
     } catch (err) {
@@ -127,14 +147,15 @@ client.handleMessage = async function (fresponse) {
 }
 
 client.processQueue = function () {
-  if (client.unsentQueue.length > 0) {
-    while (client.socket.readyState == 1 && client.unsentQueue.length > 0) {
-      debug((client.unsentQueue.length > 1 ? 'There are ' + client.unsentQueue.length + ' unsent messages. Processing...' : 'There is 1 unsent message. Processing...'))
-      let message = client.unsentQueue[0]
-      client.socket.transmit(message.topic, 'queued', message)
-      client.unsentQueue.shift()
+  if (Object.keys(client.unsentQueue).length > 0) {
+    while (client.socket.readyState == 1 && Object.keys(client.unsentQueue).length > 0) {
+      debug((Object.keys(client.unsentQueue).length > 1 ? 'There are ' + Object.keys(client.unsentQueue).length + ' unsent messages. Processing...' : 'There is 1 unsent message. Processing...'))
+      let eventID = Object.keys(client.unsentQueue)[0]
+      let message = client.unsentQueue[eventID]
+      client.socket.transmit(message.topic, 'queued', message, eventID)
+      delete client.unsentQueue[eventID]
     }
-    if (client.unsentQueue.length == 0) {
+    if (Object.keys(client.unsentQueue).length == 0) {
       debug('All unsent messages sent')
     }
   } else {
@@ -186,23 +207,17 @@ client.isConnected = async function () {
     let counter = 1
     let interval = setInterval(function () {
       if (isConnected) {
-        client.pendingQueue = client.pendingQueue.filter(a => a.topic != 'ping')
-        client.unsentQueue = client.unsentQueue.filter(a => a.topic != 'ping')
         resolve(true)
         clearInterval(interval)
       } else if (counter > 1000) {
         reject(false)
         clearInterval(interval)
       } else {
-        client.socket.transmit('ping', 'unsent', {})
+        client.socket.send(format.output('ping', {}))
       }
       counter++
     }, 300)
   })
-}
-
-client.succsessfullySend = async function (data_id, resolve) {
-  sendQueue[data_id] = resolve
 }
 
 client.disconnect = async function () {
