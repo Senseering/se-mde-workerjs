@@ -131,6 +131,7 @@ client.handleMessage = async function (fresponse) {
     isConnected = true
   } else if (fresponse.topic === 'change') {
     if(client.config.isCompared.resolve){
+      clearTimeout(client.config.isCompared.timeout)
       client.config.isCompared.resolve(fresponse.message)
     }
   } else if (fresponse.topic === 'compare') {
@@ -139,6 +140,7 @@ client.handleMessage = async function (fresponse) {
     console.log(fresponse.topic)
   } else if (fresponse.topic === 'update-status') {
     if(client.config.isUpdated.resolve){
+      clearTimeout(client.config.isUpdated.timeout)
       client.config.isUpdated.resolve(fresponse.message)
     }
   } else {

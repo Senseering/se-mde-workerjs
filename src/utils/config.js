@@ -18,7 +18,7 @@ VERSION_ORDER.forEach((configuration) => config.version[configuration] = {})
 
 /** 
  * Initialisises the config and reads it the first time
-*/
+ */
 config.init = async function (path = "./config.json") {
     config.file = new Promise(async (resolve, reject) => {
         try {
