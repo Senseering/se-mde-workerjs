@@ -39,42 +39,17 @@ Worker.prototype.connect = async function (location) {
     if (!this.isRegistered) {
         this.key = new NodeRSA(await config.get('privKey'))
 
-        debug('Fetching registration details')
-
-        let schema = {}
-        let info = {}
-        //worker without community
-        schema.input = (await config.get('schema')).input
-        schema.output = (await config.get('schema')).output
-        info = {
-            description: (await config.get('info')).worker.description,
-            tags: (await config.get('info')).worker.tags,
-            input: (await config.get('info')),
-            output: (await config.get('info'))
-
-        }
-
-
-        //initialize websocket client and register worker on manager
-        let registration = {
-            schema: schema,
-            info: info,
-            settings: (await config.get("settings")),
-            pubkey: this.key.exportKey('public'),
-            name: (await config.get('profile')).name,
-            payment: (await config.get('payment')),
-            apikey: (await config.get('credentials')).split(":")[1],
-            location: (await config.get('profile')).location,
-            id: (await config.get('credentials')).split(":")[0]
-        }
-
         debug('Registering worker')
         for (let i = 0; i < (await config.get("settings")).messageRetries; i++) {
             try {
+                debug("Retrieving worker version ...")
                 let version = await config.getVersion()
+                debug("Comparing changes with manager ...")
                 let changes = await compare.send(version)
+                debug("Comparing changes locally ...")
                 if (changes.split(".").map((change) => !Boolean(Number(change))).reduce((a, b) => a && b))
                     break;
+                debug("Transferin local changes ...")
                 let missingConfig = await config.getChanges(changes)
                 await update.send(missingConfig)
             } catch (err) {
