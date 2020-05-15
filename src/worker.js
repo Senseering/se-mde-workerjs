@@ -3,6 +3,7 @@ const config = require('./utils/config')
 const debug = require('debug')('worker')
 const compare = require("./socket/methods/compare")
 const update = require("./socket/methods/update")
+const change = require("./socket/methods/change")
 require('colors')
 
 const client = require('./socket/client')
@@ -36,33 +37,45 @@ Worker.prototype.connect = async function (location) {
 
 
     //register worker if not already done in the past
-    if (!this.isRegistered) {
-        this.key = new NodeRSA(await config.get('privKey'))
+    this.key = new NodeRSA(await config.get('privKey'))
 
-        debug('Registering worker')
-        for (let i = 0; i < (await config.get("settings")).messageRetries; i++) {
-            try {
-                debug("Retrieving worker version ...")
-                let version = await config.getVersion()
-                debug("Comparing changes with manager ...")
-                let changes = await compare.send(version)
-                debug("Comparing changes locally ...")
-                if (changes.split(".").map((change) => !Boolean(Number(change))).reduce((a, b) => a && b))
-                    break;
-                debug("Transferin local changes ...")
-                let missingConfig = await config.getChanges(changes)
-                await update.send(missingConfig)
-            } catch (err) {
-                
-                debug(err.message)
-                if(i === (await config.get("settings")).messageRetries)
-                    throw err
-            }
-        }
-        this.isRegistered = true
-        debug('Worker registered in system')
-    }
+    debug('Registering worker')
+    await updateConfig()
+    client.onUpdate = updateConfig
     debug('Initialisation done')
+}
+
+let updateConfig = async function () {
+    for (let i = 0; i < (await config.get("settings")).messageRetries; i++) {
+        try {
+            debug("Retrieving worker version ...")
+            let version = await config.getVersion()
+            debug("Comparing changes with manager ...")
+            let changes = await compare.send(version)
+            debug("Comparing changes locally ...")
+            if (changes.split(".").map((change) => !Boolean(Number(change))).reduce((a, b) => a && b))
+                break; // Leave loop if no changes detected
+            debug("Transferin local changes ...")
+            let missingConfig = await config.getChanges(changes)
+            await update.send(missingConfig)
+            if (changes.split(".").map((change) => change === "-1").reduce((a, b) => a || b)) {
+                // If there is one change that is newer on manager request the change
+                // TODO add no changes allowed worker
+                let updates = await change.send(changes)
+                for (const update of Object.keys(updates)) {
+                    try {
+                        await config.update(update, updates[update], { recursive: true })
+                    } catch (error) {
+                        throw new Error("Update from remote failed: " + error.message)
+                    }
+                }
+            }
+
+        } catch (err) {
+            if (i === (await config.get("settings")).messageRetries - 1)
+                throw err
+        }
+    }
 }
 
 

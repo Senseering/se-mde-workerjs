@@ -244,10 +244,12 @@ config.compare = async function (version) {
 config.getChanges = async function (changes){
     let result = {}
     for (const [index, change] of (changes.split(".")).entries()) {
-        if(VERSION_ORDER[index] !== "privKey"){
-            result[VERSION_ORDER[index]] = await config.get(VERSION_ORDER[index])
-        } else {
-            result["pubkey"] =  (new NodeRSA(await config.get(VERSION_ORDER[index]))).exportKey('public')
+        if(change === "1"){
+            if(VERSION_ORDER[index] !== "privKey"){
+                result[VERSION_ORDER[index]] = await config.get(VERSION_ORDER[index])
+            } else {
+                result["pubkey"] =  (new NodeRSA(await config.get(VERSION_ORDER[index]))).exportKey('public')
+            }
         }
     }
     return result
@@ -259,10 +261,10 @@ config.getChanges = async function (changes){
  * @param configuration The update configuration
 */
 config.update = async function (field, configuration, { recursive = false, spacing = 2 } = {}) {
-    debug("Updating: " + field)
     let managedConfig = await config.file
 
     config.file = new Promise(async (resolve, reject) => {
+        debug("Updating: " + field)
         try {
             let configFile = JSON.parse(await fs.readFile(config.path, "utf-8"))
 

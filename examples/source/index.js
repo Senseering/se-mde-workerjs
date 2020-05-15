@@ -9,5 +9,5 @@ let worker = new Worker();
 
     let data = { test: 'Hello world!' }
     await worker.publish(data)
-    await worker.disconnect()
+    //await worker.disconnect()
 })();
