@@ -1,6 +1,9 @@
 const NodeRSA = require('node-rsa')
 const config = require('./utils/config')
 const debug = require('debug')('worker')
+const compare = require("./socket/methods/compare")
+const update = require("./socket/methods/update")
+const change = require("./socket/methods/change")
 require('colors')
 
 const client = require('./socket/client')
@@ -34,45 +37,45 @@ Worker.prototype.connect = async function (location) {
 
 
     //register worker if not already done in the past
-    if (!this.isRegistered) {
-        this.key = new NodeRSA(await config.get('privKey'))
+    this.key = new NodeRSA(await config.get('privKey'))
 
-        debug('Fetching registration details')
-
-        let schema = {}
-        let info = {}
-        //worker without community
-        schema.input = (await config.get('schema')).input
-        schema.output = (await config.get('schema')).output
-        info = {
-            description: (await config.get('info')).worker.description,
-            tags: (await config.get('info')).worker.tags,
-            input: (await config.get('info')),
-            output: (await config.get('info'))
-
-        }
-
-
-        //initialize websocket client and register worker on manager
-        let registration = {
-            schema: schema,
-            info: info,
-            pubkey: this.key.exportKey('public'),
-            name: (await config.get('profile')).name,
-            payment: (await config.get('payment')),
-            apikey: (await config.get('credentials')).split(":")[1],
-            location: (await config.get('profile')).location,
-            id: (await config.get('credentials')).split(":")[0]
-        }
-
-        debug('Registering worker')
-
-        await register(registration)
-        await client.isRegistered()
-        this.isRegistered = true
-        debug('Worker registered in system')
-    }
+    debug('Registering worker')
+    await updateConfig()
+    client.onUpdate = updateConfig
     debug('Initialisation done')
+}
+
+let updateConfig = async function () {
+    for (let i = 0; i < (await config.get("settings")).messageRetries; i++) {
+        try {
+            debug("Retrieving worker version ...")
+            let version = await config.getVersion()
+            debug("Comparing changes with manager ...")
+            let changes = await compare.send(version)
+            debug("Comparing changes locally ...")
+            if (changes.split(".").map((change) => !Boolean(Number(change))).reduce((a, b) => a && b))
+                break; // Leave loop if no changes detected
+            debug("Transferin local changes ...")
+            let missingConfig = await config.getChanges(changes)
+            await update.send(missingConfig)
+            if (changes.split(".").map((change) => change === "-1").reduce((a, b) => a || b)) {
+                // If there is one change that is newer on manager request the change
+                // TODO add no changes allowed worker
+                let updates = await change.send(changes)
+                for (const update of Object.keys(updates)) {
+                    try {
+                        await config.update(update, updates[update], { recursive: true })
+                    } catch (error) {
+                        throw new Error("Update from remote failed: " + error.message)
+                    }
+                }
+            }
+
+        } catch (err) {
+            if (i === (await config.get("settings")).messageRetries - 1)
+                throw err
+        }
+    }
 }
 
 

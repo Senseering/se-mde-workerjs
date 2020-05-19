@@ -55,14 +55,14 @@ module.exports = function () {
         expect(res).to.equal("1.1.1.1")
     })
 
-    it('Test comparison with corect version & without timestamp', async function () {
-        let res = await config.compare("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=" + "." +
-            "Y8DlQawRYn8MmAjCUuL54lFWDNojIG2EWiMd0jF3qbs=" + "." +
-            "VQeu2MgSOLu34V4Kjbxu0A1+Gd0f7VWtHPWx+IbkvO8=" + "." +
+    it('Test comparison with correct version & without timestamp', async function () {
+        let res = await config.compare("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=." +
+            "fvPRSm1EDCPeIrw9qaanppdW3L/Eb2V5Dxc7/mH0rP8=." +
+            "VQeu2MgSOLu34V4Kjbxu0A1+Gd0f7VWtHPWx+IbkvO8=." +
             "qxSxXd4M+iRKnNYRew0iplyBMSoOElGqfmJ4VpOHniM=." +
-            "6IwsTmsYTop89NViiVKu/BSM/6H7myb3sR691R35L+Q=")
-
-        expect(res).to.equal("0.0.0.0.0")
+            "6IwsTmsYTop89NViiVKu/BSM/6H7myb3sR691R35L+Q=." + 
+            "9u0Sz94te0sjlwG+9k3Hb2qkLoNg2DqQRzTpOecAcPQ=")
+        expect(res).to.equal("0.0.0.0.0.0")
     })
 
     it('Update profile and compare for update', async function () {
@@ -72,12 +72,12 @@ module.exports = function () {
         let version = await config.getVersion()
         await config.update("profile", profile)
         let res = await config.compare("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=@1588256356160." +
-            "Y8DlQawRYn8MmAjCUuL54lFWDNojIG2EWiMd0jF3qbs=@1588256356160." +
-            "VQeu2MgSOLu34V4Kjbxu0A1+Gd0f7VWtHPWx+IbkvO8=@1588256356160." +
-            "qxSxXd4M+iRKnNYRew0iplyBMSoOElGqfmJ4VpOHniM=@1588256356160." +
-            "6IwsTmsYTop89NViiVKu/BSM/6H7myb3sR691R35L+Q=@1588256356160")
-
-        expect(res).to.equal("0.0.-1.0.0")
+        "fvPRSm1EDCPeIrw9qaanppdW3L/Eb2V5Dxc7/mH0rP8=@1588256356160." +
+        "VQeu2MgSOLu34V4Kjbxu0A1+Gd0f7VWtHPWx+IbkvO8=@1588256356160." +
+        "qxSxXd4M+iRKnNYRew0iplyBMSoOElGqfmJ4VpOHniM=@1588256356160." +
+        "6IwsTmsYTop89NViiVKu/BSM/6H7myb3sR691R35L+Q=@1588256356160." +
+        "9u0Sz94te0sjlwG+9k3Hb2qkLoNg2DqQRzTpOecAcPQ=@1588256356160")
+        expect(res).to.equal("0.0.-1.0.0.0")
         profile.name = "Example Source"
         await config.update("profile", profile)
     })
@@ -86,10 +86,11 @@ module.exports = function () {
         let res = await config.getVersion()
 
         expect(res).to.equal("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
-            "Y8DlQawRYn8MmAjCUuL54lFWDNojIG2EWiMd0jF3qbs=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
+            "fvPRSm1EDCPeIrw9qaanppdW3L/Eb2V5Dxc7/mH0rP8=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
             "VQeu2MgSOLu34V4Kjbxu0A1+Gd0f7VWtHPWx+IbkvO8=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
             "qxSxXd4M+iRKnNYRew0iplyBMSoOElGqfmJ4VpOHniM=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
-            "6IwsTmsYTop89NViiVKu/BSM/6H7myb3sR691R35L+Q=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs))
+            "6IwsTmsYTop89NViiVKu/BSM/6H7myb3sR691R35L+Q=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
+            "9u0Sz94te0sjlwG+9k3Hb2qkLoNg2DqQRzTpOecAcPQ=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs))
     })
 
     it('Update profile with wrong config and throw', async function () {

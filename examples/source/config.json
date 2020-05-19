@@ -1,18 +1,20 @@
 {
-  "credentials": "386ecc70-9045-11ea-9aca-234ce0d47534:4a3ad8514a6d40d3bcb555c3f9fd40cb",
-  "url": "http://localhost/",
+  "credentials": "b3c5a670-9601-11ea-adab-d1c58a58c60a:e28c741681534c36b21ce689834d91c4",
+  "url": "https://labor2.felix.senseering.net/",
   "settings": {
+    "messageTimeout": 10000,
+    "messageRetries": 1,
     "qualityOfService": 1
   },
   "payment": {
-    "fixCost": 0,
+    "fixCost": 16,
     "isFixCostOnly": false
   },
   "profile": {
     "name": "Example Source",
     "location": {
-      "latitude": 52.5297268,
-      "longitude": 13.400391
+      "latitude": 52.529726,
+      "longitude": 13.40039
     }
   },
   "privKey": "./env/key.pem",
@@ -24,7 +26,8 @@
     "worker": {
       "description": "./env/description/worker.md",
       "tags": [
-        "image processing"
+        "image processing",
+        "klon"
       ]
     },
     "input": {
