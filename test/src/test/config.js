@@ -55,12 +55,12 @@ module.exports = function () {
         expect(res).to.equal("1.1.1.1")
     })
 
-    it('Test comparison with corect version & without timestamp', async function () {
-        let res = await config.compare("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=" + "." +
-            "fvPRSm1EDCPeIrw9qaanppdW3L/Eb2V5Dxc7/mH0rP8=" + "." +
-            "VQeu2MgSOLu34V4Kjbxu0A1+Gd0f7VWtHPWx+IbkvO8=" + "." +
-            "A3Yy7ktfY8fJ8rXN7WTuIsSfC4TDNPWH4kb+LEerq2I=." +
-            "RBNvo1WzZ4oRRq0W9+hknpT7T8If536DEMBg9hyq/4o=." + 
+    it('Test comparison with correct version & without timestamp', async function () {
+        let res = await config.compare("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=." +
+            "fvPRSm1EDCPeIrw9qaanppdW3L/Eb2V5Dxc7/mH0rP8=." +
+            "VQeu2MgSOLu34V4Kjbxu0A1+Gd0f7VWtHPWx+IbkvO8=." +
+            "qxSxXd4M+iRKnNYRew0iplyBMSoOElGqfmJ4VpOHniM=." +
+            "6IwsTmsYTop89NViiVKu/BSM/6H7myb3sR691R35L+Q=." + 
             "9u0Sz94te0sjlwG+9k3Hb2qkLoNg2DqQRzTpOecAcPQ=")
         expect(res).to.equal("0.0.0.0.0.0")
     })
@@ -74,8 +74,8 @@ module.exports = function () {
         let res = await config.compare("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=@1588256356160." +
         "fvPRSm1EDCPeIrw9qaanppdW3L/Eb2V5Dxc7/mH0rP8=@1588256356160." +
         "VQeu2MgSOLu34V4Kjbxu0A1+Gd0f7VWtHPWx+IbkvO8=@1588256356160." +
-        "A3Yy7ktfY8fJ8rXN7WTuIsSfC4TDNPWH4kb+LEerq2I=@1588256356160." +
-        "RBNvo1WzZ4oRRq0W9+hknpT7T8If536DEMBg9hyq/4o=@1588256356160." +
+        "qxSxXd4M+iRKnNYRew0iplyBMSoOElGqfmJ4VpOHniM=@1588256356160." +
+        "6IwsTmsYTop89NViiVKu/BSM/6H7myb3sR691R35L+Q=@1588256356160." +
         "9u0Sz94te0sjlwG+9k3Hb2qkLoNg2DqQRzTpOecAcPQ=@1588256356160")
         expect(res).to.equal("0.0.-1.0.0.0")
         profile.name = "Example Source"
@@ -88,8 +88,8 @@ module.exports = function () {
         expect(res).to.equal("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
             "fvPRSm1EDCPeIrw9qaanppdW3L/Eb2V5Dxc7/mH0rP8=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
             "VQeu2MgSOLu34V4Kjbxu0A1+Gd0f7VWtHPWx+IbkvO8=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
-            "A3Yy7ktfY8fJ8rXN7WTuIsSfC4TDNPWH4kb+LEerq2I=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
-            "RBNvo1WzZ4oRRq0W9+hknpT7T8If536DEMBg9hyq/4o=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
+            "qxSxXd4M+iRKnNYRew0iplyBMSoOElGqfmJ4VpOHniM=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
+            "6IwsTmsYTop89NViiVKu/BSM/6H7myb3sR691R35L+Q=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
             "9u0Sz94te0sjlwG+9k3Hb2qkLoNg2DqQRzTpOecAcPQ=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs))
     })
 
