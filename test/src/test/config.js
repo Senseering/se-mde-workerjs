@@ -1,5 +1,5 @@
-let config = require("../../../src/utils/config");
-const fs = require("fs").promises
+let config = require("../../../src/utils/config/config");
+
 
 module.exports = function ({CONFIG_PATH} = {}) {
     let expect = require('chai').expect;

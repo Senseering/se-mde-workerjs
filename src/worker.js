@@ -1,5 +1,5 @@
 const NodeRSA = require('node-rsa')
-const config = require('./utils/config')
+const config = require('./utils/config/config')
 const debug = require('debug')('worker')
 const compare = require("./socket/methods/compare")
 const update = require("./socket/methods/update")

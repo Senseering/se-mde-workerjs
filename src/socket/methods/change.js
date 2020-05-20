@@ -1,4 +1,4 @@
-const config = require('../../utils/config')
+const config = require('../../utils/config/config')
 const client = require('../client')
 
 let change = {}

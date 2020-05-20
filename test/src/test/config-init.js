@@ -1,4 +1,4 @@
-let config = require("../../../src/utils/config");
+let config = require("../../../src/utils/config/config");
 
 module.exports = function ({CONFIG_PATH} = {}) {
     let expect = require('chai').expect;
