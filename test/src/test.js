@@ -2,23 +2,36 @@
 const { sleep } = require("./utils/sleep")
 
 //define test import function
-let importTest = function (name, path, data) {
+let importTest = function (name, path, config) {
     describe(name, function () {
-        require(path)(data);
+        require(path)(config);
     });
 }
 
+let config = require("../../src/utils/config");
+let CONFIG_PATH = "./test/data/config.json"
 
-describe("Startet testing all worker functions ", function () {
+describe("Testing configuration initalisation", function () {
+    importTest("Check for different bad initalisations","./test/config-init")
+})
 
-    //initialize storage 
-    before(async () => {
-        //doSometing
+describe("Testing configuration for [Persistent File Storage]", function () {
+
+    beforeEach(async () => {
+        await config.init(CONFIG_PATH)
     })
 
-    //add your tests here!
-    importTest("Testing configuration","./test/config");
+    importTest("Testing configuration","./test/config", {
+        CONFIG_PATH
+    })
+})
 
 
-    //importTest( "Reverter -  reverting changes", "./reverter/reverter.js", storage, expected); //not working
-});
+describe("Testing configuration for [In Memory]", function () {
+
+    before(async () => {
+        await config.init(CONFIG_PATH)
+    })
+
+    importTest("Testing configuration","./test/config", {CONFIG_PATH})
+})

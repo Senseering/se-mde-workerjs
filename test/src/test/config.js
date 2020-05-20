@@ -1,29 +1,8 @@
 let config = require("../../../src/utils/config");
 const fs = require("fs").promises
-let CONFIG_PATH = "./test/data/config.json"
 
-module.exports = function () {
-
+module.exports = function ({CONFIG_PATH} = {}) {
     let expect = require('chai').expect;
-    beforeEach(async () => {
-        await config.init(CONFIG_PATH)
-    })
-
-    it('Bad config should throw (malformed id)', async function () {
-        try {
-            await config.init("./test/data/badIDConfig.json")
-        } catch (err) {
-            expect(err).to.be.an('error');
-        }
-    })
-
-    it('Bad config should throw (malformed url)', async function () {
-        try {
-            await config.init("./test/data/badURLConfig.json")
-        } catch (err) {
-            expect(err).to.be.an('error');
-        }
-    })
 
     it('Test load full config', async function () {
         let res = await config.get("full")
@@ -67,9 +46,8 @@ module.exports = function () {
 
     it('Update profile and compare for update', async function () {
         let profile = { "name": "Example Source", "location": { "latitude": 52.5297268, "longitude": 13.400391 } }
-        profile.name = "tests"
+        profile.name = "tests" // Set profile to different version
 
-        let version = await config.getVersion()
         await config.update("profile", profile)
         let res = await config.compare("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=@1588256356160." +
         "fvPRSm1EDCPeIrw9qaanppdW3L/Eb2V5Dxc7/mH0rP8=@1588256356160." +
@@ -77,20 +55,26 @@ module.exports = function () {
         "qxSxXd4M+iRKnNYRew0iplyBMSoOElGqfmJ4VpOHniM=@1588256356160." +
         "6IwsTmsYTop89NViiVKu/BSM/6H7myb3sR691R35L+Q=@1588256356160." +
         "9u0Sz94te0sjlwG+9k3Hb2qkLoNg2DqQRzTpOecAcPQ=@1588256356160")
-        expect(res).to.equal("0.0.-1.0.0.0")
+        expect(res).to.equal("0.0.-1.0.0.0") // The manager should update his version of the file because ours is newer
         profile.name = "Example Source"
-        await config.update("profile", profile)
+        await config.update("profile", profile) // Revert changes 
     })
 
     it('Check getVersion for correct result', async function () {
         let res = await config.getVersion()
 
-        expect(res).to.equal("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
-            "fvPRSm1EDCPeIrw9qaanppdW3L/Eb2V5Dxc7/mH0rP8=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
-            "VQeu2MgSOLu34V4Kjbxu0A1+Gd0f7VWtHPWx+IbkvO8=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
-            "qxSxXd4M+iRKnNYRew0iplyBMSoOElGqfmJ4VpOHniM=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
-            "6IwsTmsYTop89NViiVKu/BSM/6H7myb3sR691R35L+Q=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs) + "." +
-            "9u0Sz94te0sjlwG+9k3Hb2qkLoNg2DqQRzTpOecAcPQ=@" + parseInt((await fs.lstat(CONFIG_PATH)).mtimeMs))
+        expect(res).to.equal("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=@" + parseInt(res.split(".")[0].split("@")[1]) + "." +
+            "fvPRSm1EDCPeIrw9qaanppdW3L/Eb2V5Dxc7/mH0rP8=@" + parseInt(res.split(".")[1].split("@")[1]) + "." +
+            "VQeu2MgSOLu34V4Kjbxu0A1+Gd0f7VWtHPWx+IbkvO8=@" + parseInt(res.split(".")[2].split("@")[1]) + "." +
+            "qxSxXd4M+iRKnNYRew0iplyBMSoOElGqfmJ4VpOHniM=@" + parseInt(res.split(".")[3].split("@")[1]) + "." +
+            "6IwsTmsYTop89NViiVKu/BSM/6H7myb3sR691R35L+Q=@" + parseInt(res.split(".")[4].split("@")[1]) + "." +
+            "9u0Sz94te0sjlwG+9k3Hb2qkLoNg2DqQRzTpOecAcPQ=@" + parseInt(res.split(".")[5].split("@")[1]))
+
+        res.split(".").forEach((timestampString) => {
+            let timestamp = parseInt(timestampString.split("@")[1])
+            let date = new Date(timestamp)
+            expect(date > new Date(1589969549193)).to.be.true // Be older then some arbitary date in the past and be no invalid date
+        })
     })
 
     it('Update profile with wrong config and throw', async function () {
