@@ -6,7 +6,7 @@ const Ajv = require('ajv')
 const ajv = new Ajv()
 const NodeRSA = require('node-rsa')
 const validateConfig = ajv.compile(require("./configSchema.json"));
-const VERSION_ORDER = ["schema", "privKey", "profile", "info", "settings", "payment"]
+const VERSION_ORDER = ["schema", "privKey", "profile", "info", "settings"]
 const PRIVAT_KEY_BIT = 1024
 
 
@@ -18,7 +18,7 @@ VERSION_ORDER.forEach((configuration) => config.version[configuration] = {})
 
 /** 
  * Initialisises the config and reads it the first time
- */
+*/
 config.init = async function (path = "./config.json") {
     config.file = new Promise(async (resolve, reject) => {
         try {
@@ -183,13 +183,7 @@ config.getVersion = async function () {
 */
 config.updateVersion = async function (field, configuration) {
     let configFile = JSON.parse(await fs.readFile(config.path, "utf-8"))
-    let configurationHash
-    if(field === "privKey"){
-        let key = (new NodeRSA(configuration)).exportKey('public')
-        configurationHash = crypto.createHash('sha256').update(key).digest('base64')
-    }else{
-        configurationHash = crypto.createHash('sha256').update(JSON.stringify(configuration)).digest('base64')
-    }
+    let configurationHash = crypto.createHash('sha256').update(JSON.stringify(configuration)).digest('base64')
     let configurationTimestamp = parseInt((await fs.lstat(config.path)).mtimeMs)
     let valid = validateConfig(configFile)
     if (!valid)
@@ -237,34 +231,16 @@ config.compare = async function (version) {
     return change.join(".")
 }
 
-/**
- * Returns the requested changes
- * @param changes Requested changes e.g. 1.1.1.1.1
- */
-config.getChanges = async function (changes){
-    let result = {}
-    for (const [index, change] of (changes.split(".")).entries()) {
-        if(change === "1"){
-            if(VERSION_ORDER[index] !== "privKey"){
-                result[VERSION_ORDER[index]] = await config.get(VERSION_ORDER[index])
-            } else {
-                result["pubkey"] =  (new NodeRSA(await config.get(VERSION_ORDER[index]))).exportKey('public')
-            }
-        }
-    }
-    return result
-}
-
 /** 
  * Updating specific field with a configuration
  * @param field The field to update
  * @param configuration The update configuration
 */
 config.update = async function (field, configuration, { recursive = false, spacing = 2 } = {}) {
+    debug("Updating: " + field)
     let managedConfig = await config.file
 
     config.file = new Promise(async (resolve, reject) => {
-        debug("Updating: " + field)
         try {
             let configFile = JSON.parse(await fs.readFile(config.path, "utf-8"))
 
@@ -372,6 +348,5 @@ module.exports = {
     init: config.init,
     update: config.update,
     getVersion: config.getVersion,
-    getChanges: config.getChanges,
     VERSION_ORDER,
 }
