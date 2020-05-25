@@ -1,4 +1,4 @@
-const config = require("../utils/config")
+const config = require("../utils/config/config")
 const debug = require('debug')('trigger')
 require('colors')
 
@@ -44,7 +44,7 @@ Trigger.prototype.execute = async function (msg) {
             let workerIDs = typeof (msg.workerIDs) == 'string' ? [msg.workerIDs] : msg.workerIDs
 
             try {
-                let calculations = await this.service(msg.data, function (message) { await status.report(statusID, 'Processing', 'log', message) })
+                let calculations = await this.service(msg.data, async function (message) { await status.report(statusID, 'Processing', 'log', message) })
 
                 let data = calculations
                 let options = {}

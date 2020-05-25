@@ -1,15 +1,15 @@
 const debug = require('debug')('utils:config')
 const crypto = require("crypto")
-const fs = require("fs").promises
-const fsutil = require('./fsutil')
 const Ajv = require('ajv')
 const ajv = new Ajv()
 const NodeRSA = require('node-rsa')
-const validateConfig = ajv.compile(require("./configSchema.json"));
+const validateConfig = ajv.compile(require("./schema/config.json"));
 const VERSION_ORDER = ["schema", "privKey", "profile", "info", "settings", "payment"]
 const PRIVAT_KEY_BIT = 1024
+const DEFAULT_PATH = "./config.json"
 
 
+let persistence = {}
 
 let config = {}
 config.version = {}
@@ -19,15 +19,40 @@ VERSION_ORDER.forEach((configuration) => config.version[configuration] = {})
 /** 
  * Initialisises the config and reads it the first time
  */
-config.init = async function (path = "./config.json") {
+config.init = async function (path = DEFAULT_PATH) {
     config.file = new Promise(async (resolve, reject) => {
         try {
-            let configFile = JSON.parse(await fs.readFile(path, "utf-8"))
-            let valid = validateConfig(configFile)
-            if (!valid)
-                throw new Error(validateConfig.errors[0].dataPath + " " + validateConfig.errors[0].message)
-            new URL(configFile.url)
-            config.path = path
+            if (typeof path === 'string') {
+                persistence = require('./storage/filesystem')
+                let configFile = JSON.parse(await persistence.read(path))
+                let valid = validateConfig(configFile)
+                if (!valid)
+                    throw new Error(validateConfig.errors[0].dataPath + " " + validateConfig.errors[0].message)
+                new URL(configFile.url)
+                config.path = path
+            } else if (typeof path === 'object') {
+                persistence = require('./storage/inMemory')
+                let configFile = path
+                let valid = validateConfig(configFile)
+                if (!valid)
+                    throw new Error(validateConfig.errors[0].dataPath + " " + validateConfig.errors[0].message)
+                new URL(configFile.url)
+                persistence.write('./env/description/input.md', configFile.info.input.description)
+                configFile.info.input.description = './env/description/input.md'
+                persistence.write('./env/description/output.md', configFile.info.output.description)
+                configFile.info.output.description = './env/description/output.md'
+                persistence.write('./env/description/worker.md', configFile.info.worker.description)
+                configFile.info.worker.description = './env/description/worker.md'
+                persistence.write('./env/schema/output.json', JSON.stringify(configFile.schema.output))
+                configFile.schema.output = './env/schema/output.json'
+                persistence.write('./env/schema/input.json', JSON.stringify(configFile.schema.input))
+                configFile.schema.input = './env/schema/input.json'
+                persistence.write('./env/key.pem', configFile.privKey)
+                configFile.privKey = './env/key.pem'
+                persistence.write('./config.json', JSON.stringify(configFile))
+                new URL(configFile.url)
+                config.path = DEFAULT_PATH
+            }
             resolve(await config.get("full", { fromFile: true }))
         } catch (error) {
             reject(error)
@@ -44,7 +69,7 @@ config.init = async function (path = "./config.json") {
 config.get = async function (request, { fromFile = false } = {}) {
     debug("Retrieve from config: " + request)
     if (fromFile) {
-        let configFile = JSON.parse(await fs.readFile(config.path, "utf-8"))
+        let configFile = JSON.parse(await persistence.read(config.path))
         if (request === "full") {
             return {
                 "credentials": await config.resolve(configFile, "credentials"),
@@ -78,14 +103,14 @@ config.resolve = async function (configFile, field) {
     switch (field) {
         case "privKey":
             try {
-                configFile.privKey = await fs.readFile(configFile.privKey, 'utf8')
+                configFile.privKey = await persistence.read(configFile.privKey)
             } catch (err) {
                 if (err.code === "ENOENT") {
                     debug("Could not find privat key. Creating one...")
-                    fsutil.ensureDirectoryExistence(configFile.privKey)
+                    await persistence.directory(configFile.privKey)
                     let privKeyLocation = configFile.privKey
                     configFile.privKey = (new NodeRSA({ b: PRIVAT_KEY_BIT })).exportKey('private')
-                    await fs.writeFile(privKeyLocation, configFile.privKey)
+                    await persistence.write(privKeyLocation, configFile.privKey)
                 } else {
                     throw err
                 }
@@ -93,24 +118,24 @@ config.resolve = async function (configFile, field) {
             break;
         case "schema":
             try {
-                configFile.schema.input = JSON.parse(await fs.readFile(configFile.schema.input, "utf-8"))
+                configFile.schema.input = JSON.parse(await persistence.read(configFile.schema.input))
             } catch (err) {
                 if (err.code === "ENOENT") {
                     debug("Could not find input schema. Creating one...")
-                    fsutil.ensureDirectoryExistence(configFile.schema.input)
-                    await fs.writeFile(configFile.schema.input, JSON.stringify({}))
+                    await persistence.directory(configFile.schema.input)
+                    await persistence.write(configFile.schema.input, JSON.stringify({}))
                     configFile.schema.input = {}
                 } else {
                     throw err
                 }
             }
             try {
-                configFile.schema.output = JSON.parse(await fs.readFile(configFile.schema.output, "utf-8"))
+                configFile.schema.output = JSON.parse(await persistence.read(configFile.schema.output))
             } catch (err) {
                 if (err.code === "ENOENT") {
                     debug("Could not find output schema. Creating one...")
-                    fsutil.ensureDirectoryExistence(configFile.schema.output)
-                    await fs.writeFile(configFile.schema.output, JSON.stringify({}))
+                    await persistence.directory(configFile.schema.output)
+                    await persistence.write(configFile.schema.output, JSON.stringify({}))
                     configFile.schema.output = {}
                 } else {
                     throw err
@@ -119,36 +144,36 @@ config.resolve = async function (configFile, field) {
             break;
         case "info":
             try {
-                configFile.info.worker.description = await fs.readFile(configFile.info.worker.description, "utf-8")
+                configFile.info.worker.description = await persistence.read(configFile.info.worker.description)
             } catch (err) {
                 if (err.code === "ENOENT") {
                     debug("Could not find worker descrition. Creating one...")
-                    fsutil.ensureDirectoryExistence(configFile.info.worker.description)
-                    await fs.writeFile(configFile.info.worker.description, "")
+                    await persistence.directory(configFile.info.worker.description)
+                    await persistence.write(configFile.info.worker.description, "")
                     configFile.info.worker.description = {}
                 } else {
                     throw err
                 }
             }
             try {
-                configFile.info.input.description = await fs.readFile(configFile.info.input.description, "utf-8")
+                configFile.info.input.description = await persistence.read(configFile.info.input.description)
             } catch (err) {
                 if (err.code === "ENOENT") {
                     debug("Could not find input descrition. Creating one...")
-                    fsutil.ensureDirectoryExistence(configFile.info.input.description)
-                    await fs.writeFile(configFile.info.input.description, "")
+                    await persistence.directory(configFile.info.input.description)
+                    await persistence.write(configFile.info.input.description, "")
                     configFile.info.input.description = {}
                 } else {
                     throw err
                 }
             }
             try {
-                configFile.info.output.description = await fs.readFile(configFile.info.output.description, "utf-8")
+                configFile.info.output.description = await persistence.read(configFile.info.output.description)
             } catch (err) {
                 if (err.code === "ENOENT") {
                     debug("Could not find output descrition. Creating one...")
-                    fsutil.ensureDirectoryExistence(configFile.info.output.description)
-                    await fs.writeFile(configFile.info.output.description, "")
+                    await persistence.directory(configFile.info.output.description)
+                    await persistence.write(configFile.info.output.description, "")
                     configFile.info.output.description = {}
                 } else {
                     throw err
@@ -182,30 +207,30 @@ config.getVersion = async function () {
  * @param field the field to update e.g. schema, info etc.
 */
 config.updateVersion = async function (field, configuration) {
-    let configFile = JSON.parse(await fs.readFile(config.path, "utf-8"))
+    let configFile = JSON.parse(await persistence.read(config.path))
     let configurationHash
-    if(field === "privKey"){
+    if (field === "privKey") {
         let key = (new NodeRSA(configuration)).exportKey('public')
         configurationHash = crypto.createHash('sha256').update(key).digest('base64')
-    }else{
+    } else {
         configurationHash = crypto.createHash('sha256').update(JSON.stringify(configuration)).digest('base64')
     }
-    let configurationTimestamp = parseInt((await fs.lstat(config.path)).mtimeMs)
+    let configurationTimestamp = await persistence.time(config.path)
     let valid = validateConfig(configFile)
     if (!valid)
         throw new Error(validateConfig.errors[0].dataPath + " " + validateConfig.errors[0].message)
     switch (field) {
         case "privKey":
-            configurationTimestamp = Math.max(configurationTimestamp, parseInt((await fs.lstat(configFile.privKey)).mtimeMs))
+            configurationTimestamp = Math.max(configurationTimestamp, await persistence.time(configFile.privKey))
             break;
         case "schema":
-            configurationTimestamp = Math.max(configurationTimestamp, parseInt((await fs.lstat(configFile.schema.input)).mtimeMs))
-            configurationTimestamp = Math.max(configurationTimestamp, parseInt((await fs.lstat(configFile.schema.output)).mtimeMs))
+            configurationTimestamp = Math.max(configurationTimestamp, await persistence.time(configFile.schema.input))
+            configurationTimestamp = Math.max(configurationTimestamp, await persistence.time(configFile.schema.output))
             break;
         case "info":
-            configurationTimestamp = Math.max(configurationTimestamp, parseInt((await fs.lstat(configFile.info.input.description)).mtimeMs))
-            configurationTimestamp = Math.max(configurationTimestamp, parseInt((await fs.lstat(configFile.info.output.description)).mtimeMs))
-            configurationTimestamp = Math.max(configurationTimestamp, parseInt((await fs.lstat(configFile.info.worker.description)).mtimeMs))
+            configurationTimestamp = Math.max(configurationTimestamp, await persistence.time(configFile.info.input.description))
+            configurationTimestamp = Math.max(configurationTimestamp, await persistence.time(configFile.info.output.description))
+            configurationTimestamp = Math.max(configurationTimestamp, await persistence.time(configFile.info.worker.description))
         default:
             break;
     }
@@ -241,14 +266,14 @@ config.compare = async function (version) {
  * Returns the requested changes
  * @param changes Requested changes e.g. 1.1.1.1.1
  */
-config.getChanges = async function (changes){
+config.getChanges = async function (changes) {
     let result = {}
     for (const [index, change] of (changes.split(".")).entries()) {
-        if(change === "1"){
-            if(VERSION_ORDER[index] !== "privKey"){
+        if (change === "1") {
+            if (VERSION_ORDER[index] !== "privKey") {
                 result[VERSION_ORDER[index]] = await config.get(VERSION_ORDER[index])
             } else {
-                result["pubkey"] =  (new NodeRSA(await config.get(VERSION_ORDER[index]))).exportKey('public')
+                result["pubkey"] = (new NodeRSA(await config.get(VERSION_ORDER[index]))).exportKey('public')
             }
         }
     }
@@ -266,7 +291,7 @@ config.update = async function (field, configuration, { recursive = false, spaci
     config.file = new Promise(async (resolve, reject) => {
         debug("Updating: " + field)
         try {
-            let configFile = JSON.parse(await fs.readFile(config.path, "utf-8"))
+            let configFile = JSON.parse(await persistence.read(config.path))
 
             // Check against schema -- Too Hacky
             // Copy to not mess with actual work later
@@ -305,25 +330,25 @@ config.update = async function (field, configuration, { recursive = false, spaci
             if (recursive) {
                 switch (field) {
                     case "privKey":
-                        await fs.writeFile(configFile.privKey, configuration)
+                        await persistence.write(configFile.privKey, configuration)
                         break;
                     case "schema":
                         // Recursive write schenmas
-                        await fs.writeFile(configFile.schema.output, configuration.output)
-                        await fs.writeFile(configFile.schema.input, configuration.input)
+                        await persistence.write(configFile.schema.output, configuration.output)
+                        await persistence.write(configFile.schema.input, configuration.input)
                         // Overwrite schemas with file location
                         configuration.schema.output = configFile.output
                         configuration.schema.input = configFile.input
                         // Overwrite old file with new file 
                         configFile.schema = configuration
                         // Write to config
-                        await fs.writeFile(config.path, JSON.stringify(configFile, null, spacing))
+                        await persistence.write(config.path, JSON.stringify(configFile, null, spacing))
                         break;
                     case "info":
                         // Recursive write descriptions
-                        await fs.writeFile(configFile.info.worker.description, configuration.worker.description)
-                        await fs.writeFile(configFile.info.input.description, configuration.input.description)
-                        await fs.writeFile(configFile.info.output.description, configuration.output.description)
+                        await persistence.write(configFile.info.worker.description, configuration.worker.description)
+                        await persistence.write(configFile.info.input.description, configuration.input.description)
+                        await persistence.write(configFile.info.output.description, configuration.output.description)
                         // Overwrite descriptions with file location
                         configuration.output.description = configFile.info.output.description
                         configuration.input.description = configFile.info.input.description
@@ -331,16 +356,16 @@ config.update = async function (field, configuration, { recursive = false, spaci
                         // Overwrite old file with new file ( tags missing in old file )
                         configFile.info = configuration
                         // Write to config
-                        await fs.writeFile(config.path, JSON.stringify(configFile, null, spacing))
+                        await persistence.write(config.path, JSON.stringify(configFile, null, spacing))
                         break;
                     default:
                         configFile[field] = configuration
-                        await fs.writeFile(config.path, JSON.stringify(configFile, null, spacing))
+                        await persistence.write(config.path, JSON.stringify(configFile, null, spacing))
                         break;
                 }
             } else {
                 configFile[field] = configuration
-                await fs.writeFile(config.path, JSON.stringify(configFile, null, spacing))
+                await persistence.write(config.path, JSON.stringify(configFile, null, spacing))
                 switch (field) {
                     case "privKey":
                         break;
