@@ -36,8 +36,8 @@ filesystem.time = async function (location) {
  */
 filesystem.directory = async function (location) {
     var dir = path.dirname(location);
-    if (await fs.exists(dir)) {
-      return true;
+    if (await fs.stat(dir)) {
+        return true;
     }
     await filesystem.directory(dir);
     await fs.mkdir(dir)
