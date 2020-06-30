@@ -106,7 +106,7 @@ config.resolve = async function (configFile, field) {
                 configFile.privKey = await persistence.read(configFile.privKey)
             } catch (err) {
                 if (err.code === "ENOENT") {
-                    debug("Could not find privat key. Creating one...")
+                    debug("Could not find private key. Creating one...")
                     await persistence.directory(configFile.privKey)
                     let privKeyLocation = configFile.privKey
                     configFile.privKey = (new NodeRSA({ b: PRIVAT_KEY_BIT })).exportKey('private')
@@ -147,10 +147,10 @@ config.resolve = async function (configFile, field) {
                 configFile.info.worker.description = await persistence.read(configFile.info.worker.description)
             } catch (err) {
                 if (err.code === "ENOENT") {
-                    debug("Could not find worker descrition. Creating one...")
+                    debug("Could not find worker description. Creating one...")
                     await persistence.directory(configFile.info.worker.description)
                     await persistence.write(configFile.info.worker.description, "")
-                    configFile.info.worker.description = {}
+                    configFile.info.worker.description = ""
                 } else {
                     throw err
                 }
@@ -159,10 +159,10 @@ config.resolve = async function (configFile, field) {
                 configFile.info.input.description = await persistence.read(configFile.info.input.description)
             } catch (err) {
                 if (err.code === "ENOENT") {
-                    debug("Could not find input descrition. Creating one...")
+                    debug("Could not find input description. Creating one...")
                     await persistence.directory(configFile.info.input.description)
                     await persistence.write(configFile.info.input.description, "")
-                    configFile.info.input.description = {}
+                    configFile.info.input.description = ""
                 } else {
                     throw err
                 }
@@ -171,10 +171,10 @@ config.resolve = async function (configFile, field) {
                 configFile.info.output.description = await persistence.read(configFile.info.output.description)
             } catch (err) {
                 if (err.code === "ENOENT") {
-                    debug("Could not find output descrition. Creating one...")
+                    debug("Could not find output description. Creating one...")
                     await persistence.directory(configFile.info.output.description)
                     await persistence.write(configFile.info.output.description, "")
-                    configFile.info.output.description = {}
+                    configFile.info.output.description = ""
                 } else {
                     throw err
                 }

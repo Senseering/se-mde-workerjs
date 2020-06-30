@@ -35,12 +35,14 @@ filesystem.time = async function (location) {
  * @param location The path e.g. './config/'
  */
 filesystem.directory = async function (location) {
-    var dir = path.dirname(location);
-    if (await fs.exists(dir)) {
-      return true;
+    var dir = path.dirname(location)
+    try {
+        await fs.stat(dir)
+        return true
+    } catch (err) {
+        await filesystem.directory(dir)
+        await fs.mkdir(dir)
     }
-    await filesystem.directory(dir);
-    await fs.mkdir(dir)
 }
 
 

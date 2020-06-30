@@ -1,7 +1,9 @@
+const fs = require('fs').promises
 let config = require("../../../src/utils/config/config");
+const { worker } = require('cluster');
 
 
-module.exports = function ({CONFIG_PATH} = {}) {
+module.exports = function ({ CONFIG_PATH } = {}) {
     let expect = require('chai').expect;
 
     it('Test load full config', async function () {
@@ -39,7 +41,7 @@ module.exports = function ({CONFIG_PATH} = {}) {
             "fvPRSm1EDCPeIrw9qaanppdW3L/Eb2V5Dxc7/mH0rP8=." +
             "VQeu2MgSOLu34V4Kjbxu0A1+Gd0f7VWtHPWx+IbkvO8=." +
             "qxSxXd4M+iRKnNYRew0iplyBMSoOElGqfmJ4VpOHniM=." +
-            "6IwsTmsYTop89NViiVKu/BSM/6H7myb3sR691R35L+Q=." + 
+            "6IwsTmsYTop89NViiVKu/BSM/6H7myb3sR691R35L+Q=." +
             "9u0Sz94te0sjlwG+9k3Hb2qkLoNg2DqQRzTpOecAcPQ=")
         expect(res).to.equal("0.0.0.0.0.0")
     })
@@ -50,11 +52,11 @@ module.exports = function ({CONFIG_PATH} = {}) {
 
         await config.update("profile", profile)
         let res = await config.compare("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=@1588256356160." +
-        "fvPRSm1EDCPeIrw9qaanppdW3L/Eb2V5Dxc7/mH0rP8=@1588256356160." +
-        "VQeu2MgSOLu34V4Kjbxu0A1+Gd0f7VWtHPWx+IbkvO8=@1588256356160." +
-        "qxSxXd4M+iRKnNYRew0iplyBMSoOElGqfmJ4VpOHniM=@1588256356160." +
-        "6IwsTmsYTop89NViiVKu/BSM/6H7myb3sR691R35L+Q=@1588256356160." +
-        "9u0Sz94te0sjlwG+9k3Hb2qkLoNg2DqQRzTpOecAcPQ=@1588256356160")
+            "fvPRSm1EDCPeIrw9qaanppdW3L/Eb2V5Dxc7/mH0rP8=@1588256356160." +
+            "VQeu2MgSOLu34V4Kjbxu0A1+Gd0f7VWtHPWx+IbkvO8=@1588256356160." +
+            "qxSxXd4M+iRKnNYRew0iplyBMSoOElGqfmJ4VpOHniM=@1588256356160." +
+            "6IwsTmsYTop89NViiVKu/BSM/6H7myb3sR691R35L+Q=@1588256356160." +
+            "9u0Sz94te0sjlwG+9k3Hb2qkLoNg2DqQRzTpOecAcPQ=@1588256356160")
         expect(res).to.equal("0.0.-1.0.0.0") // The manager should update his version of the file because ours is newer
         profile.name = "Example Source"
         await config.update("profile", profile) // Revert changes 
@@ -84,6 +86,14 @@ module.exports = function ({CONFIG_PATH} = {}) {
         } catch (err) {
             expect(err).to.be.an('error');
         }
+    })
+
+    it('Delete worker description and check if it is auto-replaced', async function () {
+        await fs.unlink('./test/data/env/description/worker.md')
+        await config.init(CONFIG_PATH)
+        let configInfo = await config.get('info')
+        await fs.copyFile('./test/data/env/description/input.md', './test/data/env/description/worker.md')
+        expect(configInfo.worker.description).to.equal('')
     })
 }
 
