@@ -13,7 +13,7 @@ let config = require("../../src/utils/config/config");
 let CONFIG_PATH = "./test/data/config.json"
 
 describe("Testing configuration initalisation", function () {
-    importTest("Check for different bad initalisations","./test/config-init")
+    importTest("Check for different bad initalisations", "./test/config-init")
 })
 
 describe("Testing configuration for [Persistent File Storage]", function () {
@@ -22,11 +22,10 @@ describe("Testing configuration for [Persistent File Storage]", function () {
         await config.init(CONFIG_PATH)
     })
 
-    importTest("Testing configuration","./test/config", {
+    importTest("Testing configuration", "./test/config", {
         CONFIG_PATH
     })
 })
-
 
 describe("Testing configuration for [In Memory]", function () {
 
@@ -42,5 +41,5 @@ describe("Testing configuration for [In Memory]", function () {
         await config.init(configFile)
     })
 
-    importTest("Testing configuration","./test/config", {CONFIG_PATH})
+    importTest("Testing configuration", "./test/config", { CONFIG_PATH })
 })
