@@ -58,15 +58,17 @@ let updateConfig = async function () {
             debug("Transferin local changes ...")
             let missingConfig = await config.getChanges(changes)
             await update.send(missingConfig)
-            if (changes.split(".").map((change) => change === "-1").reduce((a, b) => a || b)) {
-                // If there is one change that is newer on manager request the change
-                // TODO add no changes allowed worker
-                let updates = await change.send(changes)
-                for (const update of Object.keys(updates)) {
-                    try {
-                        await config.update(update, updates[update], { recursive: true })
-                    } catch (error) {
-                        throw new Error("Update from remote failed: " + error.message)
+            if (Object.keys(missingConfig).length > 0) {
+                if (changes.split(".").map((change) => change === "-1").reduce((a, b) => a || b)) {
+                    // If there is one change that is newer on manager request the change
+                    // TODO add no changes allowed worker
+                    let updates = await change.send(changes)
+                    for (const update of Object.keys(updates)) {
+                        try {
+                            await config.update(update, updates[update], { recursive: true })
+                        } catch (error) {
+                            throw new Error("Update from remote failed: " + error.message)
+                        }
                     }
                 }
             }
