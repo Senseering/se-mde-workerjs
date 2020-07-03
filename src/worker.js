@@ -49,14 +49,14 @@ let updateConfig = async function () {
     for (let i = 0; i < (await config.get("settings")).messageRetries; i++) {
         try {
             debug("Retrieving worker version ...")
-            let version = await config.getVersion()
+            let version = await config.version.get()
             debug("Comparing changes with manager ...")
             let changes = await compare.send(version)
             debug("Comparing changes locally ...")
             if (changes.split(".").map((change) => !Boolean(Number(change))).reduce((a, b) => a && b))
                 break; // Leave loop if no changes detected
             debug("Transferin local changes ...")
-            let missingConfig = await config.getChanges(changes)
+            let missingConfig = await config.version.changes(changes)
             await update.send(missingConfig)
             if (Object.keys(missingConfig).length > 0) {
                 if (changes.split(".").map((change) => change === "-1").reduce((a, b) => a || b)) {

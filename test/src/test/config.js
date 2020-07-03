@@ -32,12 +32,12 @@ module.exports = function ({ CONFIG_PATH } = {}) {
     })
 
     it('Test comparison with rubish version', async function () {
-        let res = await config.compare("test@200000000000000000.test2@200000000000000000.trest2@200000000000000000.ts@200000000000000000")
+        let res = await config.version.compare("test@200000000000000000.test2@200000000000000000.trest2@200000000000000000.ts@200000000000000000")
         expect(res).to.equal("1.1.1.1")
     })
 
     it('Test comparison with correct version & without timestamp', async function () {
-        let res = await config.compare("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=." +
+        let res = await config.version.compare("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=." +
             "fvPRSm1EDCPeIrw9qaanppdW3L/Eb2V5Dxc7/mH0rP8=." +
             "VQeu2MgSOLu34V4Kjbxu0A1+Gd0f7VWtHPWx+IbkvO8=." +
             "qxSxXd4M+iRKnNYRew0iplyBMSoOElGqfmJ4VpOHniM=." +
@@ -51,7 +51,7 @@ module.exports = function ({ CONFIG_PATH } = {}) {
         profile.name = "tests" // Set profile to different version
 
         await config.update("profile", profile)
-        let res = await config.compare("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=@1588256356160." +
+        let res = await config.version.compare("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=@1588256356160." +
             "fvPRSm1EDCPeIrw9qaanppdW3L/Eb2V5Dxc7/mH0rP8=@1588256356160." +
             "VQeu2MgSOLu34V4Kjbxu0A1+Gd0f7VWtHPWx+IbkvO8=@1588256356160." +
             "qxSxXd4M+iRKnNYRew0iplyBMSoOElGqfmJ4VpOHniM=@1588256356160." +
@@ -63,7 +63,7 @@ module.exports = function ({ CONFIG_PATH } = {}) {
     })
 
     it('Check getVersion for correct result', async function () {
-        let res = await config.getVersion()
+        let res = await config.version.get()
 
         expect(res).to.equal("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=@" + parseInt(res.split(".")[0].split("@")[1]) + "." +
             "fvPRSm1EDCPeIrw9qaanppdW3L/Eb2V5Dxc7/mH0rP8=@" + parseInt(res.split(".")[1].split("@")[1]) + "." +

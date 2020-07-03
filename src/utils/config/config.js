@@ -13,7 +13,10 @@ let persistence = {}
 
 let config = {}
 config.version = {}
-VERSION_ORDER.forEach((configuration) => config.version[configuration] = {})
+config.version.component = {}
+VERSION_ORDER.forEach((configuration) => config.version.component[configuration] = {})
+
+config.settings = {}
 
 
 /** 
@@ -184,100 +187,20 @@ config.resolve = async function (configFile, field) {
             break;
     }
     if (VERSION_ORDER.includes(field))
-        await config.updateVersion(field, configFile[field])
+        await config.version.update(field, configFile[field])
     return configFile[field]
 }
 
 /***
  * Returns the current verison
  */
-config.getVersion = async function () {
+config.version.get = async function () {
     await config.file
     let versions = []
     VERSION_ORDER.forEach((field) => {
-        versions.push(config.version[field].hash + "@" + config.version[field].timestamp)
+        versions.push(config.version.component[field].hash + "@" + config.version.component[field].timestamp)
     })
     return versions.join(".")
-}
-
-
-
-/**
- * @param configuration the full config opject
- * @param field the field to update e.g. schema, info etc.
-*/
-config.updateVersion = async function (field, configuration) {
-    let configFile = JSON.parse(await persistence.read(config.path))
-    let configurationHash
-    if (field === "privKey") {
-        let key = (new NodeRSA(configuration)).exportKey('public')
-        configurationHash = crypto.createHash('sha256').update(key).digest('base64')
-    } else {
-        configurationHash = crypto.createHash('sha256').update(JSON.stringify(configuration)).digest('base64')
-    }
-    let configurationTimestamp = await persistence.time(config.path)
-    let valid = validateConfig(configFile)
-    if (!valid)
-        throw new Error(validateConfig.errors[0].dataPath + " " + validateConfig.errors[0].message)
-    switch (field) {
-        case "privKey":
-            configurationTimestamp = Math.max(configurationTimestamp, await persistence.time(configFile.privKey))
-            break;
-        case "schema":
-            configurationTimestamp = Math.max(configurationTimestamp, await persistence.time(configFile.schema.input))
-            configurationTimestamp = Math.max(configurationTimestamp, await persistence.time(configFile.schema.output))
-            break;
-        case "info":
-            configurationTimestamp = Math.max(configurationTimestamp, await persistence.time(configFile.info.input.description))
-            configurationTimestamp = Math.max(configurationTimestamp, await persistence.time(configFile.info.output.description))
-            configurationTimestamp = Math.max(configurationTimestamp, await persistence.time(configFile.info.worker.description))
-        default:
-            break;
-    }
-    config.version[field].hash = configurationHash
-    config.version[field].timestamp = configurationTimestamp
-}
-
-/** 
- * Comparing a version ( every number is mapped to the corresponding hash ) to the underlying files
- * @param version The version e.g. ( 'qI7[...]FwA=.qI7[...]FwA=.qI7[...]FwA=' )
-*/
-config.compare = async function (version) {
-    debug("Compare the version with: " + version)
-    await config.file
-    let hashes = version.split(".")
-    let change = []
-    for (const [index, version] of hashes.entries()) {
-        let [hash, timestamp] = version.split("@")
-        if (hash === config.version[VERSION_ORDER[index]].hash) {
-            change[index] = 0
-        } else {
-            if (timestamp >= config.version[VERSION_ORDER[index]].timestamp) {
-                change[index] = 1
-            } else {
-                change[index] = -1
-            }
-        }
-    }
-    return change.join(".")
-}
-
-/**
- * Returns the requested changes
- * @param changes Requested changes e.g. 1.1.1.1.1
- */
-config.getChanges = async function (changes) {
-    let result = {}
-    for (const [index, change] of (changes.split(".")).entries()) {
-        if (change === "1") {
-            if (VERSION_ORDER[index] !== "privKey") {
-                result[VERSION_ORDER[index]] = await config.get(VERSION_ORDER[index])
-            } else {
-                result["pubkey"] = (new NodeRSA(await config.get(VERSION_ORDER[index]))).exportKey('public')
-            }
-        }
-    }
-    return result
 }
 
 /** 
@@ -382,7 +305,7 @@ config.update = async function (field, configuration, { recursive = false, spaci
             }
             managedConfig[field] = configuration
             if (VERSION_ORDER.includes(field))
-                await config.updateVersion(field, managedConfig[field])
+                await config.version.update(field, managedConfig[field])
             resolve(managedConfig)
         } catch (error) {
             reject(error)
@@ -391,12 +314,94 @@ config.update = async function (field, configuration, { recursive = false, spaci
     return config.file
 }
 
+/**
+ * @param configuration the full config opject
+ * @param field the field to update e.g. schema, info etc.
+*/
+config.version.update = async function (field, configuration) {
+    let configFile = JSON.parse(await persistence.read(config.path))
+    let configurationHash
+    if (field === "privKey") {
+        let key = (new NodeRSA(configuration)).exportKey('public')
+        configurationHash = crypto.createHash('sha256').update(key).digest('base64')
+    } else {
+        configurationHash = crypto.createHash('sha256').update(JSON.stringify(configuration)).digest('base64')
+    }
+    let configurationTimestamp = await persistence.time(config.path)
+    let valid = validateConfig(configFile)
+    if (!valid)
+        throw new Error(validateConfig.errors[0].dataPath + " " + validateConfig.errors[0].message)
+    switch (field) {
+        case "privKey":
+            configurationTimestamp = Math.max(configurationTimestamp, await persistence.time(configFile.privKey))
+            break;
+        case "schema":
+            configurationTimestamp = Math.max(configurationTimestamp, await persistence.time(configFile.schema.input))
+            configurationTimestamp = Math.max(configurationTimestamp, await persistence.time(configFile.schema.output))
+            break;
+        case "info":
+            configurationTimestamp = Math.max(configurationTimestamp, await persistence.time(configFile.info.input.description))
+            configurationTimestamp = Math.max(configurationTimestamp, await persistence.time(configFile.info.output.description))
+            configurationTimestamp = Math.max(configurationTimestamp, await persistence.time(configFile.info.worker.description))
+        default:
+            break;
+    }
+    config.version.component[field].hash = configurationHash
+    config.version.component[field].timestamp = configurationTimestamp
+}
+
+/** 
+ * Comparing a version ( every number is mapped to the corresponding hash ) to the underlying files
+ * @param version The version e.g. ( 'qI7[...]FwA=.qI7[...]FwA=.qI7[...]FwA=' )
+*/
+config.version.compare = async function (version) {
+    debug("Compare the version with: " + version)
+    await config.file
+    let hashes = version.split(".")
+    let change = []
+    for (const [index, version] of hashes.entries()) {
+        let [hash, timestamp] = version.split("@")
+        if (hash === config.version.component[VERSION_ORDER[index]].hash) {
+            change[index] = 0
+        } else {
+            if (timestamp >= config.version.component[VERSION_ORDER[index]].timestamp) {
+                change[index] = 1
+            } else {
+                change[index] = -1
+            }
+        }
+    }
+    return change.join(".")
+}
+
+/**
+ * Returns the requested changes
+ * @param changes Requested changes e.g. 1.1.1.1.1
+ */
+config.version.changes = async function (changes) {
+    let result = {}
+    for (const [index, change] of (changes.split(".")).entries()) {
+        if (change === "1") {
+            if (VERSION_ORDER[index] !== "privKey") {
+                result[VERSION_ORDER[index]] = await config.get(VERSION_ORDER[index])
+            } else {
+                result["pubkey"] = (new NodeRSA(await config.get(VERSION_ORDER[index]))).exportKey('public')
+            }
+        }
+    }
+    return result
+}
+
+
+
 module.exports = {
-    compare: config.compare,
+    version: {
+        compare: config.version.compare,
+        get: config.version.get,
+        changes: config.version.changes
+    },
     get: config.get,
     init: config.init,
     update: config.update,
-    getVersion: config.getVersion,
-    getChanges: config.getChanges,
     VERSION_ORDER,
 }
