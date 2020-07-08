@@ -32,7 +32,7 @@
         "settings": {
             "$id": "#/properties/settings",
             "type": "object",
-            "additionalProperties": false,
+            "additionalProperties": true,
             "required": [
                 "qualityOfService"
             ],
@@ -103,7 +103,14 @@
         "privKey": {
             "$id": "#/properties/privKey",
             "type": "string",
-            "format": "uri-reference",
+            "anyOf": [
+                {
+                    "format": "uri-reference"
+                },
+                {
+                    "regexp": { "pattern": "^-{5}.{21}-{5}.*-{5}.{19}-{5}$", "flags": "gms" }
+                }
+            ],
             "examples": [
                 "./env/key.pem"
             ]
@@ -128,18 +135,24 @@
             "properties": {
                 "input": {
                     "$id": "#/properties/schema/properties/input",
-                    "type": "string",
-                    "format": "uri-reference",
+                    "oneOf": [
+                        {"type": "string"},
+                        {"type": "object"}
+                    ],
                     "examples": [
-                        "./env/schema/input.json"
+                        "./env/schema/input.json",
+                        "json schema"
                     ]
                 },
                 "output": {
                     "$id": "#/properties/schema/properties/output",
-                    "type": "string",
-                    "format": "uri-reference",
+                    "oneOf": [
+                        {"type": "string"},
+                        {"type": "object"}
+                    ],
                     "examples": [
-                        "./env/schema/output.json"
+                        "./env/schema/output.json",
+                        "json schema"
                     ]
                 }
             }
@@ -166,9 +179,9 @@
                         "description": {
                             "$id": "#/properties/info/properties/worker/properties/description",
                             "type": "string",
-                            "format": "uri-reference",
                             "examples": [
-                                "./env/description/worker.md"
+                                "./env/description/worker.md",
+                                "markdown"
                             ]
                         },
                         "tags": {
@@ -194,9 +207,9 @@
                         "description": {
                             "$id": "#/properties/info/properties/input/properties/description",
                             "type": "string",
-                            "format": "uri-reference",
                             "examples": [
-                                "./env/description/input.md"
+                                "./env/description/input.md",
+                                "markdown"
                             ]
                         },
                         "tags": {
@@ -222,9 +235,9 @@
                         "description": {
                             "$id": "#/properties/info/properties/output/properties/description",
                             "type": "string",
-                            "format": "uri-reference",
                             "examples": [
-                                "./env/description/output.md"
+                                "./env/description/output.md",
+                                "markdown"
                             ]
                         },
                         "tags": {

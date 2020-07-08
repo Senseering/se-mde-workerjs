@@ -1,4 +1,4 @@
-const config = require("../utils/config")
+const config = require("../utils/config/config")
 const debug = require('debug')('trigger')
 require('colors')
 

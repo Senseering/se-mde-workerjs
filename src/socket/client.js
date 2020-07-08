@@ -1,5 +1,5 @@
 const WebSocket = require('ws')
-const config = require('../utils/config')
+const config = require('../utils/config/config')
 const uuidV1 = require('uuid/v1')
 const debug = require('debug')('ws:client')
 require('colors')
@@ -120,15 +120,38 @@ client.handleMessage = async function (fresponse) {
       debug(("error in response" + err).red)
     }
   } else if (fresponse.topic === "update") {
-    delete fresponse.topic
-    delete fresponse.id
-    await update(fresponse)
+    if (client.config.isChanged.resolve) {
+      clearTimeout(client.config.isChanged.timeout)
+      client.config.isChanged.resolve(fresponse.message)
+    }
   } else if (fresponse.topic === "trigger" && client.hasOwnProperty('trigger')) {
     debug('trigger initiated')
     status.report(fresponse.statusID, "Processing", "started", 'Service received job')
     client.trigger.execute(fresponse)
   } else if (fresponse.topic === 'pong') {
     isConnected = true
+  } else if (fresponse.topic === 'change') {
+    if (client.config.isCompared.resolve) {
+      clearTimeout(client.config.isCompared.timeout)
+      client.config.isCompared.resolve(fresponse.message)
+    }
+  } else if (fresponse.topic === 'compare') {
+    console.log(fresponse.topic)
+  } else if (fresponse.topic === 'update-status') {
+    if (!fresponse.message.remote) {
+      // Returns the status of the update process and resolves it
+      if (client.config.isUpdated.resolve) {
+        clearTimeout(client.config.isUpdated.timeout)
+        if (!fresponse.error) {
+          client.config.isUpdated.resolve(fresponse.message)
+        } else {
+          client.config.isUpdated.reject(new Error(fresponse.error))
+        }
+      }
+    } else {
+      // Triggers a new update process becuase it was initialized from remote
+      await client.onUpdate()
+    }
   } else {
     debug('Unknown message topic received: ' + fresponse.topic)
   }
@@ -150,6 +173,11 @@ client.processQueue = function () {
     debug('No leftover messages to be send')
   }
 }
+
+client.config = {}
+client.config.isCompared = {}
+client.config.isChanged = {}
+client.config.isUpdated = {}
 
 client.isRegistered = async function () {
   return new Promise(function (resolve, reject) {
