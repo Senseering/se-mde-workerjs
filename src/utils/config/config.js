@@ -286,10 +286,10 @@ config.getChanges = async function (changes) {
  * @param configuration The update configuration
 */
 config.update = async function (field, configuration, { recursive = false, spacing = 2 } = {}) {
-    debug("Updating: " + field)
     let managedConfig = await config.file
 
     config.file = new Promise(async (resolve, reject) => {
+        debug("Updating: " + field)
         try {
             let configFile = JSON.parse(await persistence.read(config.path))
 
@@ -397,5 +397,6 @@ module.exports = {
     init: config.init,
     update: config.update,
     getVersion: config.getVersion,
+    getChanges: config.getChanges,
     VERSION_ORDER,
 }
