@@ -190,19 +190,6 @@ config.resolve = async function (configFile, field) {
         await config.version.update(field, configFile[field])
     return configFile[field]
 }
-
-/***
- * Returns the current verison
- */
-config.version.get = async function () {
-    await config.file
-    let versions = []
-    VERSION_ORDER.forEach((field) => {
-        versions.push(config.version.component[field].hash + "@" + config.version.component[field].timestamp)
-    })
-    return versions.join(".")
-}
-
 /** 
  * Updating specific field with a configuration
  * @param field The field to update
@@ -314,6 +301,20 @@ config.update = async function (field, configuration, { recursive = false, spaci
     return config.file
 }
 
+/***
+ * Returns the current verison
+ */
+config.version.get = async function () {
+    await config.file
+    let versions = []
+    VERSION_ORDER.forEach((field) => {
+        versions.push(config.version.component[field].hash + "@" + config.version.component[field].timestamp)
+    })
+    return versions.join(".")
+}
+
+
+
 /**
  * @param configuration the full config opject
  * @param field the field to update e.g. schema, info etc.
@@ -393,6 +394,22 @@ config.version.changes = async function (changes) {
 }
 
 
+/**
+ * Returns the specified setting
+ * @param {String} property "x.y.z" String encoded representation of the property
+ */
+config.settings.get = async function (property) {
+
+}
+
+/**
+ * Sets the specified property to the given value
+ * @param {String} property "x.y.z" String encoded representation of the property
+ * @param value The value to set
+ */
+config.settings.set = async function (property, value){
+
+} 
 
 module.exports = {
     version: {
