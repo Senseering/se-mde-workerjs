@@ -32,7 +32,7 @@
         "settings": {
             "$id": "#/properties/settings",
             "type": "object",
-            "additionalProperties": true,
+            "additionalProperties": false,
             "required": [
                 "qualityOfService"
             ],
