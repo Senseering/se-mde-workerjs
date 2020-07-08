@@ -38,7 +38,7 @@ module.exports = function ({ CONFIG_PATH } = {}) {
 
     it('Test comparison with corect version & without timestamp', async function () {
         let res = await config.compare("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=" + "." +
-            "fvPRSm1EDCPeIrw9qaanppdW3L/Eb2V5Dxc7/mH0rP8=" + "." +
+            "Y8DlQawRYn8MmAjCUuL54lFWDNojIG2EWiMd0jF3qbs=" + "." +
             "VQeu2MgSOLu34V4Kjbxu0A1+Gd0f7VWtHPWx+IbkvO8=" + "." +
             "qxSxXd4M+iRKnNYRew0iplyBMSoOElGqfmJ4VpOHniM=." +
             "6IwsTmsYTop89NViiVKu/BSM/6H7myb3sR691R35L+Q=." +
