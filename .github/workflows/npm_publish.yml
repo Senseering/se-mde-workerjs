@@ -1,11 +1,13 @@
 name: Publish
+
 on:
   push:
     tags:
-      - /^v*.*.*$/
+      - v*.*.*
       
 jobs:
   publish:
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
