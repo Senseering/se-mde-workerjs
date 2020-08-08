@@ -96,7 +96,8 @@ Worker.prototype.publish = async function (data, options) {
         worker_id: (await config.get('credentials')).split(":")[0],
         created_at: Date.now(),
         price: options.price === undefined ? 0 : options.price,
-        location: (await config.get('profile')).location
+        location: (await config.get('profile')).location,
+        custom: await config.get('meta')
     }
     //append basedOn property just in case of service
     if (Object.keys((await config.get('schema')).input).length) {

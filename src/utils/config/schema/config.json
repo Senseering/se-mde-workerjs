@@ -10,7 +10,8 @@
         "privKey",
         "schema",
         "info",
-        "payment"
+        "payment",
+        "meta"
     ],
     "properties": {
         "credentials": {
@@ -32,7 +33,7 @@
         "settings": {
             "$id": "#/properties/settings",
             "type": "object",
-            "additionalProperties": true,
+            "additionalProperties": false,
             "required": [
                 "qualityOfService"
             ],
@@ -42,6 +43,16 @@
                     "type": "integer",
                     "minimum": 0,
                     "maximum": 1
+                },
+                "messageRetries": {
+                    "$id": "#/properties/profile/properties/settings/properties/messageRetries",
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100
+                },
+                "messageTimeout": {
+                    "$id": "#/properties/profile/properties/settings/properties/messageTimeout",
+                    "minimum": 100
                 }
             }
         },
@@ -252,6 +263,11 @@
                     }
                 }
             }
+        },
+        "meta": {
+            "$id": "#/properties/meta",
+            "type": "object",
+            "additionalProperties": true
         }
     }
 }

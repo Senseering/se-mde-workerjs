@@ -4,7 +4,7 @@ const Ajv = require('ajv')
 const ajv = new Ajv()
 const NodeRSA = require('node-rsa')
 const validateConfig = ajv.compile(require("./schema/config.json"));
-const VERSION_ORDER = ["schema", "privKey", "profile", "info", "settings", "payment"]
+const VERSION_ORDER = ["schema", "privKey", "profile", "info", "settings", "payment", "meta"]
 const PRIVAT_KEY_BIT = 1024
 const DEFAULT_PATH = "./config.json"
 
@@ -83,6 +83,7 @@ config.get = async function (request, { fromFile = false } = {}) {
                 "profile": await config.resolve(configFile, "profile"),
                 "info": await config.resolve(configFile, "info"),
                 "settings": await config.resolve(configFile, "settings"),
+                "meta": await config.resolve(configFile, "meta"),
             }
         } else {
             return await config.resolve(configFile, request)
@@ -395,27 +396,32 @@ config.version.changes = async function (changes) {
 
 
 /**
- * Returns the specified setting
- * @param {String} property "x.y.z" String encoded representation of the property
+ * Returns the settings
  */
-config.settings.get = async function (property) {
-
+config.settings.get = async function () {
+    return await config.get("settings")
 }
 
-/**
- * Sets the specified property to the given value
- * @param {String} property "x.y.z" String encoded representation of the property
- * @param value The value to set
- */
-config.settings.set = async function (property, value){
 
-} 
+
+
+/**
+ * Updates the settings object
+ * @param settings The value to update
+ */
+config.settings.update = async function (settings) {
+    await config.update("settings", settings)
+}
 
 module.exports = {
     version: {
         compare: config.version.compare,
         get: config.version.get,
         changes: config.version.changes
+    },
+    settings: {
+        get: config.settings.get,
+        update: config.settings.update
     },
     get: config.get,
     init: config.init,
