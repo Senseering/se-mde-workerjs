@@ -8,8 +8,6 @@ require('colors')
 
 const client = require('./socket/client')
 const publish = require('./socket/events/publish')
-const register = require('./socket/events/register')
-const status = require('./socket/events/status')
 
 /**
  * Is used to register at a manager with the necessary options given. It checks if the worker is

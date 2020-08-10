@@ -4,7 +4,6 @@ const uuidV1 = require('uuid/v1')
 const debug = require('debug')('ws:client')
 require('colors')
 
-const update = require("./events/update")
 let format = require("../utils/formatMessages")
 
 let status
