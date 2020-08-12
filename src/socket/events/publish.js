@@ -11,16 +11,18 @@ const verify = require('../../utils/verify')
  */
 let publish = async function (package, { statusID = undefined, key, resolvePromise, ttl = undefined } = {}) {
     try {
+        //append ttl to meta
+        if (ttl) {
+            package.meta.ttl = ttl
+        }
+        
         verify.appendSignature(package, key)
 
         //append non signature relevant information here
         package._id = uuidV1()
         package.statusID = statusID
 
-        //append ttl to meta
-        if (ttl) {
-            package.meta.ttl = ttl
-        }
+        
 
         //publish data
         package.resolvePromise = resolvePromise
