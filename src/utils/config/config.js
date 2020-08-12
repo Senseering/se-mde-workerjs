@@ -7,6 +7,7 @@ const validateConfig = ajv.compile(require("./schema/config.json"));
 const VERSION_ORDER = ["schema", "privKey", "profile", "info", "settings", "payment", "meta"]
 const PRIVAT_KEY_BIT = 1024
 const DEFAULT_PATH = "./config.json"
+const stringify = require('fast-json-stable-stringify')
 
 
 let persistence = {}
@@ -327,7 +328,7 @@ config.version.update = async function (field, configuration) {
         let key = (new NodeRSA(configuration)).exportKey('public')
         configurationHash = crypto.createHash('sha256').update(key).digest('base64')
     } else {
-        configurationHash = crypto.createHash('sha256').update(JSON.stringify(configuration)).digest('base64')
+        configurationHash = crypto.createHash('sha256').update(stringify(configuration)).digest('base64')
     }
     let configurationTimestamp = await persistence.time(config.path)
     let valid = validateConfig(configFile)
