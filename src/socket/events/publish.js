@@ -1,4 +1,4 @@
-const uuidV1 = require('uuid/v1')
+const uuidV1 = require('uuid').v1
 const debug = require('debug')('socket:publish')
 require("colors")
 
