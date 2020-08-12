@@ -1,6 +1,6 @@
 const WebSocket = require('ws')
 const config = require('../utils/config/config')
-const uuidV1 = require('uuid/v1')
+const uuidV1 = require('uuid').v1
 const debug = require('debug')('ws:client')
 require('colors')
 
