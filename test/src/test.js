@@ -43,3 +43,7 @@ describe("Testing configuration for [In Memory]", function () {
 
     importTest("Testing configuration", "./test/config", { CONFIG_PATH })
 })
+
+describe("Testing signature", function () {
+    importTest("", "./test/signature")
+})

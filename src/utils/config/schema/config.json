@@ -35,7 +35,9 @@
             "type": "object",
             "additionalProperties": false,
             "required": [
-                "qualityOfService"
+                "qualityOfService",
+                "messageRetries",
+                "messageTimeout"
             ],
             "properties": {
                 "qualityOfService": {
@@ -52,7 +54,13 @@
                 },
                 "messageTimeout": {
                     "$id": "#/properties/profile/properties/settings/properties/messageTimeout",
+                    "type": "integer",
                     "minimum": 100
+                },
+                "group": {
+                    "$id": "#/properties/profile/properties/settings/properties/group",
+                    "type": "string",
+                    "pattern": "^[a-z0-9\/]*$"
                 }
             }
         },
