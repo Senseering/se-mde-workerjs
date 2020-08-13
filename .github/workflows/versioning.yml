@@ -1,4 +1,4 @@
-name: Version bump
+name: Integration testing
 
 on:
   pull_request:
