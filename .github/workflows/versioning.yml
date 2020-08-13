@@ -18,6 +18,10 @@ jobs:
         run: |
           PACKAGE_VERSION=$(cat ./package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
           echo ::set-output name=current_version::$PACKAGE_VERSION
+      - name: "Setup git"
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - name: "Check out current branch"
         uses: "actions/checkout@v2"
         with:
@@ -36,8 +40,6 @@ jobs:
         run: |
           if [ ${{ steps.bump.outputs.commit_needed }} = 1 ]
           then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add package*.json
             git commit -m "${{ steps.bump.outputs.size }} update of version to ${{ steps.bump.outputs.version }}"
             git push
