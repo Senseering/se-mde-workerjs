@@ -19,10 +19,7 @@ jobs:
         with:
           node-version: 12
       - name: "Automated Version Bump"
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          npm version patch
+        run: npm version patch
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Upgrade to %s
