@@ -14,14 +14,12 @@ jobs:
         uses: "actions/checkout@v2"
         with:
           ref: ${{ github.ref }}
-      - name: "cat package.json"
-        run: cat ./package.json
       - name: "Setup Node.js"
         uses: "actions/setup-node@v1"
         with:
           node-version: 12
       - name: "Automated Version Bump"
-        uses: maks-stupak/gh-action-bump-version@v7.1.5
+        uses: 'phips28/gh-action-bump-version@master'
         with:
           tag-prefix: ''
         env:
