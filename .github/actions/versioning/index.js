@@ -6,6 +6,7 @@ try {
     // Get the JSON webhook payload for the event that triggered the workflow
     const payload = github.context.payload
     let package = JSON.parse(fs.readFileSync('./package.json', 'utf-8'))
+    let lock = JSON.parse(fs.readFileSync('./package-lock.json', 'utf-8'))
     let current_version = core.getInput('current')
     let new_version = current_version.split('.')
     let size = 'patch'
@@ -25,10 +26,12 @@ try {
     }
 
     package.version = new_version.join('.')
+    lock.version = new_version.join('.')
     fs.writeFileSync('./package.json', JSON.stringify(package, null, 4))
+    fs.writeFileSync('./package-lock.json', JSON.stringify(lock, null, 4))
 
     core.setOutput('size', size)
     core.setOutput('version', 'v' + package.version)
 } catch (error) {
-    core.setFailed(error.message);
+    core.setFailed(error.message)
 }
