@@ -7,7 +7,6 @@ on:
 
 jobs:
   release:
-    name: Create Tag
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -16,15 +15,10 @@ jobs:
       with:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         tag_prefix: "v"
-    name: Create Release
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Create Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.tag.outputs.tagname }}
-          release_name: Release ${{ steps.tag.outputs.tagname }}
+    - name: Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.tag.outputs.tagname }}
+        release_name: Release ${{ steps.tag.outputs.tagname }}
