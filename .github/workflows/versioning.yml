@@ -20,6 +20,7 @@ jobs:
           node-version: 12
       - name: "Automated Version Bump"
         run: |
+          echo -e ${{ github.event }}
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           npm version patch -m "Upgrade to %s"
