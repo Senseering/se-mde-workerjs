@@ -13,16 +13,16 @@ jobs:
       - name: "Checkout source code"
         uses: "actions/checkout@v2"
         with:
-          ref: ${{ github.ref }}
+          ref: ${{ github.head_ref }}
       - name: "Setup Node.js"
         uses: "actions/setup-node@v1"
         with:
           node-version: 12
       - name: "Automated Version Bump"
         run: |
-          git switch -c ${{ github.head_ref }}
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          npm version patch -m "Upgrade to %s"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          npm version patch
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Upgrade to %s
