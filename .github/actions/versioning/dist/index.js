@@ -4467,7 +4467,7 @@ const github = __webpack_require__(397);
 try {
     // Get the JSON webhook payload for the event that triggered the workflow
     const payload = github.context.payload
-    console.log('Github payload: ' + JSON.stringify(payload))
+    console.log('The event payload: ' + JSON.stringify(payload, undefined, 2));
     let size = 'patch'
 
     if (payload.pull_request.body.includes('patch')) {
