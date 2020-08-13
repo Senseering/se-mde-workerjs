@@ -5,7 +5,7 @@
 
 closes #the-issue-number
 
-### Upate size
+### Update size
 patch
 minor
 major
