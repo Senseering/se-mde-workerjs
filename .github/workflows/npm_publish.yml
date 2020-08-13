@@ -1,7 +1,7 @@
 name: Create Tag
 
 on:
-  push:
+  pull-request:
     branches:
       - master
 
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout source code"
-        uses: "actions/checkout@v1"
+        uses: "actions/checkout@v2"
         with:
           ref: ${{ github.ref }}
       - name: "cat package.json"
@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: 12
       - name: "Automated Version Bump"
-        uses: "phips28/gh-action-bump-version@master"
+        uses: maks-stupak/gh-action-bump-version@v7.1.5
         with:
           tag-prefix: ''
         env:
