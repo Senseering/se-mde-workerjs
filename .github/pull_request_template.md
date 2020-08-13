@@ -1,5 +1,9 @@
 ## Proposed changes
+### Short description
 
-Short description
+### Issues
 
 closes #the-issue-number
+
+### Upate size
+patch
