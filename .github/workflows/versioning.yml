@@ -34,7 +34,6 @@ jobs:
           current: ${{ steps.master.outputs.current_version }}
       - name: "Automated version bump"
         run: |
-          echo -e ${{ steps.bump.outputs.commit_needed }}
           if [ ${{ steps.bump.outputs.commit_needed }} = 1 ]
           then
             git config user.name "github-actions[bot]"
@@ -42,4 +41,6 @@ jobs:
             git add package*.json
             git commit -m "${{ steps.bump.outputs.size }} update of version to ${{ steps.bump.outputs.version }}"
             git push
+          else
+            echo -e "version change already requested"
           fi
