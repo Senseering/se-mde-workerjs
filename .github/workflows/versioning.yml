@@ -2,7 +2,7 @@ name: Version bump
 
 on:
   pull_request:
-    types: [opened]
+    types: [opened, reopened]
     branches:
       - master
 
