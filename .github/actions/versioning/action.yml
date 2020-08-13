@@ -2,4 +2,4 @@ name: 'Versioning'
 description: 'Automatically bump version of package.json according to description of PR'
 runs:
   using: 'node12'
-  main: 'versioning.js'
+  main: 'dist/index.js'
