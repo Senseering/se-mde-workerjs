@@ -5,8 +5,6 @@ on:
     types: [openend, synchronize, reopened]
     branches:
       - 'master'
-
-on:
   workflow_run:
     workflows: ["Version check"]
     branches:
