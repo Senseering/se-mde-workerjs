@@ -1,5 +1,8 @@
 name: 'Versioning'
 description: 'Automatically bump version of package.json according to description of PR'
+outputs:
+  size:
+    description: 'The size og the bump (either major, minor or patch)'
 runs:
   using: 'node12'
   main: 'dist/index.js'

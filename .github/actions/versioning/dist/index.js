@@ -40,7 +40,7 @@ module.exports =
 /******/ 	// the startup function
 /******/ 	function startup() {
 /******/ 		// Load entry module and return exports
-/******/ 		return __webpack_require__(166);
+/******/ 		return __webpack_require__(567);
 /******/ 	};
 /******/
 /******/ 	// run startup
@@ -4060,22 +4060,6 @@ exports.debug = debug; // for test
 
 /***/ }),
 
-/***/ 166:
-/***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
-
-const core = __webpack_require__(75);
-const github = __webpack_require__(397);
-
-try {
-    // Get the JSON webhook payload for the event that triggered the workflow
-    const payload = JSON.stringify(github.context.payload, undefined, 2)
-    console.log(`The event payload: ${payload}`);
-} catch (error) {
-    core.setFailed(error.message);
-}
-
-/***/ }),
-
 /***/ 190:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
@@ -4471,6 +4455,31 @@ function removeHook (state, name, method) {
   state.registry[name].splice(index, 1)
 }
 
+
+/***/ }),
+
+/***/ 567:
+/***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
+
+const core = __webpack_require__(75);
+const github = __webpack_require__(397);
+
+try {
+    // Get the JSON webhook payload for the event that triggered the workflow
+    const payload = github.context.payload
+    let size = 'patch'
+
+    if (payload.pull_request.body.includes('patch')) {
+        size = 'patch'
+    } else if (payload.pull_request.body.includes('minor') || payload.pull_request.body.includes('feat') || payload.pull_request.body.includes('feature')) {
+        size = 'minor'
+    } else if (payload.pull_request.body.includes('major') || payload.pull_request.body.includes('breaking change') || payload.pull_request.body.includes('release')) {
+        size = 'major'
+    }
+    return bump
+} catch (error) {
+    core.setFailed(error.message);
+}
 
 /***/ }),
 

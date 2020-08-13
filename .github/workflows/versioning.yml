@@ -18,5 +18,13 @@ jobs:
         uses: "actions/setup-node@v1"
         with:
           node-version: 12
-      - name: "Automated Version Bump"
+      - name: "Get Version Bump Size"
+        id: "bump_size"
         uses: ./.github/actions/versioning
+      - name: "Automated Version Bump"
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          echo -e ${{ steps.bump_size.outputs.size }}
+          npm version ${{ steps.bump_size.outputs.size }} -m "Upgrade to %s"
+          git push
