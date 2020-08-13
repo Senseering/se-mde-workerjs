@@ -4476,6 +4476,8 @@ try {
     } else if (payload.pull_request.body.includes('major') || payload.pull_request.body.includes('breaking change') || payload.pull_request.body.includes('release')) {
         size = 'major'
     }
+
+    console.log(size)
     return size
 } catch (error) {
     core.setFailed(error.message);
