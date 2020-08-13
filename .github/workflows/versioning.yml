@@ -1,6 +1,6 @@
 name: Version bump
 
-on: ["pull-request"]
+on: [pull-request]
 
 jobs:
   build:
