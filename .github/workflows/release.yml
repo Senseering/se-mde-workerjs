@@ -1,12 +1,9 @@
 name: Create Release
 
 on:
-  workflow_run:
-    workflows: ["Create Tag"]
-    branches:
-      - master
-    types: 
-      - completed
+  push:
+    tags:
+      - 'v*'
 
 jobs:
   release:
@@ -16,6 +13,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Create Release
-        uses: ncipollo/release-action@v1
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
