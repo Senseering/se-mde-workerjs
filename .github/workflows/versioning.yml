@@ -3,8 +3,7 @@ name: Version check
 on:
   pull_request:
     types: [opened, synchronize, edited, reopened]
-    branches:
-      - 'master'
+    branches: [master]
 
 jobs:
   bump:
