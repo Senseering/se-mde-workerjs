@@ -4477,8 +4477,7 @@ try {
         size = 'major'
     }
 
-    console.log(size)
-    return size
+    core.setOutput('size', size)
 } catch (error) {
     core.setFailed(error.message);
 }
