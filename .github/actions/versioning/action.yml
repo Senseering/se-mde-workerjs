@@ -1,7 +1,7 @@
 name: 'Versioning'
 description: 'Automatically bump version of package.json according to description of PR'
 inputs:
-  curent:
+  current:
     description: 'Current version on master branch'
 outputs:
   size:
