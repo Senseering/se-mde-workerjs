@@ -114,9 +114,12 @@ client.handleMessage = async function (fresponse) {
         delete client.pendingQueue[fresponse.id]
         delete client.unsentQueue[fresponse.id]
         debug('(Code ' + fresponse.code + ') ' + (fresponse.code == 200 ? 'Successful' : 'Error') + ' response from "' + fresponse.event + '": ' + fresponse.msg)
+        if(fresponse.code !== 200){
+          throw new Error('(Code ' + fresponse.code + ') Error response from "' + fresponse.event + '": ' + fresponse.msg)
+        }
       }
     } catch (err) {
-      debug(("error in response" + err).red)
+      throw err
     }
   } else if (fresponse.topic === "update") {
     if (client.config.isChanged.resolve) {
