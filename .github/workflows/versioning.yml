@@ -20,7 +20,8 @@ jobs:
           node-version: 12
       - name: "Automated Version Bump"
         run: |
-          git switch -c master
+          echo -e ${{ github.head_ref }}
+          git switch -c ${{ github.head_ref }}
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
           git config user.name "$GITHUB_ACTOR"
           git status
