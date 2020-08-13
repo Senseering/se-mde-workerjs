@@ -20,11 +20,9 @@ jobs:
           node-version: 12
       - name: "Automated Version Bump"
         run: |
-          echo -e ${{ github.head_ref }}
           git switch -c ${{ github.head_ref }}
-          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-          git config user.name "$GITHUB_ACTOR"
-          git status
-          git branch
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          npm version patch -m "Upgrade to %s"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
