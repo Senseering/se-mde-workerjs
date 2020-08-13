@@ -2,11 +2,11 @@ name: Node.js CI
 
 on:
   pull_request:
-    types: [openend, synchronize, reopened]
     branches: [master]
   workflow_run:
     workflows: ["Version check"]
-    types: [completed]
+    types: 
+      - completed
 
 jobs:
   build:
