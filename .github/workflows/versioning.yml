@@ -25,6 +25,5 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          echo -e "Version bump : ${{ steps.bump_size.outputs.size }}"
           npm version ${{ steps.bump_size.outputs.size }} -m "Upgrade to %s"
           git push
