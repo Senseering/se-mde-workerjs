@@ -7,3 +7,5 @@ closes #the-issue-number
 
 ### Upate size
 patch
+minor
+major
