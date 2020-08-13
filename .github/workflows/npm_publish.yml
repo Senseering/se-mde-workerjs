@@ -1,7 +1,7 @@
 name: Create Tag
 
 on:
-  push:
+  pull-request:
     branches:
       - master
 
@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: 12
       - name: "Automated Version Bump"
-        uses: "phips28/gh-action-bump-version@master"
+        uses: maks-stupak/gh-action-bump-version@v7.1.5
         with:
           tag-prefix: ''
         env:
