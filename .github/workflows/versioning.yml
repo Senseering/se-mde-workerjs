@@ -19,4 +19,4 @@ jobs:
         with:
           node-version: 12
       - name: "Automated Version Bump"
-        uses: ../actions/versioning/versioning
+        uses: ./.github/actions/versioning
