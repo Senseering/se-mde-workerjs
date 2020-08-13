@@ -5,7 +5,6 @@ const fs = require('fs')
 try {
     // Get the JSON webhook payload for the event that triggered the workflow
     const payload = github.context.payload
-    console.log('The event payload: ' + JSON.stringify(payload, undefined, 2));
     let package = JSON.parse(fs.readFileSync('./package.json', 'utf-8'))
     console.log('The pacakge.json in current branch: ' + JSON.stringify(package, undefined, 2));
     let current_version = core.getInput('current')

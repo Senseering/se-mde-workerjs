@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: "Checkout source code master"
         uses: "actions/checkout@v2"
+        with:
+          ref: "master"
       - name: "Get version in master"
         id: "master"
         run: |
