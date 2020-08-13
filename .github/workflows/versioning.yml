@@ -20,8 +20,6 @@ jobs:
           node-version: 12
       - name: "Automated Version Bump"
         run:
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
           npm version patch -m "Upgrade to %s"
-        with:
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
