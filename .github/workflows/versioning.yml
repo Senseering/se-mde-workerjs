@@ -10,18 +10,27 @@ jobs:
   bump:
     runs-on: ubuntu-latest
     steps:
-      - name: "Checkout source code"
+      - name: "Checkout source code master"
+        uses: "actions/checkout@v2"
+      - name: "Get version in master"
+          id: master
+        run: |
+          PACKAGE_VERSION=$(cat ./package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
+          echo ::set-output name=current_version::$PACKAGE_VERSION
+      - name: "Check out current branch"
         uses: "actions/checkout@v2"
         with:
           ref: ${{ github.head_ref }}
-      - name: "Setup Node.js"
+      - name: "Setup node.js"
         uses: "actions/setup-node@v1"
         with:
           node-version: 12
-      - name: "Get Version Bump Size"
+      - name: "Get version bump size"
         id: "bump_size"
         uses: ./.github/actions/versioning
-      - name: "Automated Version Bump"
+        with:
+          current: ${{ steps.master.outputs.current_version }}
+      - name: "Automated version bump"
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
