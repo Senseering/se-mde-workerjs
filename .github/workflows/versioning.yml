@@ -28,7 +28,7 @@ jobs:
         with:
           node-version: 12
       - name: "Get version bump size"
-        id: "bump_size"
+        id: "bump"
         uses: ./.github/actions/versioning
         with:
           current: ${{ steps.master.outputs.current_version }}
@@ -36,5 +36,4 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          npm version ${{ steps.bump_size.outputs.size }} -m "Upgrade to %s"
-          git push
+          git push -m "${{ steps.bump.outputs.size }} update of version to ${{ steps.bump.outputs.version }}"

@@ -6,6 +6,8 @@ inputs:
 outputs:
   size:
     description: 'The size of the bump (either major, minor or patch)'
+  version:
+    description: 'The new version after the bump'
 runs:
   using: 'node12'
   main: 'dist/index.js'

@@ -6,20 +6,29 @@ try {
     // Get the JSON webhook payload for the event that triggered the workflow
     const payload = github.context.payload
     let package = JSON.parse(fs.readFileSync('./package.json', 'utf-8'))
-    console.log('The pacakge.json in current branch: ' + JSON.stringify(package, undefined, 2));
     let current_version = core.getInput('current')
-    console.log('The current version: ' + current_version)
+    let new_version = current_version.split('.')
     let size = 'patch'
 
     if (payload.pull_request.body.includes('patch')) {
         size = 'patch'
+        new_version[2]++
     } else if (payload.pull_request.body.includes('minor') || payload.pull_request.body.includes('feat') || payload.pull_request.body.includes('feature')) {
         size = 'minor'
+        new_version[1]++
+        new_version[2] = 0
     } else if (payload.pull_request.body.includes('major') || payload.pull_request.body.includes('breaking change') || payload.pull_request.body.includes('release')) {
         size = 'major'
+        new_version[0]++
+        new_version[1] = 0
+        new_version[2] = 0
     }
 
+    package.version = new_version.join('.')
+    fs.writeFileSync('./package.json', JSON.stringify(package, null, 4))
+
     core.setOutput('size', size)
+    core.setOutput('version', 'v' + package.version)
 } catch (error) {
     core.setFailed(error.message);
 }
