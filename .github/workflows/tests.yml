@@ -6,7 +6,6 @@ on:
     branches: [master]
   workflow_run:
     workflows: ["Version check"]
-    branches: [master]
     types: [completed]
 
 jobs:
