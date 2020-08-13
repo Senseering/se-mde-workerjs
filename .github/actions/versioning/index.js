@@ -9,6 +9,7 @@ try {
     let package = JSON.parse(fs.readFileSync('./package.json', 'utf-8'))
     console.log('The pacakge.json in current branch: ' + JSON.stringify(package, undefined, 2));
     let current_version = core.getInput('current')
+    console.log('The current version: ' + current_version)
     let size = 'patch'
 
     if (payload.pull_request.body.includes('patch')) {
