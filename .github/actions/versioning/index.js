@@ -25,13 +25,17 @@ try {
         new_version[2] = 0
     }
 
-    package.version = new_version.join('.')
-    lock.version = new_version.join('.')
-    fs.writeFileSync('./package.json', JSON.stringify(package, null, 4))
-    fs.writeFileSync('./package-lock.json', JSON.stringify(lock, null, 4))
+    let commit_needed = package.version === new_version.join('.') ? 0 : 1
+    if (commit_needed) {
+        package.version = new_version.join('.')
+        lock.version = new_version.join('.')
+        fs.writeFileSync('./package.json', JSON.stringify(package, null, 4))
+        fs.writeFileSync('./package-lock.json', JSON.stringify(lock, null, 4))
+    }
 
     core.setOutput('size', size)
     core.setOutput('version', 'v' + package.version)
+    core.setOutput('commit_needed', commit_needed)
 } catch (error) {
     core.setFailed(error.message)
 }
