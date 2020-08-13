@@ -13,7 +13,7 @@ jobs:
       - name: "Checkout source code master"
         uses: "actions/checkout@v2"
       - name: "Get version in master"
-          id: master
+        id: "master"
         run: |
           PACKAGE_VERSION=$(cat ./package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
           echo ::set-output name=current_version::$PACKAGE_VERSION
