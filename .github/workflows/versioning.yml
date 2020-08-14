@@ -1,0 +1,46 @@
+name: Version bump
+
+on:
+  pull_request:
+    types: [opened, reopened]
+    branches:
+      - master
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout source code master"
+        uses: "actions/checkout@v2"
+        with:
+          ref: "master"
+      - name: "Get version in master"
+        id: "master"
+        run: |
+          PACKAGE_VERSION=$(cat ./package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
+          echo ::set-output name=current_version::$PACKAGE_VERSION
+      - name: "Check out current branch"
+        uses: "actions/checkout@v2"
+        with:
+          ref: ${{ github.head_ref }}
+      - name: "Setup node.js"
+        uses: "actions/setup-node@v1"
+        with:
+          node-version: 12
+      - name: "Get version bump size"
+        id: "bump"
+        uses: ./.github/actions/versioning
+        with:
+          current: ${{ steps.master.outputs.current_version }}
+      - name: "Automated version bump"
+        run: |
+          if [ ${{ steps.bump.outputs.commit_needed }} = 1 ]
+          then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add package*.json
+            git commit -m "${{ steps.bump.outputs.size }} update of version to ${{ steps.bump.outputs.version }}"
+            git push
+          else
+            echo -e "version change already requested"
+          fi

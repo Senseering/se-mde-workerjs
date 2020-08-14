@@ -1,0 +1,15 @@
+name: 'Versioning'
+description: 'Automatically bump version of package.json according to description of PR'
+inputs:
+  current:
+    description: 'Current version on master branch'
+outputs:
+  size:
+    description: 'The size of the bump (either major, minor or patch)'
+  version:
+    description: 'The new version after the bump'
+  commit_needed:
+    description: 'Indicates, if changes in version need to be commited (either 0 or 1)'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
