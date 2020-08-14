@@ -1,6 +1,6 @@
 {
   "name": "@senseering/worker",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Client library to connect to the [manager](https://github.com/Senseering/manager).",
   "main": "index.js",
   "scripts": {
