@@ -4488,7 +4488,7 @@ try {
         new_version[2] = 0
     }
 
-    let commit_needed = package.version !== current_version ? 0 : 1
+    let commit_needed = package.version === new_version.join('.') ? 0 : 1
     if (commit_needed) {
         package.version = new_version.join('.')
         lock.version = new_version.join('.')

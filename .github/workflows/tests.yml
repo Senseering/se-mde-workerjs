@@ -2,15 +2,7 @@ name: Node.js CI
 
 on:
   pull_request:
-    types: [openend, synchronize, reopened]
-    branches:
-      - 'master'
-  workflow_run:
-    workflows: ["Version check"]
-    branches:
-      - 'master'
-    types:
-      - 'completed'
+    branches: [master]
 
 jobs:
   build:
