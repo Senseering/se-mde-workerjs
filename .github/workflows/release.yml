@@ -7,6 +7,15 @@ on:
 
 jobs:
   release:
+    name: Create Tag
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: Klemensas/action-autotag@stable
+      id: "tag"
+      with:
+        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        tag_prefix: "v"
     name: Create Release
     runs-on: ubuntu-latest
     steps:
@@ -17,5 +26,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ steps.tag.outputs.tagname }}
+          release_name: Release ${{ steps.tag.outputs.tagname }}
