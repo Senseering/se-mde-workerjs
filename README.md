@@ -36,11 +36,14 @@ This should give a short introduction to workers and the possible use cases. Bel
 ### Config object high level description
 
 | Property | Subproperty |  | Type | Description |
-|--------|--------|----------|------|
+|--------|--------|----------|------|------|
 | credentials |  |  | String | Identifier for connection to manager in format '<id>:<apikey>' |
 | url |  |  | String | Protocol and domain of manager |
 | settings |  |  | Object | Some general settings on the worker's behaviour |
 |  | qualityOfService |  | Number | 0: receive at most once, 1: receive at least once |
+|  | messageRetries |  | Number | Number of tries for sending of messages |
+|  | messageTimeout |  | Number | Number of milliseconds to wait until timeout of message |
+| meta |  |  | Object | with key-value-pairs, meta field can be added to the data packages of this worker |
 | payment |  |  | Object | Fixed price and boolean option for additional pricing |
 |  | fixCost |  | Integer | Fixed costs of the data packages |
 |  | isFixCostOnly |  | Boolean | Can additional costs apply? |
