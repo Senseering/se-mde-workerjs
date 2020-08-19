@@ -1,18 +1,15 @@
 let format = {}
 
-format.input = function (message) {
-    if (typeof (message) === "string") {
-        message = JSON.parse(message)
+format.input = function (received) {
+    if (typeof (received) === "string") {
+        received = JSON.parse(received)
     }
-    let topic = message.topic
-    delete message.topic
-    return { topic: topic, message: message }
+    return { topic: received.topic, message: received.message }
 }
 format.output = function (topic, message) {
-    if (typeof (message) === "string") {
-        message = JSON.parse(message)
-    }
-    message.topic = topic
-    return JSON.stringify(message)
+    let toSend = {}
+    toSend.topic = topic
+    toSend.message = message
+    return JSON.stringify(toSend)
 }
 module.exports = format

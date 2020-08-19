@@ -4,7 +4,7 @@ const client = require('../client')
 let update = {}
 
 update.send = async function (missingConfig) {
-    await client.socket.transmit('update', 'initial', { message: missingConfig })
+    await client.socket.transmit({ topic: 'update', message: missingConfig })//'update', 'initial', { message: missingConfig })
     client.config.isUpdated.value = new Promise(async function (resolve, reject) {
         client.config.isUpdated.resolve = resolve
         client.config.isUpdated.reject = reject
@@ -12,7 +12,7 @@ update.send = async function (missingConfig) {
         TIMEOUT = (TIMEOUT ? TIMEOUT : 1000)
         client.config.isUpdated.timeout = setTimeout(() => {
             reject(new Error("TIMEOUT: Update took to long. Timeout set to: " + TIMEOUT))
-        }, TIMEOUT )
+        }, TIMEOUT)
     })
     return client.config.isUpdated.value
 }

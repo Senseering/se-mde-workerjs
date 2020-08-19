@@ -15,18 +15,14 @@ let publish = async function (package, { statusID = undefined, key, resolvePromi
         if (ttl) {
             package.meta.ttl = ttl
         }
-        
+
         verify.appendSignature(package, key)
 
         //append non signature relevant information here
         package._id = uuidV1()
         package.statusID = statusID
 
-        
-
-        //publish data
-        package.resolvePromise = resolvePromise
-        await client.socket.transmit('publish', 'initial', package, package._id)
+        await client.socket.transmit({ topic: 'data', message: package, eventID: package._id, resolvePromise })
 
         return { data: package.data, id: package._id }
     } catch (error) {
