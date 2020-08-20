@@ -50,28 +50,28 @@ let updateConfig = async function () {
             let version = await config.version.get()
             debug("Comparing changes with manager ...")
             let changes = await compare.send(version)
+
             debug("Comparing changes locally ...")
             if (changes.split(".").map((change) => !Boolean(Number(change))).reduce((a, b) => a && b))
                 break; // Leave loop if no changes detected
             debug("Transferin local changes ...")
             let missingConfig = await config.version.changes(changes)
             await update.send(missingConfig)
-            if (Object.keys(missingConfig).length > 0) {
-                if (changes.split(".").map((change) => change === "-1").reduce((a, b) => a || b)) {
-                    // If there is one change that is newer on manager request the change
-                    // TODO add no changes allowed worker
-                    let updates = await change.send(changes)
-                    for (const update of Object.keys(updates)) {
-                        try {
-                            await config.update(update, updates[update], { recursive: true })
-                        } catch (error) {
-                            throw new Error("Update from remote failed: " + error.message)
-                        }
+            if (changes.split(".").map((change) => change === "-1").reduce((a, b) => a || b)) {
+                // If there is one change that is newer on manager request the change
+                // TODO add no changes allowed worker
+                let updates = await change.send(changes)
+                for (const update of Object.keys(updates)) {
+                    try {
+                        await config.update(update, updates[update], { recursive: true })
+                    } catch (error) {
+                        throw new Error("Update from remote failed: " + error.message)
                     }
                 }
             }
 
         } catch (err) {
+
             if (i === (await config.get("settings")).messageRetries - 1)
                 throw err
         }

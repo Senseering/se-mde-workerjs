@@ -30,44 +30,26 @@ client.init = async () => {
     client.processQueue()
   }
 
-  client.socket.transmit = async function (topic, status, message, eventID) {
-
-    let event = {
-      topic: topic
-    }
+  client.socket.transmit = async function ({ topic, message, eventID, resolvePromise }) {
     eventID = (eventID === undefined) ? uuidV1() : eventID
-
-    if (status === 'initial' && typeof (message) == "object") {
-      message.eventID = eventID
-      if (topic == 'publish') {
-        event.resolvePromise = message.resolvePromise
-        delete message.resolvePromise
-      }
-      event.message = format.output(topic, message)
-    } else {
-      if (topic == 'publish') {
-        event.resolvePromise = message.resolvePromise
-        delete message.resolvePromise
-      }
-      event.message = message.message
-    }
+    message.eventID
 
     if (client.socket.readyState == 1) {
-      client.socket.send(event.message)
-      client.pendingQueue[eventID] = event
+      client.socket.send(format.output(topic, message))
+      client.pendingQueue[eventID] = resolvePromise
 
-      if (topic == 'publish') {
+      if (topic == 'data') {
         if (!(await config.get('settings')).qualityOfService) {
-          event.resolvePromise('noticed: ' + eventID)
+          resolvePromise('noticed: ' + eventID)
         }
       }
     } else {
-      client.unsentQueue[eventID] = event
+      client.unsentQueue[eventID] = { topic, message }
     }
   }
 
   client.socket.onmessage = function (msg) {
-    client.handleMessage(format.input(msg))
+    client.handleMessage(format.input(msg.data))
   }
 
   client.socket.onerror = function (err) {
@@ -91,63 +73,63 @@ client.init = async () => {
   return client.socket
 }
 
-client.handleMessage = async function (fresponse) {
-  fresponse = JSON.parse(fresponse.message.data, 'utf8')
-  if (fresponse.topic === "response") {
+client.handleMessage = async function (response) {
+  let topic = response.topic
+  let message = response.message
+
+  if (topic === "response") {
     try {
-      if (fresponse.code === 204) {
+      if (message.code === 204) {
         delete fresponse.topic
-        debug("Workersettings differ from settings in Manager. Overwriting: " + fresponse.msg)
+        debug("Workersettings differ from settings in Manager. Overwriting: " + message.msg)
       } else {
-        if (fresponse.code === 200 && fresponse.event === "register") {
+        if (message.code === 200 && message.event === "register") {
           isRegistered = true
         }
-        if (fresponse.code === 200 && fresponse.event === "publish" && fresponse.id !== undefined) {
+        if (message.code === 200 && message.event === "publish" && message.id !== undefined) {
           if ((await config.get('settings')).qualityOfService) {
-            if (client.pendingQueue[fresponse.id] !== undefined) {
-              client.pendingQueue[fresponse.id].resolvePromise("noticed: " + fresponse.id)
-            } else {
-              client.unsentQueue[fresponse.id].resolvePromise("noticed: " + fresponse.id)
+            if (client.pendingQueue[message.id] !== undefined) {
+              client.pendingQueue[message.id]("noticed: " + message.id)
             }
           }
         }
-        delete client.pendingQueue[fresponse.id]
-        delete client.unsentQueue[fresponse.id]
-        debug('(Code ' + fresponse.code + ') ' + (fresponse.code == 200 ? 'Successful' : 'Error') + ' response from "' + fresponse.event + '": ' + fresponse.msg)
-        if(fresponse.code !== 200){
-          throw new Error('(Code ' + fresponse.code + ') Error response from "' + fresponse.event + '": ' + fresponse.msg)
+        delete client.pendingQueue[message.id]
+        delete client.unsentQueue[message.id]
+        debug('(Code ' + message.code + ') ' + (message.code == 200 ? 'Successful' : 'Error') + ' response from "' + message.event + '": ' + message.msg)
+        if (message.code !== 200) {
+          throw new Error('(Code ' + message.code + ') Error response from "' + message.event + '": ' + message.msg)
         }
       }
     } catch (err) {
       throw err
     }
-  } else if (fresponse.topic === "update") {
+  } else if (topic === "update") {
     if (client.config.isChanged.resolve) {
       clearTimeout(client.config.isChanged.timeout)
-      client.config.isChanged.resolve(fresponse.message)
+      client.config.isChanged.resolve(message)
     }
-  } else if (fresponse.topic === "trigger" && client.hasOwnProperty('trigger')) {
+  } else if (topic === "trigger" && client.hasOwnProperty('trigger')) {
     debug('trigger initiated')
-    status.report(fresponse.statusID, "Processing", "started", 'Service received job')
-    client.trigger.execute(fresponse)
-  } else if (fresponse.topic === 'pong') {
+    status.report(message.statusID, "Processing", "started", 'Service received job')
+    client.trigger.execute(message)
+  } else if (topic === 'pong') {
     isConnected = true
-  } else if (fresponse.topic === 'change') {
+  } else if (topic === 'change') {
     if (client.config.isCompared.resolve) {
       clearTimeout(client.config.isCompared.timeout)
-      client.config.isCompared.resolve(fresponse.message)
+      client.config.isCompared.resolve(message)
     }
-  } else if (fresponse.topic === 'compare') {
-    console.log(fresponse.topic)
-  } else if (fresponse.topic === 'update-status') {
-    if (!fresponse.message.remote) {
+  } else if (topic === 'compare') {
+    console.log(topic)
+  } else if (topic === 'update-status') {
+    if (!message.remote) {
       // Returns the status of the update process and resolves it
       if (client.config.isUpdated.resolve) {
         clearTimeout(client.config.isUpdated.timeout)
-        if (!fresponse.error) {
-          client.config.isUpdated.resolve(fresponse.message)
+        if (!message.error) {
+          client.config.isUpdated.resolve(message)
         } else {
-          client.config.isUpdated.reject(new Error(fresponse.error))
+          client.config.isUpdated.reject(new Error(message.error))
         }
       }
     } else {
@@ -155,7 +137,7 @@ client.handleMessage = async function (fresponse) {
       await client.onUpdate()
     }
   } else {
-    debug('Unknown message topic received: ' + fresponse.topic)
+    debug('Unknown message topic received: ' + topic)
   }
 }
 
@@ -164,8 +146,8 @@ client.processQueue = function () {
     while (client.socket.readyState == 1 && Object.keys(client.unsentQueue).length > 0) {
       debug((Object.keys(client.unsentQueue).length > 1 ? 'There are ' + Object.keys(client.unsentQueue).length + ' unsent messages. Processing...' : 'There is 1 unsent message. Processing...'))
       let eventID = Object.keys(client.unsentQueue)[0]
-      let message = client.unsentQueue[eventID]
-      client.socket.transmit(message.topic, 'queued', message, eventID)
+      let unsendMessage = client.unsentQueue[eventID]
+      client.socket.transmit({ topic: unsendMessage.topic, message: unsendMessage.message, eventID })//message.topic, 'queued', message, eventID)
       delete client.unsentQueue[eventID]
     }
     if (Object.keys(client.unsentQueue).length == 0) {

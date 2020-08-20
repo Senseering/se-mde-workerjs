@@ -16,8 +16,8 @@ status.report = async function (statusID, step, status, msg = "", code = null) {
       msg: msg,
       code: code
     }
-
-    await client.socket.transmit('log', 'initial', toPublishMsg)
+    message.topic
+    await client.socket.transmit({ topic: 'log', message: toPublishMsg })
   } catch (err) {
     debug(("error occured on reporting worker status:" + err).red)
     throw err
