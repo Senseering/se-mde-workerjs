@@ -69,13 +69,30 @@ This should give a short introduction to workers and the possible use cases. Bel
 
 ### Worker API
 
-#### worker.connect : 
+#### worker.connect:
+##### No parameters
 Sets up the connection to the manager, registers the worker and generates keys
-#### worker.publish :
+#### worker.publish:
+##### data: Object that will be published
 Publishes desired data on the manager
 #### worker.provide:
+##### service: function that returns data
 Provides the service function that can be triggered on demand
-#### worker.disconnect : 
+#### worker.settings.get:
+##### No parameters
+Returns the current settings of the connection to the manager
+#### worker.settings.update:
+##### settings: New settings object for worker
+Updates the settings of the connection of the worker to the manager
+(First use worker.settings.get and modify the resulting object, before handing it to worker.settings.update)
+#### worker.meta.get:
+##### No parameters
+Returns the currently used meta data that are added to each published data point
+#### worker.meta.update:
+##### meta: New meta data object that will be added to each data point before publication
+Updates the meta data
+#### worker.disconnect:
+##### No parameters
 Stops the connection to the manager
 
 ### Templates in workers
