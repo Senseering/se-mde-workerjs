@@ -18,7 +18,7 @@ config.version.component = {}
 VERSION_ORDER.forEach((configuration) => config.version.component[configuration] = {})
 
 config.settings = {}
-
+config.meta = {}
 
 /** 
  * Initialisises the config and reads it the first time
@@ -208,6 +208,7 @@ config.update = async function (field, configuration, { recursive = false, spaci
             // Check against schema -- Too Hacky
             // Copy to not mess with actual work later
             let configCopy = JSON.parse(JSON.stringify(configFile))
+            debug(configuration)
             let configurationCopy = JSON.parse(JSON.stringify(configuration))
             // Rewrite fields to be comparable
             if (recursive) {
@@ -403,15 +404,27 @@ config.settings.get = async function () {
     return await config.get("settings")
 }
 
-
-
-
 /**
  * Updates the settings object
  * @param settings The value to update
  */
 config.settings.update = async function (settings) {
     await config.update("settings", settings)
+}
+
+/**
+ * Returns the current meta data
+ */
+config.meta.get = async function () {
+    return await config.get("meta")
+}
+
+/**
+ * Updates the meta object
+ * @param meta The value to update
+ */
+config.meta.update = async function (meta) {
+    await config.update("meta", meta)
 }
 
 module.exports = {
@@ -423,6 +436,10 @@ module.exports = {
     settings: {
         get: config.settings.get,
         update: config.settings.update
+    },
+    meta: {
+        get: config.meta.get,
+        update: config.meta.update
     },
     get: config.get,
     init: config.init,

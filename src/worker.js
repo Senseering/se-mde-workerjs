@@ -54,7 +54,7 @@ let updateConfig = async function () {
             debug("Comparing changes locally ...")
             if (changes.split(".").map((change) => !Boolean(Number(change))).reduce((a, b) => a && b))
                 break; // Leave loop if no changes detected
-            debug("Transferin local changes ...")
+            debug("Transfering local changes ...")
             let missingConfig = await config.version.changes(changes)
             await update.send(missingConfig)
             if (changes.split(".").map((change) => change === "-1").reduce((a, b) => a || b)) {
@@ -139,5 +139,40 @@ Worker.prototype.disconnect = async function () {
     debug('Disconnecting client...')
     await client.disconnect()
 }
+
+Worker.prototype.settings = {}
+
+/**
+ * This returns the current settings of the worker
+ */
+Worker.prototype.settings.get = async function () {
+    return await config.settings.get()
+}
+
+/**
+ * This updates the current settings of the worker to the new settings
+ */
+Worker.prototype.settings.update = async function (settings) {
+    await config.settings.update(settings)
+    await updateConfig()
+}
+
+Worker.prototype.meta = {}
+
+/**
+ * This returns the current meta data of the worker
+ */
+Worker.prototype.meta.get = async function () {
+    return await config.meta.get()
+}
+
+/**
+ * This updates the current meta data of the worker to the new meta data object
+ */
+Worker.prototype.meta.update = async function (meta) {
+    await config.meta.update(meta)
+    await updateConfig()
+}
+
 
 module.exports = Worker
