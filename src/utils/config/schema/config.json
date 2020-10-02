@@ -64,15 +64,18 @@
                 },
                 "tangle": {
                     "$id": "#/properties/profile/properties/settings/properties/tangle",
-                    "type": "boolean"
+                    "type": "boolean",
+                    "default": true
                 },
                 "notifications": {
                     "$id": "#/properties/profile/properties/settings/properties/notifications",
-                    "type": "boolean"
+                    "type": "boolean",
+                    "default": true
                 },
                 "storage": {
                     "$id": "#/properties/profile/properties/settings/properties/storage",
-                    "type": "boolean"
+                    "type": "boolean",
+                    "default": true
                 }
             }
         },
