@@ -216,8 +216,8 @@ config.update = async function (field, configuration, { recursive = false, spaci
                     case "privKey":
                         break;
                     case "schema":
-                        configurationCopy.schema.output = configCopy.output
-                        configurationCopy.schema.input = configCopy.input
+                        configurationCopy.output = configCopy.schema.output
+                        configurationCopy.input = configCopy.schema.input
                         configCopy.schema = configurationCopy
                         break;
                     case "info":
@@ -247,13 +247,13 @@ config.update = async function (field, configuration, { recursive = false, spaci
                         break;
                     case "schema":
                         // Recursive write schenmas
-                        await persistence.write(configFile.schema.output, configuration.output)
-                        await persistence.write(configFile.schema.input, configuration.input)
-                        // Overwrite schemas with file location
-                        configuration.schema.output = configFile.output
-                        configuration.schema.input = configFile.input
+                        await persistence.write(configFile.schema.output, JSON.stringify(configuration.output, null, spacing))
+                        await persistence.write(configFile.schema.input, JSON.stringify(configuration.input, null, spacing))
                         // Overwrite old file with new file 
-                        configFile.schema = configuration
+                        configFile.schema = {
+                            output: configFile.schema.output,
+                            input: configFile.schema.input
+                        }
                         // Write to config
                         await persistence.write(config.path, JSON.stringify(configFile, null, spacing))
                         break;
@@ -262,12 +262,12 @@ config.update = async function (field, configuration, { recursive = false, spaci
                         await persistence.write(configFile.info.worker.description, configuration.worker.description)
                         await persistence.write(configFile.info.input.description, configuration.input.description)
                         await persistence.write(configFile.info.output.description, configuration.output.description)
-                        // Overwrite descriptions with file location
-                        configuration.output.description = configFile.info.output.description
-                        configuration.input.description = configFile.info.input.description
-                        configuration.worker.description = configFile.info.worker.description
                         // Overwrite old file with new file ( tags missing in old file )
-                        configFile.info = configuration
+                        configFile.info = {
+                            output: configFile.info.output,
+                            input: configFile.info.input,
+                            worker: configFile.info.worker
+                        }
                         // Write to config
                         await persistence.write(config.path, JSON.stringify(configFile, null, spacing))
                         break;
