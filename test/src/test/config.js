@@ -43,10 +43,10 @@ module.exports = function ({ CONFIG_PATH } = {}) {
             "fvPRSm1EDCPeIrw9qaanppdW3L/Eb2V5Dxc7/mH0rP8=@" + parseInt(res.split(".")[1].split("@")[1]) + "." +
             "q1Z7n4WF28AdZX7kfG2h6QX9v8BS6t0EFlbSMrcKt6M=@" + parseInt(res.split(".")[2].split("@")[1]) + "." +
             "VGWHXN1FX2FMeDIhWjDlIhyyQll2aiAQaIi2ndbzkjc=@" + parseInt(res.split(".")[3].split("@")[1]) + "." +
-            "S+4vBMtWCJsnLJvRAFs8We546T/+70z1bd4a/u/yNKs=@" + parseInt(res.split(".")[4].split("@")[1]) + "." +
+            "VNgGrzqlobbrqy3poUTzVXLSSN8n0rJZJxZmoSE9ErE=@" + parseInt(res.split(".")[4].split("@")[1]) + "." +
             "9u0Sz94te0sjlwG+9k3Hb2qkLoNg2DqQRzTpOecAcPQ=@" + parseInt(res.split(".")[5].split("@")[1]) + "." +
             "RBNvo1WzZ4oRRq0W9+hknpT7T8If536DEMBg9hyq/4o=@" + parseInt(res.split(".")[6].split("@")[1]))
-            
+
         res.split(".").forEach((timestampString) => {
             let timestamp = parseInt(timestampString.split("@")[1])
             let date = new Date(timestamp)
@@ -55,7 +55,7 @@ module.exports = function ({ CONFIG_PATH } = {}) {
     })
 
     it('Test comparison with correct version & without timestamp', async function () {
-        let res = await config.version.compare("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=@1596843792720.fvPRSm1EDCPeIrw9qaanppdW3L/Eb2V5Dxc7/mH0rP8=@1596843792720.q1Z7n4WF28AdZX7kfG2h6QX9v8BS6t0EFlbSMrcKt6M=@1596843792720.VGWHXN1FX2FMeDIhWjDlIhyyQll2aiAQaIi2ndbzkjc=@1596843792720.S+4vBMtWCJsnLJvRAFs8We546T/+70z1bd4a/u/yNKs=@1596843792720.9u0Sz94te0sjlwG+9k3Hb2qkLoNg2DqQRzTpOecAcPQ=@1596843792720.RBNvo1WzZ4oRRq0W9+hknpT7T8If536DEMBg9hyq/4o=@1596843792720")
+        let res = await config.version.compare("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=@1601651825523.fvPRSm1EDCPeIrw9qaanppdW3L/Eb2V5Dxc7/mH0rP8=@1601651825523.q1Z7n4WF28AdZX7kfG2h6QX9v8BS6t0EFlbSMrcKt6M=@1601651825523.VGWHXN1FX2FMeDIhWjDlIhyyQll2aiAQaIi2ndbzkjc=@1601651825523.VNgGrzqlobbrqy3poUTzVXLSSN8n0rJZJxZmoSE9ErE=@1601651825523.9u0Sz94te0sjlwG+9k3Hb2qkLoNg2DqQRzTpOecAcPQ=@1601651825523.RBNvo1WzZ4oRRq0W9+hknpT7T8If536DEMBg9hyq/4o=@1601651825523")
         expect(res).to.equal("0.0.0.0.0.0.0")
     })
 
@@ -64,13 +64,7 @@ module.exports = function ({ CONFIG_PATH } = {}) {
         profile.name = "tests" // Set profile to different version
 
         await config.update("profile", profile)
-        let res = await config.version.compare("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=@1588256356160." +
-            "fvPRSm1EDCPeIrw9qaanppdW3L/Eb2V5Dxc7/mH0rP8=@1588256356160." +
-            "q1Z7n4WF28AdZX7kfG2h6QX9v8BS6t0EFlbSMrcKt6M=@1588256356160." +
-            "VGWHXN1FX2FMeDIhWjDlIhyyQll2aiAQaIi2ndbzkjc=@1588256356160." +
-            "S+4vBMtWCJsnLJvRAFs8We546T/+70z1bd4a/u/yNKs=@1588256356160." +
-            "9u0Sz94te0sjlwG+9k3Hb2qkLoNg2DqQRzTpOecAcPQ=@1596843792720." +
-            "RBNvo1WzZ4oRRq0W9+hknpT7T8If536DEMBg9hyq/4o=@1596843792720")
+        let res = await config.version.compare("2Z2M3GFJ6MfzSnMnFjOE+RX0RI+VE62C9O2EB4zD9xE=@1601651825523.fvPRSm1EDCPeIrw9qaanppdW3L/Eb2V5Dxc7/mH0rP8=@1601651825523.q1Z7n4WF28AdZX7kfG2h6QX9v8BS6t0EFlbSMrcKt6M=@1601651825523.VGWHXN1FX2FMeDIhWjDlIhyyQll2aiAQaIi2ndbzkjc=@1601651825523.VNgGrzqlobbrqy3poUTzVXLSSN8n0rJZJxZmoSE9ErE=@1601651825523.9u0Sz94te0sjlwG+9k3Hb2qkLoNg2DqQRzTpOecAcPQ=@1601651825523.RBNvo1WzZ4oRRq0W9+hknpT7T8If536DEMBg9hyq/4o=@1601651825523")
         expect(res).to.equal("0.0.-1.0.0.0.0") // The manager should update his version of the file because ours is newer
         profile.name = "Example Source"
         await config.update("profile", profile) // Revert changes 
