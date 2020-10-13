@@ -4,7 +4,10 @@
     "settings": {
         "messageRetries": 3,
         "qualityOfService": 1,
-        "messageTimeout": 1000
+        "messageTimeout": 1000,
+        "notifications": true,
+        "storage": true,
+        "tangle": true
     },
     "meta": {},
     "payment": {

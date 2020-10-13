@@ -1,7 +1,7 @@
 const debug = require('debug')('utils:config')
 const crypto = require("crypto")
 const Ajv = require('ajv')
-const ajv = new Ajv()
+const ajv = new Ajv({ useDefaults: true })
 const NodeRSA = require('node-rsa')
 const validateConfig = ajv.compile(require("./schema/config.json"));
 const VERSION_ORDER = ["schema", "privKey", "profile", "info", "settings", "payment", "meta"]
