@@ -61,6 +61,21 @@
                     "$id": "#/properties/profile/properties/settings/properties/group",
                     "type": "string",
                     "pattern": "^[a-z0-9\/]*$"
+                },
+                "tangle": {
+                    "$id": "#/properties/profile/properties/settings/properties/tangle",
+                    "type": "boolean",
+                    "default": true
+                },
+                "notifications": {
+                    "$id": "#/properties/profile/properties/settings/properties/notifications",
+                    "type": "boolean",
+                    "default": true
+                },
+                "storage": {
+                    "$id": "#/properties/profile/properties/settings/properties/storage",
+                    "type": "boolean",
+                    "default": true
                 }
             }
         },
@@ -127,7 +142,10 @@
                     "format": "uri-reference"
                 },
                 {
-                    "regexp": { "pattern": "^-{5}.{21}-{5}.*-{5}.{19}-{5}$", "flags": "gms" }
+                    "regexp": {
+                        "pattern": "^-{5}.{21}-{5}.*-{5}.{19}-{5}$",
+                        "flags": "gms"
+                    }
                 }
             ],
             "examples": [
@@ -155,8 +173,12 @@
                 "input": {
                     "$id": "#/properties/schema/properties/input",
                     "oneOf": [
-                        {"type": "string"},
-                        {"type": "object"}
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "object"
+                        }
                     ],
                     "examples": [
                         "./env/schema/input.json",
@@ -166,8 +188,12 @@
                 "output": {
                     "$id": "#/properties/schema/properties/output",
                     "oneOf": [
-                        {"type": "string"},
-                        {"type": "object"}
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "object"
+                        }
                     ],
                     "examples": [
                         "./env/schema/output.json",
