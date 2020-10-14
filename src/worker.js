@@ -92,11 +92,13 @@ Worker.prototype.publish = async function (data, options) {
     let result
     let meta = {
         worker_id: (await config.get('credentials')).split(":")[0],
-        created_at: Date.now(),
         price: options.price === undefined ? 0 : options.price,
-        location: (await config.get('profile')).location,
         custom: await config.get('meta')
     }
+    // Set timestamp and location to parameters given by options or to parameters defined in config if they are not defined by options
+    meta.created_at = options.created_at !== undefined ? options.created_at : Date.now()
+    meta.location = options.location !== undefined ? options.location : (await config.get('profile')).location
+
     //append basedOn property just in case of service
     if (Object.keys((await config.get('schema')).input).length) {
         meta.basedOn = {
