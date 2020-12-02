@@ -119,7 +119,11 @@ client.handleMessage = async function (response) {
       clearTimeout(client.config.isCompared.timeout)
       client.config.isCompared.resolve(message)
     }
-  } else if (topic === 'compare') {
+  }
+  else if (topic === 'worker') {
+    console.log(topic)
+  }
+  else if (topic === 'compare') {
     console.log(topic)
   } else if (topic === 'update-status') {
     if (!message.remote) {
@@ -162,6 +166,9 @@ client.config = {}
 client.config.isCompared = {}
 client.config.isChanged = {}
 client.config.isUpdated = {}
+
+client.state = {}
+client.state.isChanged = {}
 
 client.isRegistered = async function () {
   return new Promise(function (resolve, reject) {

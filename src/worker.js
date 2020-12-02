@@ -176,5 +176,6 @@ Worker.prototype.meta.update = async function (meta) {
     await updateConfig()
 }
 
+Worker.prototype.state = require('./utils/state')
 
 module.exports = Worker
