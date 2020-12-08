@@ -1,19 +1,10 @@
 const client = require('../../client')
+const config = require('../../../utils/config/config')
 
-let change = {}
+let init = {}
 
-change.send = async function (stateChange) {
-    await client.socket.transmit({ topic: 'worker/state', message: stateChange })
-    client.config.isChanged.value = new Promise(async function (resolve, reject) {
-        client.config.isChanged.resolve = resolve
-        client.config.isChanged.reject = reject
-        let TIMEOUT = (await config.get("settings")).messageTimeout
-        TIMEOUT = (TIMEOUT ? TIMEOUT : 1000)
-        client.config.isChanged.timeout = setTimeout(() => {
-            reject(new Error("TIMEOUT: Retreiving changes took to long. Timeout set to: " + TIMEOUT))
-        }, TIMEOUT)
-    })
-    return client.config.isChanged.value
+init.send = async function (change) {
+    await client.socket.transmit({ topic: 'worker/state/change', message: change })
 }
 
-module.exports = change
+module.exports = init

@@ -41,6 +41,7 @@ Worker.prototype.connect = async function (location) {
     await updateConfig()
     client.onUpdate = updateConfig
     debug('Initialisation done')
+    Worker.prototype.state = require('./utils/state')
 }
 
 let updateConfig = async function () {
@@ -176,6 +177,5 @@ Worker.prototype.meta.update = async function (meta) {
     await updateConfig()
 }
 
-Worker.prototype.state = require('./utils/state')
 
 module.exports = Worker

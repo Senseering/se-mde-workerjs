@@ -5,6 +5,7 @@ const debug = require('debug')('ws:client')
 require('colors')
 
 let format = require("../utils/formatMessages")
+const { countBy } = require('lodash')
 
 let status
 let isConnected = false
@@ -114,14 +115,26 @@ client.handleMessage = async function (response) {
     client.trigger.execute(message)
   } else if (topic === 'pong') {
     isConnected = true
+
   } else if (topic === 'change') {
     if (client.config.isCompared.resolve) {
       clearTimeout(client.config.isCompared.timeout)
       client.config.isCompared.resolve(message)
     }
   }
-  else if (topic === 'worker') {
-    console.log(topic)
+  else if (topic === 'worker/state/init-status') {
+    if (client.state.isInitalised.resolve) {
+      clearTimeout(client.state.isInitalised.timeout)
+      if (!message.error) {
+        client.state.isInitalised.resolve(message)
+      } else {
+        client.state.isInitalised.reject(new Error(message.error))
+      }
+    }
+  } else if (topic === 'worker/state/change') {
+    console.log(message)
+    if(client.state.event.change)
+      client.state.event.change(message.key, message.value)
   }
   else if (topic === 'compare') {
     console.log(topic)
@@ -168,7 +181,8 @@ client.config.isChanged = {}
 client.config.isUpdated = {}
 
 client.state = {}
-client.state.isChanged = {}
+client.state.event = {}
+client.state.isInitalised = {}
 
 client.isRegistered = async function () {
   return new Promise(function (resolve, reject) {
