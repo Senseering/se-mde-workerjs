@@ -41,6 +41,7 @@ Worker.prototype.connect = async function (location) {
     await updateConfig()
     client.onUpdate = updateConfig
     debug('Initialisation done')
+    Worker.prototype.state = require('./utils/state')
 }
 
 let updateConfig = async function () {
