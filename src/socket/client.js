@@ -132,7 +132,6 @@ client.handleMessage = async function (response) {
       }
     }
   } else if (topic === 'worker/state/change') {
-    console.log(message)
     if(client.state.event.change)
       client.state.event.change(message.key, message.value)
   }
