@@ -3,19 +3,44 @@ let config = require("../../../src/utils/config/config");
 module.exports = function ({CONFIG_PATH} = {}) {
     let expect = require('chai').expect;
     it('Bad config should throw (malformed id)', async function () {
+        let error
         try {
             await config.init("./test/data/badIDConfig.json")
         } catch (err) {
-            expect(err).to.be.an('error');
+            error = err
         }
+        expect(error).to.be.an('error');
     })
 
     it('Bad config should throw (malformed url)', async function () {
+        let error
         try {
             await config.init("./test/data/badURLConfig.json")
         } catch (err) {
-            expect(err).to.be.an('error');
+            error = err
         }
+        expect(error).to.be.an('error');
+    })
+
+    
+    it('Bad config should throw (malformed key in custom)', async function () {
+        let error
+        try {
+            await config.init("./test/data/wrongKeyConfig.json")
+        } catch (err) {
+            error = err
+        }
+        expect(error).to.be.an('error');
+    })
+
+    it('Should work (all keys correct in config meta)', async function () {
+        let error
+        try {
+            await config.init("./test/data/rightKeyConfig.json")
+        } catch (err) {
+            error = err
+        }
+        expect(error).to.equal(undefined);
     })
 
     
