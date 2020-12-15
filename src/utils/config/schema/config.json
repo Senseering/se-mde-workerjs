@@ -301,7 +301,25 @@
         "meta": {
             "$id": "#/properties/meta",
             "type": "object",
-            "additionalProperties": true
+            "definitions": {
+    	        "key": {
+      		        "type": "object",
+                    "patternProperties": {
+    			        "^[^$ .]*$": { 
+  					        "oneOf": [
+    					        { "type": "string" },
+    					        { "type": "number" },
+    					        { "type": "object", "$ref": "#/definitions/key" },
+    					        { "type": "array", "items": { "$ref": "#/definitions/key" }},
+    					        { "type": "boolean"},
+    					        { "type": "null"}
+  					        ]
+                        },
+  			        },
+    		        "additionalProperties": false
+    	        }
+  	        },
+            "$ref": "#/definitions/key"
         }
     }
 }
