@@ -65,17 +65,19 @@ state.init = async function (schema, initalState) {
 
     
     // Register event in Websocket
-    client.state.event.change = (key, value) => {
+    client.state.event.change = async (key, value) => {
         let stateCopy = JSON.parse(JSON.stringify(state.store.state))
         object.set(stateCopy, key, value)
         let valid = state.store.schema.validate(stateCopy)
         if (!valid) {
             debug('Incoming malformed state:', validate.errors)
         } else {
-            state.set(key, value)
-            for (const [pattern, cb] of Object.entries(state.event['change'])) {
-                if(minimatch(key, pattern))
-                    cb(key, value)
+            await state.set(key, value)
+            if(state.event['change']){
+                for (const [pattern, cb] of Object.entries(state.event['change'])) {
+                    if(minimatch(key, pattern))
+                        cb(key, value)
+                }
             }
         }
     }
