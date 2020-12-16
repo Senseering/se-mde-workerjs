@@ -2,6 +2,41 @@
     "$schema": "http://json-schema.org/draft-07/schema",
     "type": "object",
     "additionalProperties": false,
+    "definitions": {
+        "key": {
+            "patternProperties": {
+                "^[^$ .]*$": {
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "allOf": [
+                                {"type":"object"},
+                                {"$ref": "#/definitions/key"}
+                            ]
+                        },
+                        {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/key"
+                            }
+                        },
+                        {
+                            "type": "boolean"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                }
+            },
+            "additionalProperties": false
+        }
+    },
     "required": [
         "credentials",
         "url",
@@ -300,8 +335,7 @@
         },
         "meta": {
             "$id": "#/properties/meta",
-            "type": "object",
-            "additionalProperties": true
+            "$ref": "#/definitions/key"
         }
     }
 }

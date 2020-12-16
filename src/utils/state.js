@@ -22,7 +22,7 @@ state.init = async function (schema, initalState) {
     state.store.schema.validate = ajv.compile(schema)
     let valid = state.store.schema.validate(initalState)
     if (!valid)
-        throw new Error(validate.errors[0].dataPath + " " + validate.errors[0].message)
+        throw new Error(state.store.schema.validate.errors[0].dataPath + " " + state.store.schema.validate.errors[0].message)
     // Store state locally
     state.store.state = initalState
     state.store.schema.raw = schema
@@ -54,16 +54,16 @@ state.init = async function (schema, initalState) {
      * @param {Function} cb 
      */
     state.on = function (event, pattern, cb) {
-        if(event === 'change'){
+        if (event === 'change') {
             // Subscribe to topic for incoming events for the given key
-            if(!state.event['change'])
+            if (!state.event['change'])
                 state.event['change'] = {}
 
             state.event['change'][pattern] = cb
         }
     }
 
-    
+
     // Register event in Websocket
     client.state.event.change = async (key, value) => {
         let stateCopy = JSON.parse(JSON.stringify(state.store.state))
@@ -73,9 +73,9 @@ state.init = async function (schema, initalState) {
             debug('Incoming malformed state:', validate.errors)
         } else {
             await state.set(key, value)
-            if(state.event['change']){
+            if (state.event['change']) {
                 for (const [pattern, cb] of Object.entries(state.event['change'])) {
-                    if(minimatch(key, pattern))
+                    if (minimatch(key, pattern))
                         cb(key, value)
                 }
             }
