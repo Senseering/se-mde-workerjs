@@ -1,32 +1,33 @@
-![Node.js Tests](https://github.com/Senseering/worker_js/workflows/Node.js%20CI/badge.svg)
+<p align="center" >
+  <img src="assets/210127_SE_Trademark-Logo__Worker.png" width="70%">
+</p>
 
-Client library to connect to the [manager](https://github.com/Senseering/manager).
+<p align="center">
+    A <a href="https://nodejs.org/en/">Node.js</a> based, device and service connector.
+</p>
+<p align="center">
+  <img src="https://github.com/Senseering/worker_js/workflows/Node.js%20CI/badge.svg">
+  <a href="https://github.com/iotaledger/bee/blob/master/LICENSE" style="text-decoration:none;"><img src="https://img.shields.io/badge/license-MIT-green" alt="Apache 2.0 license"></a>
+  <a href="https://discord.gg/qDF38JDR3D" style="text-decoration:none;"><img src="https://img.shields.io/badge/Discord-9cf.svg?logo=discord" alt="Discord"></a>
+</p>
 
-## Development lifecycle
+## Motivation
 
-Before doing a PR check your code against the linter: 
+Connecting IoT devices and services to management tools and anlytics can be cumbersome. The Senseering Worker provides a simple interface to the senseering world written in Node.js. Examples for common scenarios (e.g. MQTT, HTTP and OPC-UA) can be found in the given <a href="https://github.com/Senseering/example_workers">example repository</a>.
 
-```npm run lint```
-
-And run all tests:
-
-```npm run test```
+## Installation
 
 
-## Example usage
-```js
-let Worker = require('@senseering/worker')
+This is a [Node.js](https://nodejs.org/en/) module available through the
+[npm registry](https://www.npmjs.com/).
 
-let config = './config.json'
+Before installing, [download and install Node.js](https://nodejs.org/en/download/).
 
-let worker = new Worker();
+Installation is done using the
+[`npm install` command](https://docs.npmjs.com/getting-started/installing-npm-packages-locally):
 
-(async function () {
-    await worker.connect(config)
-
-    let data = { test: 'Hello world!' }
-    await worker.publish(data, options: {price: 0})
-})();
+```sh
+npm install @senseering/worker
 ```
 
 ## Worker Description
