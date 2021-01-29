@@ -15,6 +15,20 @@
 
 Connecting IoT devices and services to management tools and anlytics can be cumbersome. The Senseering Worker provides a simple interface to the senseering world written in Node.js. Examples for common scenarios (e.g. MQTT, HTTP and OPC-UA) can be found in the given <a href="https://github.com/Senseering/example_workers">example repository</a>.
 
+## Installation
+
+
+This is a [Node.js](https://nodejs.org/en/) module available through the
+[npm registry](https://www.npmjs.com/).
+
+Before installing, [download and install Node.js](https://nodejs.org/en/download/).
+
+Installation is done using the
+[`npm install` command](https://docs.npmjs.com/getting-started/installing-npm-packages-locally):
+
+```sh
+npm install @senseering/worker
+```
 
 ## Worker Description
 A worker is the basic building block for our approach to a decentralised data plattform. It utilizes the manager for storing, managing and selling our data on the senseering myDataEconomy-plattform. The workers objective is to process or generate data based on sensor inputs or other available feeds. It can be run as a source that only publishes data to your liking (e.g. send every few seconds the new sensor inputs) or as a service, which provides a service function that can be triggered on demand (e.g. a weather station that should only publish on demand or an image recognition service). Also a mixture of those two types is possible.
